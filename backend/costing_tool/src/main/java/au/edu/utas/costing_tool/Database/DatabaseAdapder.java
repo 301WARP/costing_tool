@@ -1,8 +1,9 @@
 package au.edu.utas.costing_tool.Database;
 
-// Unbuilt imports
+// Inbuilt imports
 import java.util.List;
 
+// Local imports
 import au.edu.utas.costing_tool.Model.Cost;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
