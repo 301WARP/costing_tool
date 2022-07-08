@@ -1,5 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -11,50 +12,43 @@ import javax.persistence.Table;
 
 
 // =============================================================================
-// Enums
+// Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Enums.Facility;
-import au.edu.utas.costing_tool.Enums.TimeUnit;
 import au.edu.utas.costing_tool.Enums.ExpenseType;
+import au.edu.utas.costing_tool.Enums.Organisation;
 
 
 @Entity
 @Table(name="expense")
-@DiscriminatorValue("FACILITY_HIRE")
-public class FacilityHire extends Expense
+@DiscriminatorValue("PARTNER_ORGANISATION")
+public class PartnerOrganisation extends Expense
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    @Column(name="facility")
-    private Facility facility;
-    public Facility getFacility() {return this.facility;}
-    public void setFacility(Facility facility) {this.facility = facility;}
+    @Column(name="organisation")
+    private Organisation organisation;
+    public Organisation getOrganisation() {return this.organisation;}
+    public void setOrganisation(Organisation organisation)
+        {this.organisation = organisation;}
 
-    @Column(name="time_unit")
-    private TimeUnit timeUnit;
-    public TimeUnit getTimeUnit() {return this.timeUnit;}
-    public void setTimeUnit(TimeUnit timeUnit) {this.timeUnit = timeUnit;}
-
-
+    
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public FacilityHire() {super();}
+    public PartnerOrganisation() {super();}
 
-    public FacilityHire(Project project,
-                        ExpenseType type,
-                        Double costPerUnit,
-                        Double inKindPercent,
-                        Facility facility,
-                        TimeUnit timeUnit)
+    public PartnerOrganisation( Project project,
+                                ExpenseType type,
+                                Double costPerUnit,
+                                Double inKindPercent,
+                                Organisation organisation)
     {
         super(project, type, costPerUnit, inKindPercent);
 
-        this.setFacility(facility);
-        this.setTimeUnit(timeUnit);
+        this.setOrganisation(organisation);
     }
 }

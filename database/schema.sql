@@ -134,7 +134,7 @@ CREATE TABLE `project`
     `ci_endorsement` BOOLEAN NOT NULL,
     `ci_endorsement_date` DATE,
     `risk_assessment` BOOLEAN NOT NULL,
-    `satisfied_risks` BOOLEAN NOT NULL,
+    `risks_managed` BOOLEAN NOT NULL,
     `utas_insurance` BOOLEAN NOT NULL,
     `defence_strategic_goods` BOOLEAN NOT NULL,
     `conflict_of_interest` BOOLEAN NOT NULL,
@@ -150,6 +150,7 @@ CREATE TABLE `project`
     `director_endorsement_2_date`DATE,
 	-- College Endoresement
     `college_endorsement` BOOLEAN,
+    `college_endorsement_date` DATE,
 
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
@@ -177,6 +178,8 @@ CREATE TABLE `expense`
 	-- Facility  Hire
     `facility` ENUM('Labs R Us'),
     `time_unit` ENUM('minutes', 'hours', 'days', 'weeks', 'months'),
+
+	-- Partner Organisation
     `organisation` ENUM('UMELB', '?'),
     PRIMARY KEY (`id`)
 

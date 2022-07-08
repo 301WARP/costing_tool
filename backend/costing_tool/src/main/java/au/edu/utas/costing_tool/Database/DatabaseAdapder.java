@@ -4,7 +4,7 @@ package au.edu.utas.costing_tool.Database;
 import java.util.List;
 
 // Local imports
-import au.edu.utas.costing_tool.Model.Cost;
+import au.edu.utas.costing_tool.Model.Expense;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
 
@@ -44,19 +44,19 @@ public class DatabaseAdapder
         // TODO: Not yet completed.
     }
 
-    public List<Cost> fetchCostList(Project p)
+    public List<Expense> fetchCostList(Project p)
     {
         // TODO: Not yet completed.
         return null;
     }
 
-    public Cost fetchCostDetails(Cost r)
+    public Expense fetchCostDetails(Expense r)
     {
         // TODO: Not yet completed.
         return null;
     }
 
-    public void pushCostDetails(Cost r)
+    public void pushCostDetails(Expense r)
     {
         // TODO: Not yet completed.
     }

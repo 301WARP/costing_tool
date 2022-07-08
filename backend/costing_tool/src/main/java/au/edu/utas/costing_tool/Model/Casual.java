@@ -1,16 +1,76 @@
 package au.edu.utas.costing_tool.Model;
 
-// Inbuilt imports
-import java.time.LocalDate;
-import java.util.Dictionary;
+// =============================================================================
+// External Imports
+// =============================================================================
 
-enum CasualClassification {}
-enum PayCode {}
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+
+// =============================================================================
+// Project Imports
+// =============================================================================
+
+import au.edu.utas.costing_tool.Enums.CasualClassification;
+import au.edu.utas.costing_tool.Enums.ContractType;
+import au.edu.utas.costing_tool.Enums.PayCode;
+
+
+@Entity
+@Table(name="contract")
+@DiscriminatorValue("CASUAL")
 public class Casual extends Staff
 {
-    public CasualClassification Classification;
-    public PayCode PayCode;
-    public double HourlyRate;
-    public Dictionary<LocalDate, Double> Hours;
+    // =========================================================================
+    // Properties
+    // =========================================================================
+
+    @Column(name="classification_non_casual")
+    private CasualClassification classification;
+    public CasualClassification getClassification()
+        {return this.classification;}
+    public void setClassification(CasualClassification classification)
+        {this.classification = classification;}
+
+    @Column(name="pay_code")
+    private PayCode payCode;
+    public PayCode getPayCode() {return this.payCode;}
+    public void setPayCode(PayCode payCode) {this.payCode = payCode;}
+
+    @Column(name="hourly_rate")
+    private Double hourlyRate;
+    public Double getHourlyRate() {return this.hourlyRate;}
+    public void setHourlyRate(Double rate) {this.hourlyRate = rate;}
+
+    // TODO(Andrew): Contribution?
+    //private Dictionary<LocalDate, Double> Hours;
+
+
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
+    public Casual() {super();}
+
+    public Casual(Researcher researcher)
+    {
+        super(researcher, ContractType.CASUAL);
+    }
+
+    public Casual(  Researcher researcher,
+                    Double wageAdjustment,
+                    Double salaryOnCostRate,
+                    CasualClassification classification,
+                    PayCode step,
+                    Double hourlyRate)
+    {
+        super(researcher, ContractType.CASUAL, wageAdjustment, salaryOnCostRate);
+
+        this.setClassification(classification);
+        this.setPayCode(payCode);
+        this.setHourlyRate(hourlyRate);
+    }
 }
