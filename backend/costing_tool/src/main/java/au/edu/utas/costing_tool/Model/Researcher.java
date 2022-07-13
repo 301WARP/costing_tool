@@ -1,14 +1,20 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External imports
 // =============================================================================
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,11 +43,13 @@ public class Researcher
     @Id
     @GeneratedValue
     @Column(name="staff_id")
+    @Access(AccessType.FIELD)
     public Long staffID;
     public Long getStaffID() {return this.staffID;}
     public void setStaffID(Long id) {this.staffID = id;}
 
     @Column(name="title")
+    @Enumerated(EnumType.STRING)
     public Title title;
     public Title getTitle() {return this.title;}
     public void setTitle(Title title) {this.title = title;}
@@ -62,29 +70,33 @@ public class Researcher
     @JsonManagedReference
     public List<Contract> contracts;
     public List<Contract> getContracts() {return this.contracts;}
-    public void setContracts(List<Contract> contracts)
-        {this.contracts = contracts;}
+    public void setContracts(List<Contract> contracts) {this.contracts = contracts;}
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public Researcher() {}
+    public Researcher()
+    {
+        this.setContracts(new ArrayList<Contract>());
+    }
 
     public Researcher(Title title, String firstName, String lastName)
     {
-        this.title = title;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this();
+        this.setTitle(title);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
     }
 
     public Researcher(Long id, Title title, String firstName, String lastName)
     {
-        this.staffID = id;
-        this.title = title;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this();
+        this.setStaffID(id);
+        this.setTitle(title);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
     }
 
 
@@ -94,11 +106,11 @@ public class Researcher
 
     public boolean addContract(Contract contract)
     {
-        return this.contracts.add(contract);
+        return this.getContracts().add(contract);
     }
 
     public boolean removeContract(Contract contract)
     {
-        return this.contracts.remove(contract);
+        return this.getContracts().remove(contract);
     }
 }

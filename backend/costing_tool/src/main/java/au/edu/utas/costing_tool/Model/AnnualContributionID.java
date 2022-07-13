@@ -1,35 +1,62 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External imports
 // =============================================================================
 
-import java.time.Year;
-
-import javax.persistence.Embeddable;
+import java.util.Objects;
 
 
-@Embeddable
 public class AnnualContributionID extends ContributionID
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    private Year year;
-    public Year getYear() {return this.year;}
-    public void setYear(Year year) {this.year = year;}
+    private static final long serialVersionUID = 1L;
+
+    private Integer year;
+    public Integer getYear() {return this.year;}
+    public void setYear(Integer year) {this.year = year;}
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    AnnualContributionID() {super();}
+    public AnnualContributionID() {super();}
 
-    AnnualContributionID(Contract contract, Project project, Year year)
+    public AnnualContributionID(Long contractID, Long projectID, Integer year)
     {
-        super(contract, project);
+        super(contractID, projectID);
         this.setYear(year);
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (!(o instanceof AnnualContributionID))
+            return false;
+
+        AnnualContributionID id = (AnnualContributionID) o;
+
+        return super.equals(o)
+            && Objects.equals(this.getYear(), id.getYear());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.getContractID(),
+                            this.getProjectID(),
+                            this.getYear());
     }
 }

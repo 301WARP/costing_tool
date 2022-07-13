@@ -1,10 +1,20 @@
 package au.edu.utas.costing_tool.Model;
 
+
+// =============================================================================
+// External Imports
+// =============================================================================
+
 import javax.persistence.Embeddable;
+
 
 @Embeddable
 public class EthicsChecklist
 {
+    // =========================================================================
+    // Properties
+    // =========================================================================
+
     private Boolean humanMedical;
     public Boolean getHumanMedical() {return this.humanMedical;}
     public void setHumanMedical(Boolean involves) {this.humanMedical = involves;}
@@ -52,4 +62,38 @@ public class EthicsChecklist
     private Integer carcinogenTeratogenRef;
     public Integer getCarcinogenTeratogenRef() {return this.carcinogenTeratogenRef;}
     public void setCarcinogenTeratogenRef(Integer ref) {this.carcinogenTeratogenRef = ref;}
+
+
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
+    public EthicsChecklist() {}
+
+    public EthicsChecklist( Boolean humanMedical,
+                            Integer humanMedicalRef,
+                            Boolean humanSocialScience,
+                            Integer humanSocialScienceRef,
+                            Boolean animals,
+                            Integer animalsRef,
+                            Boolean gmo,
+                            Integer gmoRef,
+                            Boolean radiation,
+                            Integer radiationRef,
+                            Boolean carcinogenTeratogen,
+                            Integer carcinogenTeratogenRef)
+    {
+        this.setHumanMedical(humanMedical);
+        this.setHumanMedicalRef(humanMedicalRef);
+        this.setHumanSocialScience(humanSocialScience);
+        this.setHumanSocialScienceRef(humanSocialScienceRef);
+        this.setAnimals(animals);
+        this.setAnimalsRef(animalsRef);
+        this.setGMO(gmo);
+        this.setGMORef(gmoRef);
+        this.setRadiation(radiation);
+        this.setRadiationRef(radiationRef);
+        this.setCarcinogenTeratogen(carcinogenTeratogen);
+        this.setCarcinogenTeratogenRef(carcinogenTeratogenRef);
+    }
 }

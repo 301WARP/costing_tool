@@ -19,28 +19,32 @@ import org.springframework.web.bind.annotation.RestController;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Model.Expense;
-import au.edu.utas.costing_tool.Database.ExpenseRepository;
+import au.edu.utas.costing_tool.Database.AnnualContributionRepository;
+import au.edu.utas.costing_tool.Model.AnnualContribution;
+import au.edu.utas.costing_tool.Model.AnnualContributionID;
 
 
 @RestController
-public class ExpenseController
+public class AnnualContributionController
 {
     // =========================================================================
     // Properties
     // =========================================================================
     @Autowired
-    private final ExpenseRepository expenseRepository;
-    private ExpenseRepository expRepos() {return this.expenseRepository;}
+    private final AnnualContributionRepository annualContributionRepository;
+    private AnnualContributionRepository acRepos()
+    {
+        return this.annualContributionRepository;
+    }
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public ExpenseController(ExpenseRepository repos)
+    public AnnualContributionController(AnnualContributionRepository repos)
     {
-        this.expenseRepository = repos;
+        this.annualContributionRepository = repos;
     }
 
 
@@ -48,56 +52,27 @@ public class ExpenseController
     // Methods
     // =========================================================================
 
-    @GetMapping(path="/expenses")
-    List<Expense> all()
+    @GetMapping(path="/acs")
+    List<AnnualContribution> all()
     {
-        List<Expense> expenses = new ArrayList<Expense>();
-        this.expRepos().findAll().forEach(expenses::add);
-        return expenses;
+        List<AnnualContribution> acs = new ArrayList<AnnualContribution>();
+        this.acRepos().findAll().forEach(acs::add);
+        return acs;
     }
 
-
-    @GetMapping(path="/expenses/{id}")
-    Expense one(@PathVariable Long id)
+    @GetMapping(path="/acs/{contractID}/{projectID}/{year}")
+    AnnualContribution one( @PathVariable Long contractID,
+                            @PathVariable Long projectID,
+                            @PathVariable Integer year)
     {
-        Optional<Expense> expense = this.expRepos().findById(id);
+        AnnualContributionID id
+            = new AnnualContributionID(contractID, projectID, year);
+        Optional<AnnualContribution> ac = this.acRepos().findById(id);
 
         // TODO(Andrew): return some sort of 404 message
-        if (!expense.isPresent())
+        if (!ac.isPresent())
             return null;
 
-        return expense.get();
+        return ac.get();
     }
-
-
-
-    /*
-    public List<Expense> loadCosts()
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public void loadCostDetails(Expense c)
-    {
-        // TODO: not yet implemented
-    }
-
-    public void updateCost(Expense c)
-    {
-        // TODO: not yet implemented
-    }
-
-    public List<Expense> filterByType(ExpenseType type)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Expense> filterByDescription(String description)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-    */
 }

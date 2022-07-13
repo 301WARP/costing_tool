@@ -1,12 +1,23 @@
 package au.edu.utas.costing_tool.Model;
 
+
+// =============================================================================
+// External imports
+// =============================================================================
+
 import java.time.LocalDate;
 
 import javax.persistence.Embeddable;
 
+
+// TODO(Andrew): Consider making this its own table
 @Embeddable
 public class CIEndorsement
 {
+    // =========================================================================
+    // Properties
+    // =========================================================================
+
     private Boolean ciEndorsement;
     public Boolean getCIEndorsement() {return this.ciEndorsement;}
     public void setCIEndorsement(Boolean endorsed) {this.ciEndorsement = endorsed;}
@@ -39,4 +50,29 @@ public class CIEndorsement
     public Boolean getForeignPrinciples() {return this.foreignPrinciples;}
     public void setForeignPrinciples(Boolean involves) {this.foreignPrinciples = involves;}
 
+
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
+    public CIEndorsement() {}
+
+    public CIEndorsement(   Boolean endorsement,
+                            LocalDate date,
+                            Boolean assessment,
+                            Boolean satisfied,
+                            Boolean isCovered,
+                            Boolean isOnList,
+                            Boolean isPresent,
+                            Boolean involves)
+    {
+        this.setCIEndorsement(endorsement);
+        this.setCIEndorsementDate(date);
+        this.setRiskAssessment(assessment);
+        this.setRisksManaged(satisfied);
+        this.setUTASInsurance(isCovered);
+        this.setDefenceStrategicGoods(isOnList);
+        this.setConflictOfInterest(isPresent);
+        this.setForeignPrinciples(involves);
+    }
 }

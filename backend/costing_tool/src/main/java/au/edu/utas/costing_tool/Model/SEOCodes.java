@@ -9,7 +9,7 @@ import javax.persistence.Embeddable;
 
 
 @Embeddable
-public class SOECodes
+public class SEOCodes
 {
     // =========================================================================
     // Properties
@@ -44,5 +44,5 @@ public class SOECodes
     // Constructors
     // =========================================================================
 
-    public SOECodes() {}
+    public SEOCodes() {}
 }

@@ -1,5 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -7,7 +8,10 @@ package au.edu.utas.costing_tool.Model;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.hibernate.annotations.DiscriminatorOptions;
 
 
 // =============================================================================
@@ -20,22 +24,22 @@ import au.edu.utas.costing_tool.Enums.PayCode;
 
 
 @Entity
-@Table(name="contract")
 @DiscriminatorValue("CASUAL")
+@DiscriminatorOptions(force=true)
 public class Casual extends Staff
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    @Column(name="classification_non_casual")
+    @Column(name="classification_casual")
+    @Enumerated(value=EnumType.STRING)
     private CasualClassification classification;
-    public CasualClassification getClassification()
-        {return this.classification;}
-    public void setClassification(CasualClassification classification)
-        {this.classification = classification;}
+    public CasualClassification getClassification() {return this.classification;}
+    public void setClassification(CasualClassification classification) {this.classification = classification;}
 
     @Column(name="pay_code")
+    @Enumerated(value=EnumType.ORDINAL)
     private PayCode payCode;
     public PayCode getPayCode() {return this.payCode;}
     public void setPayCode(PayCode payCode) {this.payCode = payCode;}
@@ -72,5 +76,17 @@ public class Casual extends Staff
         this.setClassification(classification);
         this.setPayCode(payCode);
         this.setHourlyRate(hourlyRate);
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    // TODO(Andrew): null checking and correct formula
+    @Override
+    public Double CostRate()
+    {
+        return this.getHourlyRate();
     }
 }

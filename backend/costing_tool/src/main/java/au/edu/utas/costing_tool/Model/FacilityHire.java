@@ -1,5 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -7,11 +8,12 @@ package au.edu.utas.costing_tool.Model;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 
 // =============================================================================
-// Enums
+// Project Imports
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.Facility;
@@ -20,7 +22,6 @@ import au.edu.utas.costing_tool.Enums.ExpenseType;
 
 
 @Entity
-@Table(name="expense")
 @DiscriminatorValue("FACILITY_HIRE")
 public class FacilityHire extends Expense
 {
@@ -29,11 +30,13 @@ public class FacilityHire extends Expense
     // =========================================================================
 
     @Column(name="facility")
+    @Enumerated(value=EnumType.STRING)
     private Facility facility;
     public Facility getFacility() {return this.facility;}
     public void setFacility(Facility facility) {this.facility = facility;}
 
     @Column(name="time_unit")
+    @Enumerated(value=EnumType.STRING)
     private TimeUnit timeUnit;
     public TimeUnit getTimeUnit() {return this.timeUnit;}
     public void setTimeUnit(TimeUnit timeUnit) {this.timeUnit = timeUnit;}

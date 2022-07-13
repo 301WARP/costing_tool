@@ -1,39 +1,29 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External imports
 // =============================================================================
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-@Embeddable
 public class ContributionID implements Serializable
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    // TODO(Andrew): Just use ids?
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="contract_id")
-    @JsonBackReference
-    protected Contract contract;
-    public Contract getContract() {return this.contract;}
-    public void setContract(Contract contract) {this.contract = contract;}
+    private static final long serialVersionUID = 1L;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="project_id")
-    @JsonBackReference
-    protected Project project;
-    public Project getProject() {return this.project;}
-    public void setProject(Project project) {this.project = project;}
+    protected Long contractID;
+    public Long getContractID() {return this.contractID;}
+    public void setContractID(Long id) {this.contractID = id;}
+
+    protected Long projectID;
+    public Long getProjectID() {return this.projectID;}
+    public void setProjectID(Long id) {this.projectID = id;}
 
 
     // =========================================================================
@@ -42,9 +32,34 @@ public class ContributionID implements Serializable
 
     public ContributionID() {}
 
-    public ContributionID(Contract contract, Project project)
+    public ContributionID(Long contractID, Long projectID)
     {
-        this.setContract(contract);
-        this.setProject(project);
+        this.setContractID(contractID);
+        this.setProjectID(projectID);
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (!(o instanceof ContributionID))
+            return false;
+
+        ContributionID id = (ContributionID) o;
+
+        return Objects.equals(this.getContractID(), id.getContractID())
+            && Objects.equals(this.getProjectID(), id.getProjectID());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.getContractID(), this.getProjectID());
     }
 }

@@ -1,18 +1,41 @@
 package au.edu.utas.costing_tool.Model;
 
+
+// =============================================================================
+// External imports
+// =============================================================================
+
 import java.time.LocalDate;
 
 import javax.persistence.Embeddable;
 
+
 @Embeddable
 public class CollegeEndorsement
 {
-    private Boolean collegeEndorsement;
-    public Boolean getCollegeEndorsement() {return this.collegeEndorsement;}
-    public void setCollegeEndorsement(Boolean endorsed) {this.collegeEndorsement = endorsed;}
+    // =========================================================================
+    // Properties
+    // =========================================================================
 
-    private LocalDate collegeEndorsementDate;
-    public LocalDate getCollegeEndorsementDate() {return this.collegeEndorsementDate;}
-    public void setCollegeEndorsementDate(LocalDate date) {this.collegeEndorsementDate = date;}
-    
+    private Boolean endorsement;
+    public Boolean getEndorsement() {return this.endorsement;}
+    public void setEndorsement(Boolean endorsed) {this.endorsement = endorsed;}
+
+    private LocalDate date;
+    public LocalDate getDate() {return this.date;}
+    public void setDate(LocalDate date) {this.date = date;}
+
+
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
+    public CollegeEndorsement() {}
+
+    public CollegeEndorsement(  Boolean endorsed,
+                                LocalDate date)
+    {
+        this.setEndorsement(endorsed);
+        this.setDate(date);
+    }
 }

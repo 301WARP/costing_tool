@@ -14,6 +14,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `annual_expense`;
 DROP TABLE IF EXISTS `expense`;
 DROP TABLE IF EXISTS `project`;
+DROP TABLE IF EXISTS `annual_contribution`;
 DROP TABLE IF EXISTS `contribution`;
 DROP TABLE IF EXISTS `contract`;
 DROP TABLE IF EXISTS `researcher`;
@@ -31,21 +32,27 @@ CREATE TABLE `researcher`
 ) Engine=InnoDB;
 
 
--- Yearly contribution of project to contract hours
+-- Contribution of project to contract hours
 CREATE TABLE `contribution`
 (
 	`contract_id` INTEGER(6) UNSIGNED NOT NULL,
 	`project_id` INTEGER(6) UNSIGNED NOT NULL,
-	`year` YEAR NOT NULL,
 	`role` VARCHAR(25) NOT NULL,
-    `fte` DOUBLE(5, 2),
-	`hours` DOUBLE(6, 2),
     `in_kind_%` DOUBLE(5,2) NOT NULL
 		CHECK (`in_kind_%` BETWEEN 0 AND 100),
+	PRIMARY KEY (`contract_id`, `project_id`)
+) Engine=InnoDB;
+
+
+-- Annual contribution of project to contract hours
+CREATE TABLE `annual_contribution`
+(
+	`contract_id` INTEGER(6) UNSIGNED NOT NULL,
+	`project_id` INTEGER(6) UNSIGNED NOT NULL,
+	`year` INTEGER(4) NOT NULL,
+    `units` DOUBLE(6, 2),
 	PRIMARY KEY (`contract_id`, `project_id`, `year`)
 ) Engine=InnoDB;
-    --`in_kind_$` DOUBLE(9,2) NOT NULL				-- unnecessary?
-		--CHECK (`in_kind_$` >= 0),
 
 
 --  Terms under which a researcher is employed
@@ -53,7 +60,7 @@ CREATE TABLE `contract`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     `researcher_id` INTEGER(6) UNSIGNED NOT NULL,
-    `staff_type` ENUM('NonCasual', 'Casual', 'RHD'),
+    `staff_type` ENUM('NON_CASUAL', 'CASUAL', 'RHD'),
     `classification_non_casual` ENUM('A', 'B', 'C', 'D', 'E'),					-- values?
     `classification_casual` ENUM('RA1', 'RA2', 'RA3', 'RA4', 'RA5'),				-- values?
     `classification_rhd` ENUM('APA', 'TopUp'),									-- values?
@@ -76,16 +83,17 @@ CREATE TABLE `project`
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `lead_researcher_id` INTEGER(6) UNSIGNED NOT NULL,
-    `category` ENUM('1', '2', '3', '4', 'Consultancy', 'Exemption') NOT NULL,
-    `amc_menzies` ENUM('AMC', 'Menzies', 'None') NOT NULL
-		DEFAULT 'None',
+    `category` ENUM('ONE', 'TWO', 'THREE', 'FOUR', 'CONSULTANCY', 'EXEMPTION') NOT NULL,
+	`category_1_subtype` ENUM('NONE'),
+    `amc_menzies` ENUM('AMC', 'MENZIES', 'NONE') NOT NULL
+		DEFAULT 'NONE',
     `start_date` DATE NOT NULL,
 	`end_date` DATE NOT NULL,
-    `year_end_type` ENUM('Calendar', 'Financial') NOT NULL DEFAULT 'Calendar',
+    `year_end_type` ENUM('CALENDAR', 'FINANCIAL') NOT NULL DEFAULT 'CALENDAR',
     `utas_cash` DOUBLE(9,2) NOT NULL,
     `partner_cash` DOUBLE(9,2) NOT NULL,
     `entity` ENUM('IMAS') NOT NULL,												-- values?
-    `crowd_funding_provider` ENUM('?') NOT NULL,									-- values?
+    `crowd_funding_provider` ENUM('?', 'NONE') NOT NULL,									-- values?
 
 	-- Codes
 	-- Could be one table, but not sure how to enforce maximum of three
@@ -156,15 +164,13 @@ CREATE TABLE `project`
 ) Engine=InnoDB;
 
 -- Expenses
-    --`project_id` INTEGER(6) UNSIGNED NOT NULL,
-    --`year` DATE NOT NULL,
-    --`units_per_year` DOUBLE(9,2) NOT NULL,
-    --`in_kind_$` DOUBLE(9,2) NOT NULL,
-    --`accommodation` DOUBLE(9,2),					- This is just cost_per_unit
 CREATE TABLE `expense`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `expense_type` ENUM('travel', 'facility hire', 'equipment', 'consumables', 'partner organisations', 'external contracting', 'RHD non-stipend costs', 'other') NOT NULL,
+    `project_id` INTEGER(6) UNSIGNED NOT NULL,
+    `expense_type` ENUM('TRAVEL', 'FACILITY_HIRE', 'EQUIPMENT', 'CONSUMABLES',
+						'PARTNER_ORGANISATIONS', 'EXTERNAL_CONTRACTING',
+						'RHD_NON-STIPEND_COSTS', 'OTHER') NOT NULL,
     `cost_per_unit` DOUBLE(9,2) NOT NULL,
     `in_kind_%` DOUBLE(9,2) NOT NULL,
 
@@ -174,25 +180,26 @@ CREATE TABLE `expense`
     `return` DATE,
     `fare` DOUBLE(9,2),
     `car_hire` DOUBLE(9,2),
+    `meals` DOUBLE(9,2),
+    `accommodation` DOUBLE(9,2),
 
 	-- Facility  Hire
-    `facility` ENUM('Labs R Us'),
-    `time_unit` ENUM('minutes', 'hours', 'days', 'weeks', 'months'),
+    `facility` ENUM('LABS_R_US'),
+    `time_unit` ENUM('MINUTES', 'HOURS', 'DAYS', 'WEEKS', 'MONTHS'),
 
 	-- Partner Organisation
-    `organisation` ENUM('UMELB', '?'),
+    `organisation` ENUM('UMELB', '?', 'NONE'),
     PRIMARY KEY (`id`)
 
 ) Engine=InnoDB;
---, `project_id`, `year`),
 
+-- Annual Expenses
 CREATE TABLE `annual_expense`
 (
-	`project_id` INTEGER(6) UNSIGNED NOT NULL,
 	`expense_id` INTEGER(6) UNSIGNED NOT NULL,
-	`year` YEAR NOT NULL,
+	`year` INTEGER(4) NOT NULL,
 	`units` DOUBLE(9,2) NOT NULL,
-    PRIMARY KEY (`project_id`, `expense_id`, `year`)
+    PRIMARY KEY (`expense_id`, `year`)
 ) Engine=InnoDB;
 
 -- Specify foreign keys
@@ -200,6 +207,12 @@ ALTER TABLE `contract` ADD FOREIGN KEY (`researcher_id`) REFERENCES `researcher`
 ALTER TABLE `contribution` ADD FOREIGN KEY (`contract_id`) REFERENCES `contract` (`id`);
 ALTER TABLE `contribution` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
---ALTER TABLE `expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
-ALTER TABLE `annual_expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
+ALTER TABLE `expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 ALTER TABLE `annual_expense` ADD FOREIGN KEY (`expense_id`) REFERENCES `expense` (`id`);
+
+
+-- -----------------------------------------------------------------------------
+-- Test Data
+-- -----------------------------------------------------------------------------
+
+source ./test_data.sql;

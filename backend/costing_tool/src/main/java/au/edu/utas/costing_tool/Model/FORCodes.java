@@ -8,6 +8,7 @@ package au.edu.utas.costing_tool.Model;
 import javax.persistence.Embeddable;
 
 
+// TODO(Andrew): Consider making this a separate table
 @Embeddable
 public class FORCodes
 {
@@ -45,4 +46,21 @@ public class FORCodes
     // =========================================================================
 
     public FORCodes() {}
+
+    public FORCodes(Integer code1,
+                    Double percent1,
+                    Integer code2,
+                    Double percent2,
+                    Integer code3,
+                    Double percent3)
+    {
+        this.setCode1(code1);
+        this.setPercent1(percent1);
+
+        this.setCode2(code2);
+        this.setPercent2(percent2);
+
+        this.setCode3(code3);
+        this.setPercent3(percent3);
+    }
 }

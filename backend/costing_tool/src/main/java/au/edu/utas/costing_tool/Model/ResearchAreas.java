@@ -31,9 +31,21 @@ public class ResearchAreas
     public Double getPureBasic() {return this.pureBasic;}
     public void setPureBasic(Double percent) {this.pureBasic = percent;}
 
+
     // =========================================================================
     // Constructors
     // =========================================================================
 
     public ResearchAreas() {}
+
+    public ResearchAreas(   Double appliedResearch,
+                            Double experimentalDevelopment,
+                            Double strategicBasic,
+                            Double pureBasic)
+    {
+        this.setAppliedResearch(appliedResearch);
+        this.setExperimentalDevelopment(experimentalDevelopment);
+        this.setStrategicBasic(strategicBasic);
+        this.setPureBasic(pureBasic);
+    }
 }

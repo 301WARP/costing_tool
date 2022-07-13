@@ -1,8 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
 
-import java.time.Year;
-
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -13,13 +11,19 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DiscriminatorOptions;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -32,20 +36,24 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import au.edu.utas.costing_tool.Enums.ExpenseType;
 
 
+// TODO(Andrew): Catch discriminators that don't apply to subclasses here
 @Entity
 @Table(name="expense")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="expense_type")
+@DiscriminatorOptions(force=true)
 public class Expense
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
+    @Id
+    @GeneratedValue
     @Column(name="id")
-    protected Long ID;
-    public Long getID() {return this.ID;}
-    public void setID(Long type) {this.ID = type;}
+    protected Long id;
+    public Long getID() {return this.id;}
+    public void setID(Long type) {this.id = type;}
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="project_id")
@@ -54,7 +62,10 @@ public class Expense
     public Project getProject() {return this.project;}
     public void setProject(Project project) {this.project = project;}
 
-    @Column(name="expense_type")
+    @Column(name="expense_type",
+            insertable=false,
+            updatable=false)
+    @Enumerated(EnumType.STRING)
     protected ExpenseType type;
     public ExpenseType getType() {return this.type;}
     public void setType(ExpenseType type) {this.type = type;}
@@ -64,11 +75,10 @@ public class Expense
     public Double getCostPerUnit() {return this.costPerUnit;}
     public void setCostPerUnit(Double cost) {this.costPerUnit = cost;}
 
-    @Column(name="in_kind_%")
+    @Column(name="`in_kind_%`")
     protected double inKindPercent;
     public Double getInKindPercent() {return this.inKindPercent;}
-    public void setInKindPercent(Double inKindPercent)
-        {this.inKindPercent = inKindPercent;}
+    public void setInKindPercent(Double inKindPercent) {this.inKindPercent = inKindPercent;}
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
@@ -76,8 +86,7 @@ public class Expense
     @JsonManagedReference
     protected List<AnnualExpense> annualExpenses;
     public List<AnnualExpense> getAnnualExpenses() {return this.annualExpenses;}
-    public void annualExpenses(List<AnnualExpense> annualExpenses)
-        {this.annualExpenses = annualExpenses;}
+    public void annualExpenses(List<AnnualExpense> annualExpenses) {this.annualExpenses = annualExpenses;}
 
     // TODO(Andrew): How to do?
     //private Dictionary<LocalDate, Double> UnitsPerYear;
@@ -99,7 +108,9 @@ public class Expense
         this.setCostPerUnit(costPerUnit);
         this.setInKindPercent(inKindPercent);
 
-        this.getProject().addExpense(this);
+        // Update project with this expense
+        if (project != null)
+            this.getProject().addExpense(this);
     }
 
 
@@ -107,52 +118,64 @@ public class Expense
     // Methods
     // =========================================================================
 
-    public double AnnualCost(Year year)
+    public Boolean addAnnualExpense(AnnualExpense annualExpense)
     {
-        double units =  this.getAnnualExpenses()
+        return this.getAnnualExpenses().add(annualExpense);
+    }
+
+    public Boolean removeAnnualExpense(AnnualExpense annualExpense)
+    {
+        return this.getAnnualExpenses().remove(annualExpense);
+    }
+
+    public Double AnnualCost(Integer year)
+    {
+        // Assume there is at most one annual expense per year
+        double units = this.getAnnualExpenses()
             .stream()
-            .filter(expense -> year.equals(expense.getID().getYear()))
-            .mapToDouble(expense -> expense.getUnits())
+            .filter(ae -> year.equals(ae.getYear()))
+            .mapToDouble(ae -> ae.getUnits())
             .findFirst()
             .orElse(0.0);
+        
+        Double costPerUnit = this.getCostPerUnit();
 
-        if (this.getCostPerUnit() == null)
-            return 0.0;
+        if (costPerUnit == null)
+            return null;
 
-        return this.getCostPerUnit() * units;
+        return costPerUnit * units;
     }
 
-    protected double AnnualCost(AnnualExpense expense)
+    public Double AnnualCost(AnnualExpense expense)
     {
-        if (expense.getUnits() == null || this.getCostPerUnit() == null)
-            return 0.0;
+        if (expense == null)
+            return null;
 
-        return (double)expense.getUnits() * (double)this.getCostPerUnit();
+        Double units = expense.getUnits();
+        Double costPerUnit = this.getCostPerUnit();
+
+        if (units == null || costPerUnit == null)
+            return null;
+
+        return units * costPerUnit;
     }
 
-    public double Cost()
+    public Double Cost()
     {
-        return this.annualExpenses
+        return this.getAnnualExpenses()
             .stream()
             .mapToDouble(this::AnnualCost)
             .reduce(0.0, (total, cost) -> total + cost);
     }
     
-    public double inKindDollar()
+    public Double inKindDollar()
     {
-        if (this.getInKindPercent() == null)
-            return 0.0;
+        Double inKindPercent = this.getInKindPercent();
+        Double cost = this.Cost();
 
-        return (double)this.getInKindPercent() * this.Cost();
-    }
+        if (inKindPercent == null || cost == null)
+            return null;
 
-    public boolean addAnnualExpense(AnnualExpense annualExpense)
-    {
-        return this.getAnnualExpenses().add(annualExpense);
-    }
-
-    public boolean removeAnnualExpense(AnnualExpense annualExpense)
-    {
-        return this.getAnnualExpenses().remove(annualExpense);
+        return inKindPercent * cost;
     }
 }

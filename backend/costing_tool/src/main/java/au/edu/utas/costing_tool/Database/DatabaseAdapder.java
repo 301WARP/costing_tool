@@ -1,3 +1,4 @@
+/*
 package au.edu.utas.costing_tool.Database;
 
 // Inbuilt imports
@@ -61,3 +62,4 @@ public class DatabaseAdapder
         // TODO: Not yet completed.
     }
 }
+*/

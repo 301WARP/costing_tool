@@ -1,13 +1,17 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External imports
 // =============================================================================
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.hibernate.annotations.DiscriminatorOptions;
 
 
 // =============================================================================
@@ -20,8 +24,8 @@ import au.edu.utas.costing_tool.Enums.Step;
 
 
 @Entity
-@Table(name="contract")
 @DiscriminatorValue("NON_CASUAL")
+@DiscriminatorOptions(force=true)
 public class NonCasual extends Staff
 {
     // =========================================================================
@@ -29,6 +33,7 @@ public class NonCasual extends Staff
     // =========================================================================
 
     @Column(name="classification_non_casual")
+    @Enumerated(EnumType.STRING)
     private NonCasualClassification classification;
     public NonCasualClassification getClassification()
         {return this.classification;}
@@ -36,6 +41,7 @@ public class NonCasual extends Staff
         {this.classification = classification;}
 
     @Column(name="step")
+    @Enumerated(EnumType.ORDINAL)
     private Step step;
     public Step getStep() {return this.step;}
     public void setStep(Step step) {this.step = step;}
@@ -50,7 +56,6 @@ public class NonCasual extends Staff
     // Constructors
     // =========================================================================
 
-    // Constructors
     public NonCasual() {super();}
 
     public NonCasual(Researcher researcher)
@@ -73,5 +78,17 @@ public class NonCasual extends Staff
         this.setClassification(classification);
         this.setStep(step);
         this.setStartingSalary(startingSalary);
+    }
+    
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    // TODO(Andrew): null checking and correct formula
+    @Override
+    public Double CostRate()
+    {
+        return this.getStartingSalary();
     }
 }

@@ -1,15 +1,75 @@
 package au.edu.utas.costing_tool.Controller;
 
-// Inbuilt imports
+
+// =============================================================================
+// External Imports
+// =============================================================================
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+
+// =============================================================================
+// Project Imports
+// =============================================================================
+
+import au.edu.utas.costing_tool.Database.ProjectRepository;
 import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
 
-import java.time.LocalDate;
 
+@RestController
 public class ProjectController
 {
+    // =========================================================================
+    // Properties
+    // =========================================================================
+
+    @Autowired
+    private final ProjectRepository projectRepository;
+    private ProjectRepository projRepos() {return this.projectRepository;}
+
+
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
+    public ProjectController(ProjectRepository projectRepos)
+    {
+        this.projectRepository = projectRepos;
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    @GetMapping(path="/projects")
+    List<Project> all()
+    {
+        List<Project> projects = new ArrayList<Project>();
+        this.projRepos().findAll().forEach(projects::add);
+        return projects;
+    }
+
+
+    @GetMapping(path="/projects/{id}")
+    Project one(@PathVariable Long id)
+    {
+        Optional<Project> project = this.projRepos().findById(id);
+
+        // TODO(Andrew): return some sort of 404 message
+        if (!project.isPresent())
+            return null;
+
+        return project.get();
+    }
+    /*
     public List<Project> loadProjects()
     {
         // TODO: not yet implemented
@@ -55,4 +115,5 @@ public class ProjectController
         // TODO: not yet implemented
         return null;
     }
+    */
 }

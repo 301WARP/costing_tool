@@ -6,38 +6,23 @@ package au.edu.utas.costing_tool.Model;
 // =============================================================================
 
 import java.io.Serializable;
-import java.time.Year;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Objects;
 
 
-@Embeddable
-@Table(name="annual_expense")
 public class AnnualExpenseID implements Serializable
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    // TODO(Andrew): Just use ids?
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="expense_id")
-    @JsonBackReference
-    protected Expense expense;
-    public Expense getExpense() {return this.expense;}
-    public void setExpense(Expense expense) {this.expense = expense;}
+    protected Long expenseID;
+    public Long getExpenseID() {return this.expenseID;}
+    public void setExpenseID(Long id) {this.expenseID = id;}
 
-    @Column(name="year")
-    protected Year year;
-    public Year getYear() {return this.year;}
-    public void setYear(Year year) {this.year = year;}
+    protected Integer year;
+    public Integer getYear() {return this.year;}
+    public void setYear(Integer year) {this.year = year;}
+
 
     // =========================================================================
     // Constructors
@@ -45,9 +30,34 @@ public class AnnualExpenseID implements Serializable
 
     public AnnualExpenseID() {}
 
-    public AnnualExpenseID(Expense expense, Year year)
+    public AnnualExpenseID(Long expenseID, Integer year)
     {
-        this.setExpense(expense);
+        this.setExpenseID(expenseID);
         this.setYear(year);
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (!(o instanceof AnnualExpenseID))
+            return false;
+
+        AnnualExpenseID id = (AnnualExpenseID) o;
+
+        return Objects.equals(this.getExpenseID(), id.getExpenseID())
+            && Objects.equals(this.getYear(), id.getYear());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.getExpenseID(), this.getYear());
     }
 }

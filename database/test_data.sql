@@ -17,6 +17,7 @@ INSERT INTO `project`
     `description`,
     `lead_researcher_id`,
     `category`,
+    `category_1_subtype`,
     `amc_menzies`,
     `start_date`,
 	`end_date`,
@@ -53,7 +54,7 @@ INSERT INTO `project`
 	-- CI Endoresement
     `ci_endorsement`, `ci_endorsement_date`,
     `risk_assessment`,
-    `satisfied_risks`,
+    `risks_managed`,
     `utas_insurance`,
     `defence_strategic_goods`,
     `conflict_of_interest`,
@@ -64,20 +65,21 @@ INSERT INTO `project`
 	`organisational_unit_2`, `organisational_unit_2_split`,
     `director_endorsement_2`, `director_endorsement_2_date`,
 	-- College Endoresement
-    `college_endorsement`
+    `college_endorsement`, `college_endorsement_date`
 ) VALUES (
     'Test Project',									-- project name
     'A project to test the system.',				-- project description
     '1',											-- lead researcher id
-    '1',											-- category
-    'None',											-- AMC/Menzies
+    'ONE',											-- category
+    'NONE',											-- category 1 subtype
+    'NONE',											-- AMC/Menzies
     '2022-01-31',									-- start date
 	'2023-12-31',									-- end date
     'Calendar',										-- year-end type
     '25000.50',										-- UTAS cash
     '0.00',											-- partner organisation cash
     'IMAS',											-- entity
-    '?',											-- crowd funding provider
+    'NONE',											-- crowd funding provider
 
 	-- Codes
 	-- Field of Research
@@ -106,7 +108,7 @@ INSERT INTO `project`
 	-- CI Endoresement
 	TRUE, '2022-01-01',							-- CI endorsement
 	TRUE,											-- risk assessment
-	TRUE,											-- satisfied risks
+	TRUE,											-- managed risks
 	TRUE,											-- UTAS insurance
 	TRUE,											-- defence strategic goods
 	TRUE,											-- conflict of interest
@@ -115,7 +117,7 @@ INSERT INTO `project`
 	'IMAS', '100.00', TRUE, '2022-01-12',			-- organisational unit 1
 	NULL, NULL, NULL, NULL,					-- organisational unit 2
 	-- College Endoresement
-	NULL
+	NULL, NULL
 );
 
 
@@ -135,7 +137,7 @@ INSERT INTO `contract`
     `on_cost_rate`
 ) VALUES (
     '1',											-- researcher id
-    'NonCasual',									-- staff type
+    'NON_CASUAL',									-- staff type
     'A',											-- non-casual classification
     NULL,											-- casual classification
     NULL,											-- RHD classification
@@ -148,30 +150,40 @@ INSERT INTO `contract`
 );
 
 
--- Yearly contribution of project to contract hours
+-- contribution of project to contract
 INSERT INTO `contribution`
 (
 	`contract_id`,
 	`project_id`,
-	`year`,
 	`role`,
-    `fte`,
-	`hours`,
     `in_kind_%`
 ) VALUES (
 	'1',											-- contract id
 	'1',											-- project id
-	'2022',											-- year
 	'CI',											-- project role
-    '100.00',										-- fte
-	NULL,											-- hours
     '50.00'											-- in kind percent
+);
+
+
+-- contribution of project to contract
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'1',											-- contract id
+	'1',											-- project id
+	'2022',											-- year
+    '100.00'										-- units (here fte)
 );
 
 
 -- Expenses
 INSERT INTO `expense`
 (
+	`project_id`,
     `expense_type`,
     `cost_per_unit`,
     `in_kind_%`,
@@ -182,13 +194,16 @@ INSERT INTO `expense`
     `return`,
     `fare`,
     `car_hire`,
+    `meals`,
+    `accommodation`,
 
 	-- Facility  Hire
     `facility`,
     `time_unit`,
     `organisation`
 ) VALUES (
-    'facility hire',									-- expense type
+    1,													-- project id
+    'FACILITY_HIRE',									-- expense type
     '20.0',												-- cost per unit
     '70.00',											-- in kind percent
 
@@ -198,22 +213,24 @@ INSERT INTO `expense`
     NULL,												-- return date
     NULL,												-- fare
     NULL,												-- car hire price
+    NULL,												-- meal price
+    NULL,												-- accommodation price
 
 	-- Facility  Hire
-	'Labs R US',										-- facility
+	'LABS_R_US',										-- facility
     'days',												-- time unit
-    'UMELB'												-- organisation
+
+	-- Partner Organisation
+    NULL												-- organisation
 );
 
 
 INSERT INTO `annual_expense`
 (
-	`project_id`,
 	`expense_id`,
 	`year`,
 	`units`
 ) VALUES (
-	'1',												-- project id
 	'1',												-- expense id
 	'2022',												-- year
 	'30'												-- units

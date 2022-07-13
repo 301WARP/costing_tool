@@ -1,48 +1,79 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // ============================================================================= 
 // External Imports
 // ============================================================================= 
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name="contribution")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(   name="contribution_type",
-                        discriminatorType=DiscriminatorType.INTEGER)
-public abstract class AnnualContribution
+@Table(name="annual_contribution")
+@IdClass(value=AnnualContributionID.class)
+public class AnnualContribution
 {
     // ========================================================================= 
     // Properties
     // ========================================================================= 
 
-    @EmbeddedId
-    protected AnnualContributionID id;
-    public AnnualContributionID getID() {return this.id;}
-    public void setID(AnnualContributionID id) {this.id = id;}
+    @Id
+    @Column(name="contract_id")
+    protected Long contractID;
+    public Long getContractID() {return this.contractID;}
+    public void setContractID(Long id) {this.contractID = id;}
 
-    // TODO(Andrew): Does this work?
+    @Id
+    @Column(name="project_id")
+    protected Long projectID;
+    public Long getProjectID() {return this.projectID;}
+    public void setProjectID(Long id) {this.projectID = id;}
+
+    @Id
+    @Column(name="year")
+    private Integer year;
+    public Integer getYear() {return this.year;}
+    public void setYear(Integer year) {this.year = year;}
+
     @ManyToOne
+    @MapsId
     @JoinColumns({
-        @JoinColumn(name="contract_id"),
-        @JoinColumn(name="project_id")
+        @JoinColumn(name="contract_id", referencedColumnName="contract_id"),
+        @JoinColumn(name="project_id", referencedColumnName="project_id")
     })
+    @JsonBackReference
     protected Contribution contribution;
     public Contribution getContribution() {return this.contribution;}
     public void setContribution(Contribution contribution)
         {this.contribution = contribution;}
     
+    @Column(name="units")
+    protected Double units;
+    public Double getUnits() {return this.units;}
+    public void setUnits(Double units) {this.units = units;}
+
+    // Virtual fte
+    @JsonIgnore
+    public Double getFTE() {return this.units;}
+    public void setFTE(Double fte) {this.units = fte;}
+
+    // Virtual hours
+    @JsonIgnore
+    public Double getHours() {return this.units;}
+    public void setHours(Double hours) {this.units = hours;}
+
+
     // ========================================================================= 
     // Constructors
     // ========================================================================= 
@@ -53,24 +84,7 @@ public abstract class AnnualContribution
     {
         this.setContribution(contribution);
 
-        // Update contribution with this annual cotnribution
+        // Update contribution with this annual contribution
         this.getContribution().addAnnualContribution(this);
-    }
-
-
-    // ========================================================================= 
-    // Methods
-    // ========================================================================= 
-
-    public abstract Double Price();
-
-    public Double InKindDollar() 
-    {
-        return this.Price() * this.contribution.getInKindPercent();
-    }
-
-    public Double CashIncome() 
-    {
-        return this.Price() - this.InKindDollar();
     }
 }

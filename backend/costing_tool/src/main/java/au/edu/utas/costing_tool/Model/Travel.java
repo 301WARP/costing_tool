@@ -1,27 +1,27 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External Imports
 // =============================================================================
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 
 // =============================================================================
-// External Imports
+// Project Imports
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.ExpenseType;
 
 
 @Entity
-@Table(name="expense")
 @DiscriminatorValue("TRAVEL")
 public class Travel extends Expense
 {
@@ -32,20 +32,17 @@ public class Travel extends Expense
     @Column(name="num_travellers")
     private Integer numTravellers;
     public Integer getNumTravellers() {return this.numTravellers;}
-    public void setNumTravellers(Integer numTravellers)
-        {this.numTravellers = numTravellers;}
+    public void setNumTravellers(Integer numTravellers) {this.numTravellers = numTravellers;}
 
     @Column(name="departure")
     private LocalDate departureDate;
     public LocalDate getDepartureDate() {return this.departureDate;}
-    public void setDepartureDate(LocalDate departureDate)
-        {this.departureDate = departureDate;}
+    public void setDepartureDate(LocalDate departureDate) {this.departureDate = departureDate;}
 
     @Column(name="return")
     private LocalDate returnDate;
     public LocalDate getReturnDate() {return this.returnDate;}
-    public void setReturnDate(LocalDate returnDate)
-        {this.returnDate = returnDate;}
+    public void setReturnDate(LocalDate returnDate) {this.returnDate = returnDate;}
 
     @Column(name="fare")
     private Double fare;
@@ -118,27 +115,29 @@ public class Travel extends Expense
 
     public Double travelDays()
     {
-        this.annualExpenses
-            .stream()
-            .mapToDouble(AnnualExpense::getUnits)
-            .reduce(0.0, (total, days) -> total + days);
+        LocalDate d = this.getDepartureDate();
+        LocalDate r = this.getReturnDate();
 
-        return null;
+        if (d == null || r == null)
+            return null;
+
+        // Include both the first and last days of travel
+        return Double.valueOf(ChronoUnit.DAYS.between(d, r)) + 1;
     }
 
     // Assumes there is only one annual expense for the given year,
     // which should be the case
-    public double AnnualTravelDays(Year year)
+    public Double AnnualTravelDays(Integer year)
     {
         return this.getAnnualExpenses()
             .stream()
-            .filter(expense -> year.equals(expense.getID().getYear()))
+            .filter(expense -> year.equals(expense.getYear()))
             .mapToDouble(expense -> expense.getUnits())
             .findFirst()
             .orElse(0.0);
     }
 
-    public double AnnualTravelNights(Year year)
+    public double AnnualTravelNights(Integer year)
     {
         // The final year of the expense
         Year finalYear = Year.of(
@@ -150,67 +149,122 @@ public class Travel extends Expense
             - (year.equals(finalYear) ? 1.0 : 0.0);
     }
     
-    private double AnnualTravelDays(AnnualExpense expense)
+    private Double AnnualTravelDays(AnnualExpense expense)
     {
         Double days = expense.getUnits();
-        if (days == null) return 0.0;
-        return (double) days;
+
+        if (days == null)
+            return null;
+
+        return days;
     }
 
     // Returns 0 if any properties of Travel are null
     @Override
-    public double AnnualCost(Year year)
+    public Double AnnualCost(Integer year)
     {
-        if (this.getNumTravellers() == null
-            || this.getCarHire() == null
-            || this.getMeals() == null
-            || this.getAccommodation() == null)
-            return 0.0;
+        Integer travellers = this.getNumTravellers();
+        Double carHire = this.getCarHire();
+        Double meals = this.getMeals();
+        Double accommodation = this.getAccommodation();
 
-        return this.getNumTravellers() * (
-            this.AnnualTravelDays(year) * (this.getCarHire() + this.getMeals())
-            + this.AnnualTravelNights(year) * this.getAccommodation()
+        Double days = this.AnnualTravelDays(year);
+        Double nights = this.AnnualTravelDays(year);
+
+        if (travellers == null
+            || carHire == null
+            || meals == null
+            || accommodation == null
+            || days == null
+            || nights == null)
+            return null;
+
+        return travellers * (
+            days * (carHire + meals)
+            + nights * accommodation
         );
     }
 
-
-    private double AnnualTravelNights(AnnualExpense expense)
+    public Double AnnualTravelNights(AnnualExpense expense)
     {
+        if (expense == null)
+            return null;
 
-        Year year = expense.getID().getYear();
+        Integer year = expense.getYear();
+        LocalDate rDate = this.getReturnDate();
+        Double days = this.AnnualTravelDays(expense);
+
+        if (year == null || rDate == null || days == null)
+            return null;
 
         // The final year of the expense
-        Year finalYear = Year.of(
-            this.getReturnDate().getYear()
-        );
+        Integer finalYear = rDate.getYear();
 
         // Subtract night of final day of travel 
-        return this.AnnualTravelDays(expense)
-            - (year.equals(finalYear) ? 1 : 0);
+        return days - (year.equals(finalYear) ? 1.0 : 0.0);
     }
 
-
     @Override
-    protected double AnnualCost(AnnualExpense expense)
+    public Double AnnualCost(AnnualExpense expense)
     {
-        if (this.getNumTravellers() == null
-            || this.getCarHire() == null
-            || this.getMeals() == null
-            || this.getAccommodation() == null)
-            return 0.0;
+        if (expense == null)
+            return null;
+        
+        Integer travellers = this.getNumTravellers();
+        Double carHire = this.getCarHire();
+        Double meals = this.getMeals();
+        Double accommodation = this.getAccommodation();
 
-        return this.getNumTravellers() * (
-            this.AnnualTravelDays(expense) * (this.getCarHire() + this.getMeals())
-            + this.AnnualTravelNights(expense) * this.getAccommodation()
+        Double days = this.AnnualTravelDays(expense);
+        Double nights = this.AnnualTravelDays(expense);
+
+        if (travellers == null
+            || carHire == null
+            || meals == null
+            || accommodation == null)
+            return null;
+
+        return travellers * (
+            days * (carHire + meals)
+            + nights * accommodation
         );
     }
 
     @Override
-    public double Cost()
+    public Double Cost()
     {
-        return this.annualExpenses
+        // TODO(Andrew): A version like thisis useful if expenses change per
+        //               year, e.g. inflation
+        /*
+        return this.getAnnualExpenses()
             .stream()
             .mapToDouble(this::AnnualCost)
             .reduce(numTravellers * fare, (total, c) -> total + c);
+        */
+
+        LocalDate dDate = this.getDepartureDate();
+        LocalDate rDate = this.getReturnDate();
+
+        if (dDate == null || rDate == null)
+            return null;
+
+        Double nights = Double.valueOf(ChronoUnit.DAYS.between(dDate, rDate));
+        Double days = nights + 1;
+
+        Integer travellers = this.getNumTravellers();
+        Double carHire = this.getCarHire();
+        Double meals = this.getMeals();
+        Double accommodation = this.getAccommodation();
+
+        if (travellers == null
+            || carHire == null
+            || meals == null
+            || accommodation == null)
+            return null;
+
+        return travellers * (
+            days * (carHire + meals)
+            + nights * accommodation
+        );
     }
 }

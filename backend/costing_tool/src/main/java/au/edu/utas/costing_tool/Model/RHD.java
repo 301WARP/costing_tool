@@ -1,5 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
+
 // =============================================================================
 // External imports
 // =============================================================================
@@ -7,7 +8,10 @@ package au.edu.utas.costing_tool.Model;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.hibernate.annotations.DiscriminatorOptions;
 
 
 // =============================================================================
@@ -18,17 +22,17 @@ import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.RHDIncomeStream;
 
 
-
 @Entity
-@Table(name="Contract")
 @DiscriminatorValue("RHD")
+@DiscriminatorOptions(force=true)
 public class RHD extends Contract
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    @Column(name="classfication_rhd")
+    @Column(name="classification_rhd")
+    @Enumerated(value=EnumType.STRING)
     public RHDIncomeStream classification;
     public RHDIncomeStream getClassification() {return this.classification;}
     public void setClassification(RHDIncomeStream c) {this.classification = c;}
@@ -61,5 +65,17 @@ public class RHD extends Contract
 
         this.setClassification(classification);
         this.setAnnualSalary(annualSalary);
+    }
+
+
+    // =========================================================================
+    // Methods
+    // =========================================================================
+
+    // TODO(Andrew): null checking and correct formula
+    @Override
+    public Double CostRate()
+    {
+        return this.getAnnualSalary();
     }
 }
