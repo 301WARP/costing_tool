@@ -19,29 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Database.ProjectRepository;
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Model.Expense;
+import au.edu.utas.costing_tool.Database.ExpenseRepository;
 
 
 @RestController
-public class ProjectController
+public class ExpenseController
 {
     // =========================================================================
     // Properties
     // =========================================================================
-
     @Autowired
-    private final ProjectRepository projectRepository;
-    private ProjectRepository projRepos() {return this.projectRepository;}
+    private final ExpenseRepository expenseRepository;
+    private ExpenseRepository expRepos() {return this.expenseRepository;}
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public ProjectController(ProjectRepository projectRepos)
+    public ExpenseController(ExpenseRepository repos)
     {
-        this.projectRepository = projectRepos;
+        this.expenseRepository = repos;
     }
 
 
@@ -49,68 +48,53 @@ public class ProjectController
     // Methods
     // =========================================================================
 
-    @GetMapping(path="/projects")
-    List<Project> all()
+    @GetMapping(path="/expenses")
+    List<Expense> all()
     {
-        List<Project> projects = new ArrayList<Project>();
-        this.projRepos().findAll().forEach(projects::add);
-        return projects;
+        List<Expense> expenses = new ArrayList<Expense>();
+        this.expRepos().findAll().forEach(expenses::add);
+        return expenses;
     }
 
 
-    @GetMapping(path="/projects/{id}")
-    Project one(@PathVariable Long id)
+    @GetMapping(path="/expenses/{id}")
+    Expense one(@PathVariable Long id)
     {
-        Optional<Project> project = this.projRepos().findById(id);
+        Optional<Expense> expense = this.expRepos().findById(id);
 
         // TODO(Andrew): return some sort of 404 message
-        if (!project.isPresent())
+        if (!expense.isPresent())
             return null;
 
-        return project.get();
+        return expense.get();
     }
+
+
+
     /*
-    public List<Project> loadProjects()
+    public List<Expense> loadCosts()
     {
         // TODO: not yet implemented
         return null;
     }
 
-    public void loadProjectDetails(Project p)
+    public void loadCostDetails(Expense c)
     {
         // TODO: not yet implemented
     }
 
-    public Project createProject()
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public void updateProject(Project p)
+    public void updateCost(Expense c)
     {
         // TODO: not yet implemented
     }
 
-    public List<Project> filterByOwner(Researcher r)
+    public List<Expense> filterByType(ExpenseType type)
     {
         // TODO: not yet implemented
         return null;
     }
 
-    public List<Project> filterByMember(Researcher r)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Project> filterByYear(LocalDate date)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Project> filterByName(String name)
+    public List<Expense> filterByDescription(String description)
     {
         // TODO: not yet implemented
         return null;
