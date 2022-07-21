@@ -17,7 +17,6 @@ INSERT INTO `project`
     `description`,
     `lead_researcher_id`,
     `category`,
-    `category_1_subtype`,
     `amc_menzies`,
     `start_date`,
 	`end_date`,
@@ -26,6 +25,12 @@ INSERT INTO `project`
     `partner_cash`,
     `entity`,
     `crowd_funding_provider`,
+
+	-- Specific to Category 1 projects
+	`category_1_subtype`,
+
+	-- Specific to Consultancy projects
+	`profit_margin`,
 
 	-- Codes
 	-- Field of Research
@@ -71,7 +76,6 @@ INSERT INTO `project`
     'A project to test the system.',				-- project description
     '1',											-- lead researcher id
     'ONE',											-- category
-    'NONE',											-- category 1 subtype
     'NONE',											-- AMC/Menzies
     '2022-01-31',									-- start date
 	'2023-12-31',									-- end date
@@ -80,6 +84,9 @@ INSERT INTO `project`
     '0.00',											-- partner organisation cash
     'IMAS',											-- entity
     'NONE',											-- crowd funding provider
+
+    'NONE',											-- category 1 subtype
+	'50.00',										-- profit margin
 
 	-- Codes
 	-- Field of Research

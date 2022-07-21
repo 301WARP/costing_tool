@@ -84,7 +84,6 @@ CREATE TABLE `project`
     `description` VARCHAR(255) NOT NULL,
     `lead_researcher_id` INTEGER(6) UNSIGNED NOT NULL,
     `category` ENUM('ONE', 'TWO', 'THREE', 'FOUR', 'CONSULTANCY', 'EXEMPTION') NOT NULL,
-	`category_1_subtype` ENUM('NONE'),
     `amc_menzies` ENUM('AMC', 'MENZIES', 'NONE') NOT NULL
 		DEFAULT 'NONE',
     `start_date` DATE NOT NULL,
@@ -94,6 +93,12 @@ CREATE TABLE `project`
     `partner_cash` DOUBLE(9,2) NOT NULL,
     `entity` ENUM('IMAS') NOT NULL,												-- values?
     `crowd_funding_provider` ENUM('?', 'NONE') NOT NULL,									-- values?
+
+	-- Specific to Category 1 projects
+	`category_1_subtype` ENUM('NONE'),
+
+	-- Specific to Consultancy projects
+	`profit_margin` Double(5,2),
 
 	-- Codes
 	-- Could be one table, but not sure how to enforce maximum of three

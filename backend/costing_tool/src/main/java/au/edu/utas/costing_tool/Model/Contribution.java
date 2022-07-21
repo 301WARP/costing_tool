@@ -157,9 +157,23 @@ public class Contribution
 
     public Double InKindDollar() 
     {
-        if (this.Price() == null || this.getInKindPercent() == null)
+        Double price = this.Price();
+        Double inKindPercent = this.getInKindPercent();
+
+        if (price == null || inKindPercent == null)
             return null;
 
-        return this.Price() * this.getInKindPercent();
+        return price * inKindPercent;
+    }
+
+    public Double cashIncome() 
+    {
+        Double price = this.Price();
+        Double inKindDollar = this.InKindDollar();
+
+        if (price == null || inKindDollar == null)
+            return null;
+
+        return price - inKindDollar;
     }
 }
