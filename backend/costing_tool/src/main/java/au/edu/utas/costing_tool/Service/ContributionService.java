@@ -51,7 +51,7 @@ public class ContributionService
         return conDAO().readAll();
     }
 
-    public Contribution findResearcher(ContributionID id)
+    public Contribution findContribution(ContributionID id)
     {
         return conDAO().readOne(id);
     }

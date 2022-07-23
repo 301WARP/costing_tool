@@ -132,30 +132,95 @@ INSERT INTO `project`
 INSERT INTO `contract`
 (
     `researcher_id`,
-    `staff_type`,
+    `contract_type`,
+    `staff_type_non_casual`,
+    `staff_type_casual`,
     `classification_non_casual`,
     `classification_casual`,
     `classification_rhd`,
-    `pay_code`,
     `step`,
+    `pay_code`,
     `salary`,
     `hourly_rate`,
     `wage_adjustment`,
     `on_cost_rate`
 ) VALUES (
     '1',											-- researcher id
-    'NON_CASUAL',									-- staff type
+    'NON_CASUAL',									-- contract type
+    'ACADEMIC',										-- non-casual staff type
+    NULL,											-- casual staff type
     'A',											-- non-casual classification
     NULL,											-- casual classification
     NULL,											-- RHD classification
-    '1',											-- pay code
     '1',											-- step
+    NULL,											-- pay code
     '100000.00',									-- salary
     NULL,											-- hourly rate
-    '1.00',											-- wage adjustment
+    '100.00',										-- wage adjustment
     '1.00'											-- on cost rate
 );
 
+INSERT INTO `contract`
+(
+    `researcher_id`,
+    `contract_type`,
+    `staff_type_non_casual`,
+    `staff_type_casual`,
+    `classification_non_casual`,
+    `classification_casual`,
+    `classification_rhd`,
+    `step`,
+    `pay_code`,
+    `salary`,
+    `hourly_rate`,
+    `wage_adjustment`,
+    `on_cost_rate`
+) VALUES (
+    '1',											-- researcher id
+    'CASUAL',										-- contract type
+    NULL,											-- non-casual staff type
+    'PROFESSIONAL',									-- casual staff type
+    NULL,											-- non-casual classification
+    'RA1',											-- casual classification
+    NULL,											-- RHD classification
+    NULL,											-- step
+    '1',											-- pay code
+    NULL,											-- salary
+    '50.00',										-- hourly rate
+    '1.00',											-- wage adjustment
+    '123.00'										-- on cost rate
+);
+
+INSERT INTO `contract`
+(
+    `researcher_id`,
+    `contract_type`,
+    `staff_type_non_casual`,
+    `staff_type_casual`,
+    `classification_non_casual`,
+    `classification_casual`,
+    `classification_rhd`,
+    `step`,
+    `pay_code`,
+    `salary`,
+    `hourly_rate`,
+    `wage_adjustment`,
+    `on_cost_rate`
+) VALUES (
+    '1',											-- researcher id
+    'RHD',											-- contract type
+    NULL,											-- non-casual staff type
+    NULL,											-- casual staff type
+    NULL,											-- non-casual classification
+    NULL,											-- casual classification
+    'APA',											-- RHD classification
+    NULL,											-- step
+    '1',											-- pay code
+    '25000.00',										-- salary
+    NULL,											-- hourly rate
+    NULL,											-- wage adjustment
+    NULL											-- on cost rate
+);
 
 -- contribution of project to contract
 INSERT INTO `contribution`
@@ -170,6 +235,32 @@ INSERT INTO `contribution`
 	'CI',											-- project role
     '50.00'											-- in kind percent
 );
+INSERT INTO `contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`role`,
+    `in_kind_%`
+) VALUES (
+	'2',											-- contract id
+	'1',											-- project id
+	'RA',											-- project role
+    '0.00'											-- in kind percent
+);
+INSERT INTO `contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`role`,
+    `in_kind_%`
+) VALUES (
+	'3',											-- contract id
+	'1',											-- project id
+	'RHD Student',									-- project role
+    '100.00'										-- in kind percent
+);
+
+
 
 
 -- contribution of project to contract
@@ -184,6 +275,68 @@ INSERT INTO `annual_contribution`
 	'1',											-- project id
 	'2022',											-- year
     '100.00'										-- units (here fte)
+);
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'1',											-- contract id
+	'1',											-- project id
+	'2023',											-- year
+    '50.05'											-- units (here fte)
+);
+
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'2',											-- contract id
+	'1',											-- project id
+	'2022',											-- year
+    '450.00'										-- units (here hours)
+);
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'2',											-- contract id
+	'1',											-- project id
+	'2023',											-- year
+    '600.20'										-- units (here hours)
+);
+
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'3',											-- contract id
+	'1',											-- project id
+	'2022',											-- year
+    '20.00'										-- units (here fte)
+);
+INSERT INTO `annual_contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`year`,
+    `units`
+) VALUES (
+	'3',											-- contract id
+	'1',											-- project id
+	'2023',											-- year
+    '80.00'											-- units (here fte)
 );
 
 

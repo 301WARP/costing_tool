@@ -60,9 +60,13 @@ CREATE TABLE `contract`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     `researcher_id` INTEGER(6) UNSIGNED NOT NULL,
-    `staff_type` ENUM('NON_CASUAL', 'CASUAL', 'RHD'),
+    `contract_type` ENUM('NON_CASUAL', 'CASUAL', 'RHD'),
+    `staff_type_non_casual` ENUM(	'ACADEMIC', 'PROFESSIONAL',
+									'RESEARCH_ASSISTANT'),
+    `staff_type_casual` ENUM(	'ACADEMIC', 'PROFESSIONAL',
+								'NON_AWARD_TEACHING', 'CONSERVATORIUM_AMEB'),
     `classification_non_casual` ENUM('A', 'B', 'C', 'D', 'E'),					-- values?
-    `classification_casual` ENUM('RA1', 'RA2', 'RA3', 'RA4', 'RA5'),				-- values?
+    `classification_casual` ENUM('RA1', 'RA2', 'RA3', 'RA4', 'RA5'),			-- values?
     `classification_rhd` ENUM('APA', 'TopUp'),									-- values?
     `pay_code` ENUM('1', '2', '3'),												-- values?
     `step` ENUM('1', '2', '3'),													-- values?

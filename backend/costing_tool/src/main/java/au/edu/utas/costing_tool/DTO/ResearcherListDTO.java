@@ -9,14 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ContractType;
 
 
 // TODO(Andrew): Add year/all-years, or create annual variant
@@ -27,9 +19,10 @@ import au.edu.utas.costing_tool.Enums.ContractType;
 public class ResearcherListDTO
 {
     Long staffID;
-    String name;
+    String Title;
+    String firstName;
+    String lastName;
     String role;
-    //ContractType contract;
     String contract;
 
     // TODO(Andrew): Could minimize this to actualCost + inKindPercent

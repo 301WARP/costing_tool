@@ -5,6 +5,9 @@ package au.edu.utas.costing_tool.Model;
 // External Imports
 // ============================================================================= 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +28,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
+
 
 // ============================================================================= 
 // Project Imports
@@ -35,10 +38,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import au.edu.utas.costing_tool.Enums.ContractType;
 
 
+@Data
 @Entity
 @Table(name="contract")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(   name="staff_type",
+@DiscriminatorColumn(   name="contract_type",
                         discriminatorType=DiscriminatorType.STRING)
 public abstract class Contract
 {
@@ -50,34 +54,23 @@ public abstract class Contract
     @GeneratedValue
     @Column(name="id")
     protected Long id;
-    public Long getID() {return this.id;}
-    public void setID(Long id) {this.id = id;}
+
+    @Column(name="contract_type",
+            insertable=false,
+            updatable=false)
+    @Enumerated(value=EnumType.STRING)
+    protected ContractType contractType;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="researcher_id", referencedColumnName="staff_id")
     @JsonBackReference
     protected Researcher researcher;
-    public Researcher getResearcher() {return this.researcher;}
-    public void setResearcher(Researcher r) {this.researcher = r;}
-
-    @Column(name="staff_type",
-            insertable=false,
-            updatable=false)
-    @Enumerated(value=EnumType.STRING)
-    protected ContractType type;
-    public ContractType getType() {return this.type;}
-    public void setType(ContractType type) {this.type = type;}
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
                 mappedBy="contract")
     @JsonManagedReference
     protected List<Contribution> contributions;
-    public List<Contribution> getContributions() {return this.contributions;}
-    public void setContributions(List<Contribution> contributions) {this.contributions = contributions;}
-
-    // TODO(Andrew): How to do this?
-    //private Dictionary<Year, Double> FTE;
 
 
     // ========================================================================= 
@@ -92,7 +85,7 @@ public abstract class Contract
     public Contract(ContractType type)
     {
         this();
-        this.setType(type);
+        this.setContractType(type);
     }
 
     public Contract(Researcher researcher, ContractType type)

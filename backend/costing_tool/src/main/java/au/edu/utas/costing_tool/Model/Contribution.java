@@ -22,7 +22,10 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.Data;
 
+
+@Data
 @Entity
 @Table(name="contribution")
 @IdClass(value=ContributionID.class)
@@ -35,46 +38,32 @@ public class Contribution
     @Id
     @Column(name="contract_id")
     protected Long contractID;
-    public Long getContractID() {return this.contractID;}
-    public void setContractID(Long id) {this.contractID = id;}
 
     @Id
     @Column(name="project_id")
     protected Long projectID;
-    public Long getProjectID() {return this.projectID;}
-    public void setProjectID(Long id) {this.projectID = id;}
 
     @Column(name="role")
     private String role; 
-    public String getRole() {return this.role;}
-    public void setRole(String role) {this.role = role;}
 
     @Column(name="`in_kind_%`")
     private Double inKindPercent; 
-    public Double getInKindPercent() {return this.inKindPercent;}
-    public void setInKindPercent(Double inKindPercent) {this.inKindPercent = inKindPercent;}
 
     @ManyToOne
     @MapsId(value="contractID")
     @JsonBackReference
     private Contract contract;
-    public Contract getContract() {return this.contract;}
-    public void getContract(Contract contract) {this.contract = contract;}
 
     @ManyToOne
     @MapsId("projectID")
     @JsonBackReference
     private Project project;
-    public Project getProject() {return this.project;}
-    public void getProject(Project project) {this.project = project;}
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
                 mappedBy="contribution")
     @JsonManagedReference
     private List<AnnualContribution> annualContributions;
-    public List<AnnualContribution> getAnnualContributions() {return this.annualContributions;}
-    public void setAnnualContributions(List<AnnualContribution> contributions) {this.annualContributions = contributions;}
     
     
     // ========================================================================= 
@@ -139,12 +128,19 @@ public class Contribution
             return null;
 
         Double rate = contract.CostRate(); 
-        Double units = ac.getUnits();
+        Double fte = ac.getFTE();
+        Double hours = ac.getHours();
 
-        if (rate == null || units == null)
+        if (rate == null || fte == null || hours == null)
             return null;
 
-        return rate * units;
+        if (contract instanceof NonCasual || contract instanceof RHD)
+            return rate * fte / 100.0;
+        else if (contract instanceof Casual)
+            return rate * hours;
+        // Unkown contract
+        else
+            return null;
     }
 
     public Double Price()
@@ -163,7 +159,7 @@ public class Contribution
         if (price == null || inKindPercent == null)
             return null;
 
-        return price * inKindPercent;
+        return price * inKindPercent / 100.0;
     }
 
     public Double cashIncome() 

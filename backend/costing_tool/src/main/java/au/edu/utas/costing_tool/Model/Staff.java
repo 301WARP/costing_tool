@@ -8,6 +8,8 @@ package au.edu.utas.costing_tool.Model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import lombok.Data;
+
 
 // =============================================================================
 // Project Imports
@@ -16,6 +18,7 @@ import javax.persistence.Entity;
 import au.edu.utas.costing_tool.Enums.ContractType;
 
 
+@Data
 @Entity
 public abstract class Staff extends Contract
 {
@@ -25,18 +28,13 @@ public abstract class Staff extends Contract
 
     @Column(name="wage_adjustment")
     protected Double wageAdjustment;
-    public Double getWageAdjustment() {return this.wageAdjustment;}
-    public void setWageAdjustment(Double adjustment)
-        {this.wageAdjustment = adjustment;}
 
     @Column(name="on_cost_rate")
     protected Double salaryOnCostRate;
-    public Double getSalaryOnCostRate() {return this.salaryOnCostRate;}
-    public void setSalaryOnCostRate(Double rate) {this.salaryOnCostRate = rate;}
 
 
     // =========================================================================
-    //Constructors
+    // Constructors
     // =========================================================================
 
     public Staff() {super();}

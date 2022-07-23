@@ -8,6 +8,7 @@ package au.edu.utas.costing_tool.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
@@ -17,31 +18,27 @@ import java.util.Map;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Enums.ContractType;
+import au.edu.utas.costing_tool.Enums.CasualClassification;
+import au.edu.utas.costing_tool.Enums.CasualStaffType;
 import au.edu.utas.costing_tool.Enums.PayCode;
-import au.edu.utas.costing_tool.Enums.RHDIncomeStream;
+
 
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CasualDetailsDTO
+public class CasualDetailsDTO extends ContributionDetailsDTO
 {
-    // TODO(Andrew): A lot of crossover with ResearcherListDTO 
-    //               Could assume they already have that and not send.
-    Long staffID;
-    String firstName;
-    String lastName;
-    String role;
-    ContractType contract;
+    String staffType;
+    String classification;
+    Integer payCode;
 
-    RHDIncomeStream classification;
-    PayCode payCode;
+    Double hourlyRate;
+    Double wageAdjustment;
+    Double salaryOnCostRate;
 
-    Double wageExpense;
-    Double inKindPercent;
-
-    // <year, FTE>
+    // <year, hours>
     Map<Integer, Double> annualContributions;
 }

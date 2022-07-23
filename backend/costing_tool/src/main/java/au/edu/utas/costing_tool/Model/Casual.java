@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import lombok.Data;
+
 import org.hibernate.annotations.DiscriminatorOptions;
 
 
@@ -19,10 +21,12 @@ import org.hibernate.annotations.DiscriminatorOptions;
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.CasualClassification;
+import au.edu.utas.costing_tool.Enums.CasualStaffType;
 import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.PayCode;
 
 
+@Data
 @Entity
 @DiscriminatorValue("CASUAL")
 @DiscriminatorOptions(force=true)
@@ -32,22 +36,20 @@ public class Casual extends Staff
     // Properties
     // =========================================================================
 
+    @Column(name="staff_type_casual")
+    @Enumerated(EnumType.STRING)
+    protected CasualStaffType staffType;
+
     @Column(name="classification_casual")
     @Enumerated(value=EnumType.STRING)
     private CasualClassification classification;
-    public CasualClassification getClassification() {return this.classification;}
-    public void setClassification(CasualClassification classification) {this.classification = classification;}
 
     @Column(name="pay_code")
     @Enumerated(value=EnumType.ORDINAL)
     private PayCode payCode;
-    public PayCode getPayCode() {return this.payCode;}
-    public void setPayCode(PayCode payCode) {this.payCode = payCode;}
 
     @Column(name="hourly_rate")
     private Double hourlyRate;
-    public Double getHourlyRate() {return this.hourlyRate;}
-    public void setHourlyRate(Double rate) {this.hourlyRate = rate;}
 
     // TODO(Andrew): Contribution?
     //private Dictionary<LocalDate, Double> Hours;

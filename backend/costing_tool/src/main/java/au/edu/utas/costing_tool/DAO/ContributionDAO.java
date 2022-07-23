@@ -66,7 +66,7 @@ public class ContributionDAO implements DAO<Contribution, ContributionID>
     @Override
     public List<Contribution> readAll()
     {
-        String query = "select r from Researcher r";
+        String query = "select r from Contribution r";
 
         return em
             .createQuery(query, Contribution.class)
