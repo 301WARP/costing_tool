@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -79,6 +82,7 @@ public class ResearcherController
     // Methods
     // =========================================================================
 
+    @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}")
     List<ResearcherListDTO> fetchResearcherList(@PathVariable Long projectID)
     {
@@ -94,6 +98,7 @@ public class ResearcherController
             .collect(Collectors.toList());
     }
 
+    @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}/{contractID}")
     ContributionDetailsDTO
     fetchResearcherDetails( @PathVariable Long projectID,
@@ -118,25 +123,25 @@ public class ResearcherController
             return null;
         
         if (contract instanceof NonCasual)
-        {
-            System.out.println("non-casual");
             return detailsMapper.map(contribution, NonCasualDetailsDTO.class);
-        }
         if (contract instanceof Casual)
-        {
-            System.out.println("casual");
             return detailsMapper.map(contribution, CasualDetailsDTO.class);
-        }
         if (contract instanceof RHD)
-        {
-            System.out.println("rhd");
             return detailsMapper.map(contribution, RHDDetailsDTO.class);
-        }
-
         
-        System.out.println("none");
         return null;
     }
+
+    @CrossOrigin(origins="*")
+    @PutMapping(path="/researchers/{projectID}/{contractID}")
+    Long updateContribution(@RequestBody ContributionDetailsDTO dto,
+                            @PathVariable Long projectID,
+                            @PathVariable Long contractID)
+    {
+        Long id = 0L;
+        return id;
+    }
+
 
     /*
     public List<Researcher> loadResearchers()

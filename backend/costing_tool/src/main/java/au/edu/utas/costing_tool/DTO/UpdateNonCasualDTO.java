@@ -5,23 +5,22 @@ package au.edu.utas.costing_tool.DTO;
 // External Imports
 // =============================================================================
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-// TODO(Andrew): Add year/all-years, or create annual variant
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ExpenseListDTO
+public class UpdateNonCasualDTO
 {
-    Long id;
-    String type;
-    String description;
-
+    // Contribution
+    String role;
     Double inKindPercent;
-    Double actualCost;
+    Map<Integer, Double> annualContributions;
 }

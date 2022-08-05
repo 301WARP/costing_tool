@@ -14,16 +14,6 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.CasualClassification;
-import au.edu.utas.costing_tool.Enums.CasualStaffType;
-import au.edu.utas.costing_tool.Enums.PayCode;
-
-
-
 @Data
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor

@@ -11,13 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ContractType;
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +19,8 @@ public class ProjectListDTO
 {
     Long id;
     String name;
+    String startDate;
+    String endDate;
     String role;
-    ContractType type;
+    String contractType;
 }

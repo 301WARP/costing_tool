@@ -2,6 +2,9 @@ package au.edu.utas.costing_tool.Mapper;
 
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -13,7 +16,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-
+import org.springframework.http.server.reactive.UndertowHttpHandlerAdapter;
 
 // =============================================================================
 // Project Imports
@@ -33,6 +36,7 @@ import au.edu.utas.costing_tool.Enums.Step;
 
 import au.edu.utas.costing_tool.Model.AnnualContribution;
 import au.edu.utas.costing_tool.Model.Casual;
+import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
 import au.edu.utas.costing_tool.Model.NonCasual;
 import au.edu.utas.costing_tool.Model.RHD;
@@ -318,6 +322,48 @@ public class ResearcherDetailsMapper extends ModelMapper
         this.initCasualDetailsDTOMappings();
         this.initRHDDetailsDTOMappings();
     }
+
+    interface Test {
+        public abstract Enum<?> t();
+    }
+
+    private interface Foo {
+        abstract Contract f();
+    }
+
+    private Converter<Contract, String>
+    contractConverter(Method m)
+    {
+        return new AbstractConverter<Contract, String>() {
+
+            @Override
+            protected String convert(Contract c)
+            {
+                if (c == null) return null;
+
+                Object o = null;
+                Enum<?> e = null;
+
+                try {
+                    o = m.invoke(c);
+                } catch (InvocationTargetException x) {
+                    System.err.format("Invocation of %s failed: %s\n",
+                                      m.getName(), x.getCause());
+
+                } catch (IllegalAccessException x) {
+                    System.err.format("Illegal access of %s by %s: %s\n",
+                                      c.getClass(), m.getName(), x.getCause());
+                }
+
+                if (!(o instanceof Enum<?>)) return null;
+
+                e = (Enum<?>)o;
+                if (e == null) return null;
+
+                return e.name();
+            }
+        };
+    }
     
 
     // =========================================================================
@@ -329,9 +375,16 @@ public class ResearcherDetailsMapper extends ModelMapper
         this.typeMap(Contribution.class, NonCasualDetailsDTO.class)
             .addMappings(mapper ->
         {
-            mapper  .using(this.nonCasualStaffTypeConverter)
+            //mapper  .using(this.nonCasualStaffTypeConverter)
+            try {
+            mapper  .using(this.contractConverter(NonCasual.class.getMethod("getStaffType")))
                     .map(   Contribution::getContract,
                             NonCasualDetailsDTO::setStaffType);
+            } catch (NoSuchMethodException x)
+            {
+                System.err.format("Class %s has no method %s: %s\n",
+                                NonCasual.class, "getStaffType", x.getCause());
+            }
 
             mapper  .using(this.nonCasualClassificationConverter)
                     .map(   Contribution::getContract,

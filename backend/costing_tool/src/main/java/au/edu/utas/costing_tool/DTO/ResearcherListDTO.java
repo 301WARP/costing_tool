@@ -1,6 +1,10 @@
 package au.edu.utas.costing_tool.DTO;
 
 
+import java.util.Map;
+
+import au.edu.utas.costing_tool.util.Pair;
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -18,16 +22,20 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResearcherListDTO
 {
+    // Researcher
     Long staffID;
-    String Title;
+    String title;
     String firstName;
     String lastName;
-    String role;
-    String contract;
 
-    // TODO(Andrew): Could minimize this to actualCost + inKindPercent
-    Double cashIncome;
+    // Contract
+    Long contrtactID;
+    String contract;
+    String role;
+    // ContractID -> <contractType, Role>
+    //Map<Long, Pair<String, String>>
+
+    // Contribution
     Double inKindPercent;
-    Double inKindDollar;
     Double actualCost;
 }

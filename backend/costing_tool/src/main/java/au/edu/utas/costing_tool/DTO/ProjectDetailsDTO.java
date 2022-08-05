@@ -10,20 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Map;
-
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ProjectCategory;
-import au.edu.utas.costing_tool.Enums.ResearchEntity;
-import au.edu.utas.costing_tool.Enums.YearEndType;
-import au.edu.utas.costing_tool.Enums.AMCMenzies;
-import au.edu.utas.costing_tool.Enums.Category1Subtype;
-import au.edu.utas.costing_tool.Enums.CrowdFunding;
 
 
 @Data
@@ -34,21 +21,23 @@ public class ProjectDetailsDTO
 {
     Long id;
     String name;
+    String description;
     String leadResearcherName;
-    ProjectCategory category;
-    AMCMenzies amcMenzies;
-    Category1Subtype category1Subtype;
+    String category;
+    String category1Subtype;
+    String amcMenzies;
+    String amcNationalCentre;
     Double profitMargin;
 
-    LocalDate startDate;
-    LocalDate endDate;
-    YearEndType yearEnd;
+    String startDate;
+    String endDate;
+    String yearEnd;
 
     Double utasCashContribution;
     Double partnerCashContribution;
-    CrowdFunding crowdFundingProvider;
+    String crowdFundingProvider;
 
-    ResearchEntity entity;
+    String entity;
     Map<Integer, Double> forCodes;
     Map<Integer, Double> seoCodes;
     Double appliedResearch;
