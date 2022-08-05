@@ -35,6 +35,7 @@ import java.time.LocalDate;
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.AMCMenzies;
+import au.edu.utas.costing_tool.Enums.Category1Subtype;
 import au.edu.utas.costing_tool.Enums.CrowdFunding;
 import au.edu.utas.costing_tool.Enums.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.ResearchEntity;
@@ -88,6 +89,17 @@ public class Project
     private AMCMenzies amcMenzies;
     public AMCMenzies getAmcMenzies() {return this.amcMenzies;}
     public void setAmcMenzies(AMCMenzies amcMenzies) {this.amcMenzies = amcMenzies;}
+
+    @Column(name="category_1_subtype")
+    @Enumerated(value=EnumType.STRING)
+    private Category1Subtype category1Subtype;
+    public Category1Subtype getCategory1Subtype() {return this.category1Subtype;}
+    public void setCategory1Subtype(Category1Subtype category1Subtype) {this.category1Subtype = category1Subtype;}
+
+    @Column(name="profit_margin")
+    private Double profitMargin;
+    public Double getProfitMargin() {return this.profitMargin;}
+    public void setProfitMargin(Double profitMargin) {this.profitMargin = profitMargin;}
 
     @Column(name="start_date")
     private LocalDate startDate;

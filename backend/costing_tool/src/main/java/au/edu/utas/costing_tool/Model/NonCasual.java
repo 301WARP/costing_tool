@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import lombok.Data;
+
 import org.hibernate.annotations.DiscriminatorOptions;
 
 
@@ -20,9 +22,11 @@ import org.hibernate.annotations.DiscriminatorOptions;
 
 import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.NonCasualClassification;
+import au.edu.utas.costing_tool.Enums.NonCasualStaffType;
 import au.edu.utas.costing_tool.Enums.Step;
 
 
+@Data
 @Entity
 @DiscriminatorValue("NON_CASUAL")
 @DiscriminatorOptions(force=true)
@@ -32,24 +36,20 @@ public class NonCasual extends Staff
     // Properties
     // =========================================================================
 
+    @Column(name="staff_type_non_casual")
+    @Enumerated(EnumType.STRING)
+    protected NonCasualStaffType staffType;
+
     @Column(name="classification_non_casual")
     @Enumerated(EnumType.STRING)
     private NonCasualClassification classification;
-    public NonCasualClassification getClassification()
-        {return this.classification;}
-    public void setClassification(NonCasualClassification classification)
-        {this.classification = classification;}
 
     @Column(name="step")
     @Enumerated(EnumType.ORDINAL)
     private Step step;
-    public Step getStep() {return this.step;}
-    public void setStep(Step step) {this.step = step;}
 
     @Column(name="salary")
     private Double startingSalary;
-    public Double getStartingSalary() {return this.startingSalary;}
-    public void setStartingSalary(Double salary) {this.startingSalary = salary;}
 
 
     // =========================================================================
