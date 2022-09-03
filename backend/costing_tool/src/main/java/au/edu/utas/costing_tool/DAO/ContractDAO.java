@@ -6,6 +6,7 @@ package au.edu.utas.costing_tool.DAO;
 // =============================================================================
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -13,29 +14,30 @@ import javax.persistence.EntityTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 // =============================================================================
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.Model.Contract;
 
 
 @Component
-public class ResearcherDAO implements DAO<Researcher, Long>
+public class ContractDAO implements DAO<Contract, Long>
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
     @Autowired
-    private final EntityManager em;
+    private EntityManager em;
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public ResearcherDAO(EntityManager em)
+    public ContractDAO(EntityManager em)
     {
         this.em = em;
     }
@@ -46,52 +48,67 @@ public class ResearcherDAO implements DAO<Researcher, Long>
     // =========================================================================
 
     @Override
-    public Researcher create(Researcher researcher)
+    public Contract create(Contract Contract)
     {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
-        em.persist(researcher);
+        em.persist(Contract);
         t.commit();
 
-        return researcher;
+        return Contract;
     }
 
     @Override
-    public Researcher readOne(Long id)
+    public Contract readOne(Long id)
     {
-        return em.find(Researcher.class, id);
+        return em.find(Contract.class, id);
     }
 
     @Override
-    public List<Researcher> readAll()
+    public List<Contract> readAll()
     {
-        String query = "select r from Researcher r";
+        String query = "select c from Contract c";
 
         return em
-            .createQuery(query, Researcher.class)
+            .createQuery(query, Contract.class)
             .getResultList();
     }
 
     @Override
-    public Researcher update(Researcher researcher)
+    public Contract update(Contract contract)
     {
+        Consumer<EntityManager> action = a -> a.merge(contract);
+
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            action.accept(em);
+            t.commit(); 
+        }
+        catch (RuntimeException e) {
+            t.rollback();
+            throw e;
+        }
+
+        /*
         EntityTransaction t = em.getTransaction();
 
         t.begin();
-        em.merge(researcher);
+        em.merge(contract);
         t.commit();
+        */
 
-        return researcher;
+        return contract;
     }
 
     @Override
-    public void delete(Researcher researcher)
+    public void delete(Contract Contract)
     {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
-        em.remove(researcher);
+        em.remove(Contract);
         t.commit();
     }
 }
