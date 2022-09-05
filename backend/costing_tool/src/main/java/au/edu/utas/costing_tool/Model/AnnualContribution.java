@@ -19,10 +19,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name="annual_contribution")
 @IdClass(value=AnnualContributionID.class)
@@ -67,16 +69,6 @@ public class AnnualContribution
         this.setProjectID(contribution.projectID);
         this.contribution = contribution;
     }
-    /*
-    public Contribution getContribution()
-    {
-        if (this.contribution != null)
-            return this.contribution;
-        
-        // TODO(Andrew): fetch contribution from DB?
-        return null;
-    }
-    */
     
     @Column(name="units")
     protected Double units;
@@ -96,9 +88,20 @@ public class AnnualContribution
     // Constructors
     // ========================================================================= 
 
-    public AnnualContribution() {}
-
     public AnnualContribution(Long contractID, Long projectID, Integer year)
+    {
+        this.setContractID(contractID);
+        this.setProjectID(projectID);
+
+        // TODO(Andrew): Consider setting contribution here somehow
+
+        this.setYear(year);
+    }
+
+    public AnnualContribution(  Long contractID,
+                                Long projectID,
+                                Integer year,
+                                Double units)
     {
         this.setContractID(contractID);
         this.setProjectID(projectID);
@@ -106,6 +109,18 @@ public class AnnualContribution
         // TODO(Andrew): Consider setting contract here somehow
 
         this.setYear(year);
+        this.setUnits(units);
+    }
+
+    public AnnualContribution(  Contract contract,
+                                Project project,
+                                Integer year,
+                                Double units)
+    {
+        this.setContractID(contract.getId());
+        this.setProjectID(project.getID());
+        this.setYear(year);
+        this.setUnits(units);
     }
 
     public AnnualContribution(Contribution contribution, Integer year)

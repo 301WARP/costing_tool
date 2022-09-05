@@ -1,15 +1,22 @@
 package au.edu.utas.costing_tool.Controller;
 
 
+import java.net.URI;
+import java.util.HashMap;
+
 // =============================================================================
 // External Imports
 // =============================================================================
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 // =============================================================================
 // Project Imports
@@ -27,56 +34,36 @@ import org.springframework.web.bind.annotation.RestController;
 import au.edu.utas.costing_tool.Mapper.ResearcherDetailsMapper;
 import au.edu.utas.costing_tool.Mapper.ResearcherListMapper;
 import au.edu.utas.costing_tool.Mapper.UpdateContributionMapper;
-import au.edu.utas.costing_tool.DTO.CasualDetailsDTO;
 import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
-import au.edu.utas.costing_tool.DTO.NonCasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.RHDDetailsDTO;
 import au.edu.utas.costing_tool.DTO.ResearcherListDTO;
+import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
 import au.edu.utas.costing_tool.DTO.UpdateResearcherDTO;
-import au.edu.utas.costing_tool.Database.AnnualContributionRepository;
-import au.edu.utas.costing_tool.Database.ContractRepository;
-import au.edu.utas.costing_tool.Database.ProjectRepository;
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Casual;
+import au.edu.utas.costing_tool.Enums.Title;
 import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
 import au.edu.utas.costing_tool.Model.ContributionID;
-import au.edu.utas.costing_tool.Model.NonCasual;
 import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.RHD;
-
+import au.edu.utas.costing_tool.Service.ContractService;
 import au.edu.utas.costing_tool.Service.ContributionService;
+import au.edu.utas.costing_tool.Service.ProjectService;
 
 
 @RestController
+@Data
 public class ResearcherController
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    /*
-    @Autowired
-    private final ResearcherRepository researcherRepository;
-    private ResearcherRepository resRepos() {return this.researcherRepository;}
-
-    @Autowired
-    private final ResearcherService researcherService;
-    //private ResearcherService resService() {return this.researcherService;}
-    */
-
     @Autowired
     private final ContributionService contributionService;
-    //private ContributionService conService() {return this.contributionService;}
 
     @Autowired
-    private final ContractRepository contractRepository;
+    private final ContractService contractService;
 
     @Autowired
-    private final ProjectRepository projectRepository;
-
-    @Autowired
-    private final AnnualContributionRepository acRepository;
+    private final ProjectService projectService;
 
     private final ResearcherListMapper listMapper
         = new ResearcherListMapper();
@@ -87,21 +74,6 @@ public class ResearcherController
     private final UpdateContributionMapper updateMapper
         = new UpdateContributionMapper();
 
-    // =========================================================================
-    // Constructors
-    // =========================================================================
-
-    public ResearcherController(ContributionService contributionService,
-                                ContractRepository contractRepository,
-                                ProjectRepository projectRepository,
-                                AnnualContributionRepository acRepository)
-    {
-        this.contributionService = contributionService;
-        this.contractRepository = contractRepository;
-        this.projectRepository = projectRepository;
-        this.acRepository = acRepository;
-    }
-
 
     // =========================================================================
     // Methods
@@ -109,208 +81,221 @@ public class ResearcherController
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}")
-    List<ResearcherListDTO>
+    ResponseEntity<List<ResearcherListDTO>>
     fetchResearcherList(@PathVariable Long projectID)
     {
-        // TODO(Andrew): This needs a better error
-        if (projectID == null) return null;
+        if (projectID == null)
+            return ResponseEntity.badRequest().body(null);
+
+        if (this.projectService.findProject(projectID) == null)
+            return ResponseEntity.notFound().build();
 
         // TODO(Andrew): I think this is horribly inefficient; the filtering
         //               should be done at the query level.
-        return this.contributionService.listAllContributions()
-            .stream()
-            .filter(c -> c.getProjectID() == projectID)
-            .map(c -> listMapper.map(c, ResearcherListDTO.class))
-            .collect(Collectors.toList());
+        List<ResearcherListDTO> researchers =
+            this.contributionService.listAllContributions()
+                .stream()
+                .filter(c -> c.getProjectID() == projectID)
+                .map(c -> listMapper.map(c, ResearcherListDTO.class))
+                .collect(Collectors.toList());
+        
+        if (researchers.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok().body(researchers);
     }
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}/{contractID}")
-    ContributionDetailsDTO
+    ResponseEntity<ContributionDetailsDTO>
     fetchResearcherDetails( @PathVariable Long projectID,
                             @PathVariable Long contractID)
     {
-        // TODO(Andrew): This needs a better error
         if (projectID == null || contractID == null)
-            return null;
+            return ResponseEntity.badRequest().build();
 
         ContributionID id = new ContributionID(contractID, projectID);
 
         Contribution contribution = this.contributionService
                                         .findContribution(id);
 
-        // TODO(Andrew): return some sort of 404 message
-        if (contribution == null) return null;
+        if (contribution == null)
+            return ResponseEntity.notFound().build();
 
-        Contract contract = contribution.getContract();
-
-        // TODO(Andrew): return some sort of unkown contract message
-        if (contract == null)
-            return null;
+        ContributionDetailsDTO detailsDTO =
+                this.contributionService.contributionDetailsDTO(contribution);
         
-        if (contract instanceof NonCasual)
-            return detailsMapper.map(contribution, NonCasualDetailsDTO.class);
-        if (contract instanceof Casual)
-            return detailsMapper.map(contribution, CasualDetailsDTO.class);
-        if (contract instanceof RHD)
-            return detailsMapper.map(contribution, RHDDetailsDTO.class);
-        
-        return null;
+        return ResponseEntity.ok().body(detailsDTO);
     }
 
     @CrossOrigin(origins="*")
     @PutMapping(path="/researchers/{projectID}/{contractID}")
-    Contribution
+    ResponseEntity<ContributionDetailsDTO>
     updateContribution( @RequestBody UpdateResearcherDTO dto,
                         @PathVariable Long projectID,
                         @PathVariable Long contractID)
     {
         // Bad request
-        if (projectID == null || contractID == null)
-            return null;
+        if (projectID == null || contractID == null || dto == null)
+            return ResponseEntity.badRequest().build();
 
         ContributionID id = new ContributionID(contractID, projectID);
 
-        Contribution oldContribution = this.contributionService
-                                        .findContribution(id);
+        Contribution oldContribution
+            = this.contributionService.findContribution(id);
 
         // No such contribution
         if (oldContribution == null)
-            return null;
+            return ResponseEntity.notFound().build();
 
+        // TODO(Andrew): try?
         Contribution newContribution = this.updateMapper.map(dto);
 
-        return contributionService
-            .updateContribution(oldContribution, newContribution);
-
-
-        /*
-
-        oldContribution.setRole(newContribution.getRole());
-        oldContribution.setInKindPercent(newContribution.getInKindPercent());
-
-        //oldContribution.getAnnualContributions().clear();
-        //this.ClearAnnualContributions(oldContribution);
-
-        for (AnnualContribution ac : newContribution.getAnnualContributions()) {
-            List<AnnualContribution> acs = oldContribution.getAnnualContributions();
-            Integer i = acs.indexOf(ac);
-            if (i > -1) {
-                AnnualContribution oldAc = acs.get(i);
-                oldAc.setUnits(ac.getUnits());
-                this.acRepository.saveAndFlush(oldAc);
-            } else {
-                oldContribution.addAnnualContribution(ac);
-                this.acRepository.saveAndFlush(ac);
-            }
-        }
+        Contribution contribution
+            = this  .contributionService
+                    .updateContribution(oldContribution, newContribution);
         
-
-        //System.out.println(newContribution);
-
-        this.contributionService.updateContribution(oldContribution);
-        */
-
-
-
-
-        /*
-        for (AnnualContribution ac : contribution.getAnnualContributions()) {
-            this.acRepository.delete(ac);
-            contribution.removeAnnualContribution(ac);
-        }
-        */
-
-        /*
-        System.out.println(contribution.getAnnualContributions());
-        AnnualContribution ac = contribution.getAnnualContributions().get(0);
-        contribution.removeAnnualContribution(ac);
-        this.acRepository.delete(ac);
-        //this.acRepository.deleteAllInBatch(contribution.getAnnualContributions());
-        //contribution.setAnnualContributions(null);
-        this.acRepository.flush();
-        */
-
-        /*
-        this.contributionService.updateContribution(contribution);
-
-        Contract contract = contribution.getContract();
-
-        // No such contract
-        if (contract == null) return;
-
-        this.updateMapper.map(dto, contribution);
-
-        System.out.println(contribution);
-
-        this.contributionService.updateContribution(contribution);
-        */
+        ContributionDetailsDTO detailsDTO
+            = this.contributionService.contributionDetailsDTO(contribution);
+        
+        return ResponseEntity.ok().body(detailsDTO);
     }
 
     @CrossOrigin(origins="*")
     @PostMapping(path="/researchers/{projectID}/{contractID}")
-    void
+    ResponseEntity<ContributionDetailsDTO>
     createContribution( @RequestBody UpdateResearcherDTO dto,
                         @PathVariable Long projectID,
                         @PathVariable Long contractID)
     {
         // Bad request
-        if (projectID == null || contractID == null)
-            return;
+        if (projectID == null || contractID == null || dto == null)
+            return ResponseEntity.badRequest().build();
 
         ContributionID id = new ContributionID(contractID, projectID);
 
         Contribution contribution = this.contributionService
                                         .findContribution(id);
-
+        
         // Contribution already exists
-        if (contribution != null) return;
+        if (contribution != null)
+        {
+            /*
+            Map<String, Long> pathVariables = new HashMap<String, Long>();
+            pathVariables.put("projectID", projectID);
+            pathVariables.put("contractID", contractID);
+            */
 
-        Optional<Contract> c = contractRepository.findById(contractID);
-        Optional<Project> p = projectRepository.findById(projectID);
+            URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                /*
+                .path("/api/researchers/{projectID}/{contractID}")
+                .buildAndExpand(pathVariables)
+                */
+                .build()
+                .toUri();
 
-        Contract contract;
+            ContributionDetailsDTO detailsDTO
+                = this  .contributionService
+                        .contributionDetailsDTO(contribution);
+            
+            return ResponseEntity
+                .status(HttpStatus.SEE_OTHER)
+                .location(location)
+                .body(detailsDTO);
+        }
 
-        // Contract does not exist
-        if (c.isEmpty() || (contract = c.get()) == null) return;
+        Contract contract = contractService.findContract(contractID);
+        Project project = projectService.findProject(projectID);
 
-        // Project does not exist
-        if (p.isEmpty() || p.get() == null) return;
+        // No such contract/project
+        if (contract == null || project == null)
+            return ResponseEntity.notFound().build();
 
-        this.updateMapper.map(dto, contribution);
+        contribution = this.updateMapper.map(dto);
+        contribution.setContract(contract);
+        contribution.setProject(project);
 
-        this.contributionService.createContribution(contribution);
+        contribution = this
+            .contributionService
+            .createContribution(contract, project, contribution);
+        
+        if (contribution == null)
+            return ResponseEntity.internalServerError().build();
 
-        contract.addContribution(contribution);
+        ContributionDetailsDTO detailsDTO
+            = this.contributionService.contributionDetailsDTO(contribution);
 
-        //return contribution;
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .build()
+            .toUri();
+
+        return ResponseEntity.created(location).body(detailsDTO);
     }
 
     @CrossOrigin(origins="*")
     @DeleteMapping(path="/researchers/{projectID}/{contractID}")
-    void deleteContribution(@RequestBody ContributionDetailsDTO dto,
-                            @PathVariable Long projectID,
-                            @PathVariable Long contractID)
+    ResponseEntity<Void>
+    deleteContribution( @PathVariable Long projectID,
+                        @PathVariable Long contractID)
     {
+        // Bad request
+        if (projectID == null || contractID == null)
+            return ResponseEntity.badRequest().build();
+
+        Contribution contribution
+            = contributionService.findContribution(
+                new ContributionID(contractID, projectID)
+            );
+
+        // No such contribution
+        if (contribution == null)
+            return ResponseEntity.notFound().build();
+
+        contributionService.deleteContribution(contribution);
+
+        return ResponseEntity.ok().build();
     }
 
     @CrossOrigin(origins="*")
-    @PutMapping(path="/researchers/{partialName}")
-    List<String> recommendations(   @RequestBody ContributionDetailsDTO dto,
-                            @PathVariable String partialName)
+    @GetMapping(path="/researchers")
+    ResponseEntity<List<ResearcherRecommendationDTO>>
+    recommendResearchers(@RequestBody ResearcherRecommendationDTO dto)
     {
-        return null;
+        // Bad request
+        if (dto == null)
+            return ResponseEntity.badRequest().build();
+        
+        List<ResearcherRecommendationDTO> recommendations
+            = contributionService.recommendResearchers(dto);
+        
+        // No matches
+        if (recommendations.isEmpty())
+            return ResponseEntity.noContent().build();
+        
+        return ResponseEntity.ok().body(recommendations);
     }
-
-    private void ClearAnnualContributions(Contribution contribution)
+    
+    @CrossOrigin(origins="*")
+    @GetMapping(path="/researchers/{title}/{firstName}/{lastName}")
+    ResponseEntity<List<ResearcherRecommendationDTO>>
+    recommendResearchers(   @PathVariable Title title,
+                            @PathVariable String firstName,
+                            @PathVariable String lastName)
     {
-        this.acRepository.deleteAllInBatch(contribution.getAnnualContributions());
-        contribution.getAnnualContributions().clear();
-        /*
-        for (AnnualContribution ac : contribution.getAnnualContributions()) {
-            ac.delete
-        }
-        */
-
+        // Bad request
+        if (title == null || firstName == null || lastName == null)
+            return ResponseEntity.badRequest().build();
+        
+        List<ResearcherRecommendationDTO> recommendations
+            = this  .contributionService
+                    .recommendResearchers(title, firstName,lastName);
+        
+        // No matches
+        if (recommendations.isEmpty())
+            return ResponseEntity.noContent().build();
+        
+        return ResponseEntity.ok().body(recommendations);
     }
 }

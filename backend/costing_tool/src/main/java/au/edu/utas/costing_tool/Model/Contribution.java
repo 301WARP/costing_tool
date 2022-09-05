@@ -55,17 +55,42 @@ public class Contribution
     @MapsId(value="contractID")
     @JsonBackReference
     private Contract contract;
+    public void setContract(Contract contract)
+    {
+        this.contract = contract;
+
+        Long contractID = contract != null ? contract.getId() : null;
+
+        this.setContractID(contractID);
+        
+        this.getAnnualContributions()
+            .stream()
+            .forEach(a -> a.setContractID(contractID));
+    }
 
     @ManyToOne
     @MapsId("projectID")
     @JsonBackReference
     private Project project;
+    public void setProject(Project project)
+    {
+        this.project = project;
+
+        Long projectID = project != null ? project.getID() : null;
+
+        this.setProjectID(projectID);
+        
+        this.getAnnualContributions()
+            .stream()
+            .forEach(a -> a.setProjectID(projectID));
+    }
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
                 mappedBy="contribution",
                 orphanRemoval=true)
     @JsonManagedReference
+    // TODO(Andrew): final?
     private List<AnnualContribution> annualContributions;
     
     
@@ -97,6 +122,19 @@ public class Contribution
     // ========================================================================= 
     // Methods
     // ========================================================================= 
+
+    public boolean hasAnnualContribution(Integer year)
+    {
+        List<AnnualContribution> ac = this.getAnnualContributions();
+
+        if (year == null || ac == null || ac.isEmpty())
+            return false;
+        
+        return this
+            .getAnnualContributions()
+            .stream()
+            .anyMatch(a -> a.getYear().equals(year));
+    }
 
     public AnnualContribution findAnnualContribution(AnnualContribution ac)
     {

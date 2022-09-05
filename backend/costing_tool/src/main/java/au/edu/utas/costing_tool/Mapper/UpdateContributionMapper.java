@@ -20,7 +20,9 @@ import org.modelmapper.ModelMapper;
 import au.edu.utas.costing_tool.DTO.UpdateResearcherDTO;
 
 import au.edu.utas.costing_tool.Model.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
+import au.edu.utas.costing_tool.Model.Project;
 
 
 public class UpdateContributionMapper extends ModelMapper
@@ -53,27 +55,25 @@ public class UpdateContributionMapper extends ModelMapper
         });
     }
 
+    /*
     public
     Converter<Map<Integer, Double>, List<AnnualContribution>>
-    makeAnnualContributionConverter(Contribution contribution)
+    makeAnnualContributionConverter(Contract contract, Project project)
     {
         return new AbstractConverter<Map<Integer, Double>, List<AnnualContribution>>() {
 
             protected List<AnnualContribution> convert(Map<Integer, Double> acMap)
             {
                 return acMap.entrySet().stream()
-                    .map(e -> {
-                        AnnualContribution ac
-                            = new AnnualContribution(   contribution.getContractID(), contribution.getProjectID(),
-                                                        e.getKey());
-                        ac.setUnits(e.getValue());
-                        return ac;
-
-                    })
+                    .map(e -> new AnnualContribution(   project.getID(),
+                                                        contract.getId(),
+                                                        e.getKey(),
+                                                        e.getValue()))
                     .collect(Collectors.toList());
             }
         };
     }
+    */
 
     Converter<Map<Integer, Double>, List<AnnualContribution>> acConverter =
         new AbstractConverter<Map<Integer, Double>, List<AnnualContribution>>()
@@ -86,6 +86,7 @@ public class UpdateContributionMapper extends ModelMapper
         }
     };
 
+    /*
     public Contribution map(UpdateResearcherDTO dto, Contribution contribution)
     {
         this
@@ -101,6 +102,7 @@ public class UpdateContributionMapper extends ModelMapper
 
         return contribution;
     }
+    */
 
     public Contribution map(UpdateResearcherDTO dto)
     {
