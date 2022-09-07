@@ -9,7 +9,7 @@
 CREATE database IF NOT EXISTS `warp`;
 USE `warp`;
 
--- Remove existing tables in the abs database clashing with our new tables 
+-- Remove existing tables in the warp database clashing with our new tables 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `annual_expense`;
 DROP TABLE IF EXISTS `expense`;

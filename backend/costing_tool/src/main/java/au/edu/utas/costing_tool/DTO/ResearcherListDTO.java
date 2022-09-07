@@ -3,7 +3,7 @@ package au.edu.utas.costing_tool.DTO;
 
 import java.util.Map;
 
-import au.edu.utas.costing_tool.util.Pair;
+import au.edu.utas.costing_tool.Util.Pair;
 
 // =============================================================================
 // External Imports

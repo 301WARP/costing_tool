@@ -18,10 +18,17 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name="annual_contribution")
 @IdClass(value=AnnualContributionID.class)
+@ToString(exclude="contribution")
 public class AnnualContribution
 {
     // ========================================================================= 
@@ -30,21 +37,23 @@ public class AnnualContribution
 
     @Id
     @Column(name="contract_id")
-    protected Long contractID;
-    public Long getContractID() {return this.contractID;}
-    public void setContractID(Long id) {this.contractID = id;}
+    private Long contractID;
 
     @Id
     @Column(name="project_id")
-    protected Long projectID;
-    public Long getProjectID() {return this.projectID;}
-    public void setProjectID(Long id) {this.projectID = id;}
+    private Long projectID;
 
     @Id
     @Column(name="year")
     private Integer year;
-    public Integer getYear() {return this.year;}
-    public void setYear(Integer year) {this.year = year;}
+
+    public AnnualContributionID getId()
+    {
+        return new AnnualContributionID(this.contractID,
+                                        this.projectID,
+                                        this.year);
+    }
+
 
     @ManyToOne
     @MapsId
@@ -54,14 +63,15 @@ public class AnnualContribution
     })
     @JsonBackReference
     protected Contribution contribution;
-    public Contribution getContribution() {return this.contribution;}
     public void setContribution(Contribution contribution)
-        {this.contribution = contribution;}
+    {
+        this.setContractID(contribution.contractID);
+        this.setProjectID(contribution.projectID);
+        this.contribution = contribution;
+    }
     
     @Column(name="units")
     protected Double units;
-    public Double getUnits() {return this.units;}
-    public void setUnits(Double units) {this.units = units;}
 
     // Virtual fte
     @JsonIgnore
@@ -78,13 +88,53 @@ public class AnnualContribution
     // Constructors
     // ========================================================================= 
 
-    public AnnualContribution() {}
+    public AnnualContribution(Long contractID, Long projectID, Integer year)
+    {
+        this.setContractID(contractID);
+        this.setProjectID(projectID);
 
-    public AnnualContribution(Contribution contribution)
+        // TODO(Andrew): Consider setting contribution here somehow
+
+        this.setYear(year);
+    }
+
+    public AnnualContribution(  Long contractID,
+                                Long projectID,
+                                Integer year,
+                                Double units)
+    {
+        this.setContractID(contractID);
+        this.setProjectID(projectID);
+
+        // TODO(Andrew): Consider setting contract here somehow
+
+        this.setYear(year);
+        this.setUnits(units);
+    }
+
+    public AnnualContribution(  Contract contract,
+                                Project project,
+                                Integer year,
+                                Double units)
+    {
+        this.setContractID(contract.getId());
+        this.setProjectID(project.getID());
+        this.setYear(year);
+        this.setUnits(units);
+    }
+
+    public AnnualContribution(Contribution contribution, Integer year)
     {
         this.setContribution(contribution);
+        this.setYear(year);
 
         // Update contribution with this annual contribution
         this.getContribution().addAnnualContribution(this);
+    }
+
+    public AnnualContribution(Integer year, Double units)
+    {
+        this.setYear(year);
+        this.setUnits(units);
     }
 }

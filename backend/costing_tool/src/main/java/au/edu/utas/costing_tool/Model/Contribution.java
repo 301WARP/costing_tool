@@ -7,6 +7,7 @@ package au.edu.utas.costing_tool.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import au.edu.utas.costing_tool.Util.Log;
 import lombok.Data;
 
 
@@ -53,16 +55,42 @@ public class Contribution
     @MapsId(value="contractID")
     @JsonBackReference
     private Contract contract;
+    public void setContract(Contract contract)
+    {
+        this.contract = contract;
+
+        Long contractID = contract != null ? contract.getId() : null;
+
+        this.setContractID(contractID);
+        
+        this.getAnnualContributions()
+            .stream()
+            .forEach(a -> a.setContractID(contractID));
+    }
 
     @ManyToOne
     @MapsId("projectID")
     @JsonBackReference
     private Project project;
+    public void setProject(Project project)
+    {
+        this.project = project;
+
+        Long projectID = project != null ? project.getID() : null;
+
+        this.setProjectID(projectID);
+        
+        this.getAnnualContributions()
+            .stream()
+            .forEach(a -> a.setProjectID(projectID));
+    }
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
-                mappedBy="contribution")
+                mappedBy="contribution",
+                orphanRemoval=true)
     @JsonManagedReference
+    // TODO(Andrew): final?
     private List<AnnualContribution> annualContributions;
     
     
@@ -75,9 +103,17 @@ public class Contribution
         this.setAnnualContributions(new ArrayList<AnnualContribution>());
     }
 
-    public Contribution(String role, Double inKindPercent)
+    public Contribution(Long contractID, Long projectID)
     {
         this();
+        this.setContractID(contractID);
+        this.setProjectID(projectID);
+    }
+
+    public Contribution(Long contractID, Long projectID,
+                        String role, Double inKindPercent)
+    {
+        this(contractID, projectID);
         this.setRole(role);
         this.setInKindPercent(inKindPercent);
     }
@@ -87,9 +123,107 @@ public class Contribution
     // Methods
     // ========================================================================= 
 
-    public boolean addAnnualContribution(AnnualContribution contribution)
+    public boolean hasAnnualContribution(Integer year)
     {
-        return this.getAnnualContributions().add(contribution);
+        List<AnnualContribution> ac = this.getAnnualContributions();
+
+        if (year == null || ac == null || ac.isEmpty())
+            return false;
+        
+        return this
+            .getAnnualContributions()
+            .stream()
+            .anyMatch(a -> a.getYear().equals(year));
+    }
+
+    public AnnualContribution findAnnualContribution(AnnualContribution ac)
+    {
+        if (ac == null
+                || this.getAnnualContributions() == null
+                || this.getAnnualContributions().isEmpty())
+            return null;
+
+        return this .getAnnualContributions()
+                    .stream()
+                    .filter(a -> a.getId().equals(ac.getId()))
+                    .findFirst()
+                    .orElse(null);
+    }
+
+    public AnnualContribution findAnnualContributionById(AnnualContributionID id)
+    {
+        if (id == null
+                || this.getAnnualContributions() == null
+                || this.getAnnualContributions().isEmpty())
+            return null;
+
+        return this .getAnnualContributions()
+                    .stream()
+                    .filter(a -> a.getId().equals(id))
+                    .findFirst()
+                    .orElse(null);
+    }
+
+    public AnnualContribution findAnnualContributionByYear(Integer year)
+    {
+        if (year == null
+                || this.getAnnualContributions() == null
+                || this.getAnnualContributions().isEmpty())
+            return null;
+
+        return this .getAnnualContributions()
+                    .stream()
+                    .filter(a -> a.getYear().equals(year))
+                    .findFirst()
+                    .orElse(null);
+    }
+
+    public
+    List<AnnualContribution>
+    findAnnualContributions(List<AnnualContribution> ac)
+    {
+        if (ac == null
+                || ac.isEmpty()
+                || this.getAnnualContributions() == null
+                || this.getAnnualContributions().isEmpty())
+            return null;
+
+        return ac
+                .stream()
+                .filter(a -> this.findAnnualContribution(a) != null)
+                .collect(Collectors.toList());
+    }
+
+    public
+    List<AnnualContribution>
+    findAnnualContributionsById(List<AnnualContributionID> id)
+    {
+        if (id == null
+                || id.isEmpty()
+                || this.getAnnualContributions() == null
+                || this.getAnnualContributions().isEmpty())
+            return null;
+
+        return id
+                .stream()
+                .map(a -> this.findAnnualContributionById(a))
+                .filter(a -> a != null)
+                .collect(Collectors.toList());
+    }
+
+    public void clearAnnualContributions()
+    {
+        this.getAnnualContributions().clear();
+    }
+
+    public boolean addAnnualContribution(AnnualContribution ac)
+    {
+        if (ac != null && this.getAnnualContributions().add(ac)) {
+            ac.setContribution(this);
+            return true;
+        }
+            
+        return false;
     }
 
     public boolean removeAnnualContribution(AnnualContribution contribution)

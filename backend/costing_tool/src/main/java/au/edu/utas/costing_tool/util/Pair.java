@@ -1,4 +1,4 @@
-package au.edu.utas.costing_tool.util;
+package au.edu.utas.costing_tool.Util;
 
 
 // =============================================================================

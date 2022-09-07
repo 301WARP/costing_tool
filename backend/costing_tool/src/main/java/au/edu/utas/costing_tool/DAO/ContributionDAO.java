@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ public class ContributionDAO implements DAO<Contribution, ContributionID>
     // =========================================================================
 
     @Autowired
+    @PersistenceContext
     private final EntityManager em;
 
 
@@ -48,13 +50,15 @@ public class ContributionDAO implements DAO<Contribution, ContributionID>
     // =========================================================================
 
     @Override
-    public void create(Contribution contribution)
+    public Contribution create(Contribution contribution)
     {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
         em.persist(contribution);
         t.commit();
+
+        return contribution;
     }
 
     @Override
@@ -66,7 +70,7 @@ public class ContributionDAO implements DAO<Contribution, ContributionID>
     @Override
     public List<Contribution> readAll()
     {
-        String query = "select r from Contribution r";
+        String query = "select c from Contribution c";
 
         return em
             .createQuery(query, Contribution.class)
@@ -74,13 +78,15 @@ public class ContributionDAO implements DAO<Contribution, ContributionID>
     }
 
     @Override
-    public void update(Contribution contribution)
+    public Contribution update(Contribution contribution)
     {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
         em.merge(contribution);
         t.commit();
+
+        return contribution;
     }
 
     @Override

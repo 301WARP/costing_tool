@@ -46,9 +46,9 @@ public class CIEndorsement
     public Boolean getConflictOfInterest() {return this.conflictOfInterest;}
     public void setConflictOfInterest(Boolean isPresent) {this.conflictOfInterest = isPresent;}
 
-    private Boolean foreignPrinciples;
-    public Boolean getForeignPrinciples() {return this.foreignPrinciples;}
-    public void setForeignPrinciples(Boolean involves) {this.foreignPrinciples = involves;}
+    private Boolean foreignPrincipals;
+    public Boolean getForeignPrincipals() {return this.foreignPrincipals;}
+    public void setForeignPrincipals(Boolean involves) {this.foreignPrincipals = involves;}
 
 
     // =========================================================================
@@ -73,6 +73,6 @@ public class CIEndorsement
         this.setUTASInsurance(isCovered);
         this.setDefenceStrategicGoods(isOnList);
         this.setConflictOfInterest(isPresent);
-        this.setForeignPrinciples(involves);
+        this.setForeignPrincipals(involves);
     }
 }

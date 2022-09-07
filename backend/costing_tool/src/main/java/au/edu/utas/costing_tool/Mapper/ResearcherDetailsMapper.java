@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.server.reactive.UndertowHttpHandlerAdapter;
+//import org.springframework.http.server.reactive.UndertowHttpHandlerAdapter;
 
 // =============================================================================
 // Project Imports
@@ -323,6 +323,7 @@ public class ResearcherDetailsMapper extends ModelMapper
         this.initRHDDetailsDTOMappings();
     }
 
+    /*
     interface Test {
         public abstract Enum<?> t();
     }
@@ -330,6 +331,7 @@ public class ResearcherDetailsMapper extends ModelMapper
     private interface Foo {
         abstract Contract f();
     }
+    */
 
     private Converter<Contract, String>
     contractConverter(Method m)
@@ -342,7 +344,6 @@ public class ResearcherDetailsMapper extends ModelMapper
                 if (c == null) return null;
 
                 Object o = null;
-                Enum<?> e = null;
 
                 try {
                     o = m.invoke(c);
@@ -355,12 +356,9 @@ public class ResearcherDetailsMapper extends ModelMapper
                                       c.getClass(), m.getName(), x.getCause());
                 }
 
-                if (!(o instanceof Enum<?>)) return null;
+                if (!(o instanceof Enum<?>) || o == null) return null;
 
-                e = (Enum<?>)o;
-                if (e == null) return null;
-
-                return e.name();
+                return ((Enum<?>)o).name();
             }
         };
     }

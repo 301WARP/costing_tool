@@ -72,7 +72,7 @@ public class Project
     public String getDescription() {return this.description;}
     public void setDescription(String description) {this.description = description;}
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name="lead_researcher_id", referencedColumnName="staff_id")
     private Researcher leadResearcher;
     public Researcher getLeadResearcher() {return this.leadResearcher;}
@@ -186,8 +186,8 @@ public class Project
         @AttributeOverride(name="animalsRef", column=@Column(name="animals_ref")),
         @AttributeOverride(name="gmo", column=@Column(name="gmo")),
         @AttributeOverride(name="gmoRef", column=@Column(name="gmo_ref")),
-        @AttributeOverride(name="raidation", column=@Column(name="raidation")),
-        @AttributeOverride(name="raidationRef", column=@Column(name="raidation_ref")),
+        @AttributeOverride(name="radiation", column=@Column(name="radiation")),
+        @AttributeOverride(name="radiationRef", column=@Column(name="radiation_ref")),
         @AttributeOverride(name="carcinogenTeratogen", column=@Column(name="carcinogen_teratogen")),
         @AttributeOverride(name="carcinogenTeratogenRef", column=@Column(name="carcinogen_teratogen_ref")),
     })
@@ -203,7 +203,7 @@ public class Project
         @AttributeOverride(name="risksManaged", column=@Column(name="risks_managed")),
         @AttributeOverride(name="utasInsurance", column=@Column(name="utas_insurance")),
         @AttributeOverride(name="defenceStrategicGoods", column=@Column(name="defence_strategic_goods")),
-        @AttributeOverride(name="conflictOfInterst", column=@Column(name="conflict_of_interest")),
+        @AttributeOverride(name="conflictOfInterest", column=@Column(name="conflict_of_interest")),
         @AttributeOverride(name="foreignPrincipals", column=@Column(name="foreign_principals")),
     })
     private CIEndorsement ciEndorsement;

@@ -1,13 +1,14 @@
-package au.edu.utas.costing_tool.Model;
+package au.edu.utas.costing_tool.DTO;
 
 
 // =============================================================================
-// External imports
+// External Imports
 // =============================================================================
 
-import java.io.Serializable;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +16,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnnualContributionID implements Serializable
+@Builder
+public class UpdateResearcherDTO
 {
-    private static final long serialVersionUID = 1L;
-
-    private Long contractID;
-    private Long projectID;
-    private Integer year;
+    String role;
+    Double inKindPercent;
+    Map<Integer, Double> annualContributions;
 }

@@ -1,21 +1,31 @@
 package au.edu.utas.costing_tool.Controller;
 
 
+import java.net.URI;
+import java.util.HashMap;
+
 // =============================================================================
 // External Imports
 // =============================================================================
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 // =============================================================================
 // Project Imports
@@ -23,43 +33,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import au.edu.utas.costing_tool.Mapper.ResearcherDetailsMapper;
 import au.edu.utas.costing_tool.Mapper.ResearcherListMapper;
-
-import au.edu.utas.costing_tool.DTO.CasualDetailsDTO;
+import au.edu.utas.costing_tool.Mapper.UpdateContributionMapper;
 import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
-import au.edu.utas.costing_tool.DTO.NonCasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.RHDDetailsDTO;
 import au.edu.utas.costing_tool.DTO.ResearcherListDTO;
-
-import au.edu.utas.costing_tool.Model.Casual;
+import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
+import au.edu.utas.costing_tool.DTO.UpdateResearcherDTO;
+import au.edu.utas.costing_tool.Enums.Title;
 import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
 import au.edu.utas.costing_tool.Model.ContributionID;
-import au.edu.utas.costing_tool.Model.NonCasual;
-import au.edu.utas.costing_tool.Model.RHD;
-
+import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Service.ContractService;
 import au.edu.utas.costing_tool.Service.ContributionService;
+import au.edu.utas.costing_tool.Service.ProjectService;
 
 
 @RestController
+@Data
 public class ResearcherController
 {
     // =========================================================================
     // Properties
     // =========================================================================
 
-    /*
-    @Autowired
-    private final ResearcherRepository researcherRepository;
-    private ResearcherRepository resRepos() {return this.researcherRepository;}
-
-    @Autowired
-    private final ResearcherService researcherService;
-    //private ResearcherService resService() {return this.researcherService;}
-    */
-
     @Autowired
     private final ContributionService contributionService;
-    //private ContributionService conService() {return this.contributionService;}
+
+    @Autowired
+    private final ContractService contractService;
+
+    @Autowired
+    private final ProjectService projectService;
 
     private final ResearcherListMapper listMapper
         = new ResearcherListMapper();
@@ -67,15 +71,8 @@ public class ResearcherController
     private final ResearcherDetailsMapper detailsMapper
         = new ResearcherDetailsMapper();
 
-
-    // =========================================================================
-    // Constructors
-    // =========================================================================
-
-    public ResearcherController(ContributionService contributionService)
-    {
-        this.contributionService = contributionService;
-    }
+    private final UpdateContributionMapper updateMapper
+        = new UpdateContributionMapper();
 
 
     // =========================================================================
@@ -84,110 +81,221 @@ public class ResearcherController
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}")
-    List<ResearcherListDTO> fetchResearcherList(@PathVariable Long projectID)
+    ResponseEntity<List<ResearcherListDTO>>
+    fetchResearcherList(@PathVariable Long projectID)
     {
-        // TODO(Andrew): This needs a better error
-        if (projectID == null) return null;
+        if (projectID == null)
+            return ResponseEntity.badRequest().body(null);
+
+        if (this.projectService.findProject(projectID) == null)
+            return ResponseEntity.notFound().build();
 
         // TODO(Andrew): I think this is horribly inefficient; the filtering
         //               should be done at the query level.
-        return this.contributionService.listAllContributions()
-            .stream()
-            .filter(c -> c.getProjectID() == projectID)
-            .map(c -> listMapper.map(c, ResearcherListDTO.class))
-            .collect(Collectors.toList());
+        List<ResearcherListDTO> researchers =
+            this.contributionService.listAllContributions()
+                .stream()
+                .filter(c -> c.getProjectID() == projectID)
+                .map(c -> listMapper.map(c, ResearcherListDTO.class))
+                .collect(Collectors.toList());
+        
+        if (researchers.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok().body(researchers);
     }
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/researchers/{projectID}/{contractID}")
-    ContributionDetailsDTO
+    ResponseEntity<ContributionDetailsDTO>
     fetchResearcherDetails( @PathVariable Long projectID,
                             @PathVariable Long contractID)
     {
-        // TODO(Andrew): This needs a better error
         if (projectID == null || contractID == null)
-            return null;
+            return ResponseEntity.badRequest().build();
 
         ContributionID id = new ContributionID(contractID, projectID);
 
         Contribution contribution = this.contributionService
                                         .findContribution(id);
 
-        // TODO(Andrew): return some sort of 404 message
-        if (contribution == null) return null;
+        if (contribution == null)
+            return ResponseEntity.notFound().build();
 
-        Contract contract = contribution.getContract();
-
-        // TODO(Andrew): return some sort of unkown contract message
-        if (contract == null)
-            return null;
+        ContributionDetailsDTO detailsDTO =
+                this.contributionService.contributionDetailsDTO(contribution);
         
-        if (contract instanceof NonCasual)
-            return detailsMapper.map(contribution, NonCasualDetailsDTO.class);
-        if (contract instanceof Casual)
-            return detailsMapper.map(contribution, CasualDetailsDTO.class);
-        if (contract instanceof RHD)
-            return detailsMapper.map(contribution, RHDDetailsDTO.class);
-        
-        return null;
+        return ResponseEntity.ok().body(detailsDTO);
     }
 
     @CrossOrigin(origins="*")
     @PutMapping(path="/researchers/{projectID}/{contractID}")
-    Long updateContribution(@RequestBody ContributionDetailsDTO dto,
-                            @PathVariable Long projectID,
-                            @PathVariable Long contractID)
+    ResponseEntity<ContributionDetailsDTO>
+    updateContribution( @RequestBody UpdateResearcherDTO dto,
+                        @PathVariable Long projectID,
+                        @PathVariable Long contractID)
     {
-        Long id = 0L;
-        return id;
+        // Bad request
+        if (projectID == null || contractID == null || dto == null)
+            return ResponseEntity.badRequest().build();
+
+        ContributionID id = new ContributionID(contractID, projectID);
+
+        Contribution oldContribution
+            = this.contributionService.findContribution(id);
+
+        // No such contribution
+        if (oldContribution == null)
+            return ResponseEntity.notFound().build();
+
+        // TODO(Andrew): try?
+        Contribution newContribution = this.updateMapper.map(dto);
+
+        Contribution contribution
+            = this  .contributionService
+                    .updateContribution(oldContribution, newContribution);
+        
+        ContributionDetailsDTO detailsDTO
+            = this.contributionService.contributionDetailsDTO(contribution);
+        
+        return ResponseEntity.ok().body(detailsDTO);
     }
 
-
-    /*
-    public List<Researcher> loadResearchers()
+    @CrossOrigin(origins="*")
+    @PostMapping(path="/researchers/{projectID}/{contractID}")
+    ResponseEntity<ContributionDetailsDTO>
+    createContribution( @RequestBody UpdateResearcherDTO dto,
+                        @PathVariable Long projectID,
+                        @PathVariable Long contractID)
     {
-        // TODO: not yet implemented
-        return null;
+        // Bad request
+        if (projectID == null || contractID == null || dto == null)
+            return ResponseEntity.badRequest().build();
+
+        ContributionID id = new ContributionID(contractID, projectID);
+
+        Contribution contribution = this.contributionService
+                                        .findContribution(id);
+        
+        // Contribution already exists
+        if (contribution != null)
+        {
+            /*
+            Map<String, Long> pathVariables = new HashMap<String, Long>();
+            pathVariables.put("projectID", projectID);
+            pathVariables.put("contractID", contractID);
+            */
+
+            URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                /*
+                .path("/api/researchers/{projectID}/{contractID}")
+                .buildAndExpand(pathVariables)
+                */
+                .build()
+                .toUri();
+
+            ContributionDetailsDTO detailsDTO
+                = this  .contributionService
+                        .contributionDetailsDTO(contribution);
+            
+            return ResponseEntity
+                .status(HttpStatus.SEE_OTHER)
+                .location(location)
+                .body(detailsDTO);
+        }
+
+        Contract contract = contractService.findContract(contractID);
+        Project project = projectService.findProject(projectID);
+
+        // No such contract/project
+        if (contract == null || project == null)
+            return ResponseEntity.notFound().build();
+
+        contribution = this.updateMapper.map(dto);
+        contribution.setContract(contract);
+        contribution.setProject(project);
+
+        contribution = this
+            .contributionService
+            .createContribution(contract, project, contribution);
+        
+        if (contribution == null)
+            return ResponseEntity.internalServerError().build();
+
+        ContributionDetailsDTO detailsDTO
+            = this.contributionService.contributionDetailsDTO(contribution);
+
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .build()
+            .toUri();
+
+        return ResponseEntity.created(location).body(detailsDTO);
     }
 
-    public void loadResearcherDetails(Researcher r)
+    @CrossOrigin(origins="*")
+    @DeleteMapping(path="/researchers/{projectID}/{contractID}")
+    ResponseEntity<Void>
+    deleteContribution( @PathVariable Long projectID,
+                        @PathVariable Long contractID)
     {
-        // TODO: not yet implemented
+        // Bad request
+        if (projectID == null || contractID == null)
+            return ResponseEntity.badRequest().build();
+
+        Contribution contribution
+            = contributionService.findContribution(
+                new ContributionID(contractID, projectID)
+            );
+
+        // No such contribution
+        if (contribution == null)
+            return ResponseEntity.notFound().build();
+
+        contributionService.deleteContribution(contribution);
+
+        return ResponseEntity.ok().build();
     }
 
-    public Researcher createResearcher()
+    @CrossOrigin(origins="*")
+    @GetMapping(path="/researchers")
+    ResponseEntity<List<ResearcherRecommendationDTO>>
+    recommendResearchers(@RequestBody ResearcherRecommendationDTO dto)
     {
-        // TODO: not yet implemented
-        return null;
+        // Bad request
+        if (dto == null)
+            return ResponseEntity.badRequest().build();
+        
+        List<ResearcherRecommendationDTO> recommendations
+            = contributionService.recommendResearchers(dto);
+        
+        // No matches
+        if (recommendations.isEmpty())
+            return ResponseEntity.noContent().build();
+        
+        return ResponseEntity.ok().body(recommendations);
     }
-
-    public void updateResearcher(Researcher r)
+    
+    @CrossOrigin(origins="*")
+    @GetMapping(path="/researchers/{title}/{firstName}/{lastName}")
+    ResponseEntity<List<ResearcherRecommendationDTO>>
+    recommendResearchers(   @PathVariable Title title,
+                            @PathVariable String firstName,
+                            @PathVariable String lastName)
     {
-        // TODO: not yet implemented
+        // Bad request
+        if (title == null || firstName == null || lastName == null)
+            return ResponseEntity.badRequest().build();
+        
+        List<ResearcherRecommendationDTO> recommendations
+            = this  .contributionService
+                    .recommendResearchers(title, firstName,lastName);
+        
+        // No matches
+        if (recommendations.isEmpty())
+            return ResponseEntity.noContent().build();
+        
+        return ResponseEntity.ok().body(recommendations);
     }
-
-    public List<Researcher> filterByYear(LocalDate date)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Researcher> filterByContract(ContractType type)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Researcher> filterByRole(String role)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-
-    public List<Researcher> filterByName(String name)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
-    */
 }

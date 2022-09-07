@@ -235,6 +235,7 @@ INSERT INTO `contribution`
 	'CI',											-- project role
     '50.00'											-- in kind percent
 );
+/*
 INSERT INTO `contribution`
 (
 	`contract_id`,
@@ -247,6 +248,7 @@ INSERT INTO `contribution`
 	'RA',											-- project role
     '0.00'											-- in kind percent
 );
+*/
 INSERT INTO `contribution`
 (
 	`contract_id`,
@@ -289,6 +291,7 @@ INSERT INTO `annual_contribution`
     '50.05'											-- units (here fte)
 );
 
+/*
 INSERT INTO `annual_contribution`
 (
 	`contract_id`,
@@ -313,6 +316,7 @@ INSERT INTO `annual_contribution`
 	'2023',											-- year
     '600.20'										-- units (here hours)
 );
+*/
 
 INSERT INTO `annual_contribution`
 (
@@ -324,7 +328,7 @@ INSERT INTO `annual_contribution`
 	'3',											-- contract id
 	'1',											-- project id
 	'2022',											-- year
-    '20.00'										-- units (here fte)
+    '20.00'											-- units (here fte)
 );
 INSERT INTO `annual_contribution`
 (
