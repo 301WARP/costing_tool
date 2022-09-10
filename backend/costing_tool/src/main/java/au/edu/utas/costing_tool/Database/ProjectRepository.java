@@ -17,5 +17,4 @@ import au.edu.utas.costing_tool.Model.Project;
 
 public interface ProjectRepository extends JpaRepository<Project, Long>
 {
-    //public boolean existsById(Long id);
 }

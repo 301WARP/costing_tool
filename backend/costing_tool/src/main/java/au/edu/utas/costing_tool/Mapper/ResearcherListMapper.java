@@ -1,12 +1,14 @@
 package au.edu.utas.costing_tool.Mapper;
 
 
+
 // =============================================================================
 // External Imports
 // =============================================================================
 
-import org.modelmapper.ModelMapper;
-
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 // =============================================================================
 // Project Imports
@@ -16,57 +18,27 @@ import au.edu.utas.costing_tool.DTO.ResearcherListDTO;
 import au.edu.utas.costing_tool.Model.Contribution;
 
 
-public class ResearcherListMapper extends ModelMapper
+@Mapper
+public interface ResearcherListMapper
 {
-    // =========================================================================
-    // Constructors
-    // =========================================================================
+    // Researcher
+    @Mapping(target="staffID", source="contract.researcher.staffID")
+    @Mapping(target="title", source="contract.researcher.title")
+    @Mapping(target="firstName", source="contract.researcher.firstName")
+    @Mapping(target="lastName", source="contract.researcher.lastName")
+    // Contract
+    @Mapping(target="contractID", source="contractID")
+    @Mapping(target="contract", source="contract.contractType")
+    @Mapping(target="role", source="role")
+    // Contribution
+    @Mapping(target="inKindPercent", source="inKindPercent")
+    @Mapping(   target="actualCost", source="contribution",
+                qualifiedByName="priceToActualCost")
+    ResearcherListDTO contributionToResearcherListDTO(Contribution contribution);
 
-    public ResearcherListMapper()
+    @Named("priceToActualCost")
+    static Double priceToActualCost(Contribution contribution)
     {
-        super();
-
-        initResearcherListDTOMapper();
-    }
-
-
-    // =========================================================================
-    // Methods
-    // =========================================================================
-
-    private void initResearcherListDTOMapper()
-    {
-        this.typeMap(Contribution.class, ResearcherListDTO.class)
-            .addMappings(mapper ->
-        {
-            mapper.map( c -> c.getContract().getResearcher().getStaffID(),
-                        ResearcherListDTO::setStaffID);
-
-            mapper.using(EnumConverter.string)
-                    .map( c -> c.getContract().getResearcher().getTitle(),
-                        ResearcherListDTO::setTitle);
-
-            mapper.map( c -> c.getContract().getResearcher().getFirstName(),
-                        ResearcherListDTO::setFirstName);
-
-            mapper.map( c -> c.getContract().getResearcher().getLastName(),
-                        ResearcherListDTO::setLastName);
-
-            mapper.map( Contribution::getContractID,
-                        ResearcherListDTO::setContrtactID);
-
-            mapper.using(EnumConverter.string)
-                    .map( c -> c.getContract().getContractType(),
-                        ResearcherListDTO::setContract);
-
-            mapper.map( Contribution::getRole,
-                        ResearcherListDTO::setRole);
-
-            mapper.map( Contribution::Price,
-                        ResearcherListDTO::setActualCost);
-
-            mapper.map( Contribution::getInKindPercent,
-                        ResearcherListDTO::setInKindPercent);
-        });
+        return contribution.Price();
     }
 }

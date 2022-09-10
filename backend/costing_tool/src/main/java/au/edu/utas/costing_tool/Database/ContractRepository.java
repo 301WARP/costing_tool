@@ -6,7 +6,7 @@ package au.edu.utas.costing_tool.Database;
 // =============================================================================
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+//import org.springframework.data.jpa.repository.Query;
 
 // =============================================================================
 // Project Imports

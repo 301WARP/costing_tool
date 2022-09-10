@@ -23,7 +23,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import au.edu.utas.costing_tool.Util.Log;
 import lombok.Data;
 
 

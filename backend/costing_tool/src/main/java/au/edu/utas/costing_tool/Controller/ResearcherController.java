@@ -1,15 +1,14 @@
 package au.edu.utas.costing_tool.Controller;
 
 
-import java.net.URI;
-import java.util.HashMap;
 
 // =============================================================================
 // External Imports
 // =============================================================================
 
+import java.net.URI;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.Data;
@@ -65,14 +64,18 @@ public class ResearcherController
     @Autowired
     private final ProjectService projectService;
 
-    private final ResearcherListMapper listMapper
-        = new ResearcherListMapper();
+    @Autowired
+    private final ResearcherListMapper listMapper;
 
+    @Autowired
+    private final ResearcherDetailsMapper detailsMapper;
+    /*
     private final ResearcherDetailsMapper detailsMapper
         = new ResearcherDetailsMapper();
+    */
 
-    private final UpdateContributionMapper updateMapper
-        = new UpdateContributionMapper();
+    @Autowired
+    private final UpdateContributionMapper updateMapper;
 
 
     // =========================================================================
@@ -90,13 +93,10 @@ public class ResearcherController
         if (this.projectService.findProject(projectID) == null)
             return ResponseEntity.notFound().build();
 
-        // TODO(Andrew): I think this is horribly inefficient; the filtering
-        //               should be done at the query level.
         List<ResearcherListDTO> researchers =
-            this.contributionService.listAllContributions()
+            this.contributionService.listAllContributionsforProject(projectID)
                 .stream()
-                .filter(c -> c.getProjectID() == projectID)
-                .map(c -> listMapper.map(c, ResearcherListDTO.class))
+                .map(c -> this.listMapper.contributionToResearcherListDTO(c))
                 .collect(Collectors.toList());
         
         if (researchers.isEmpty())
@@ -149,7 +149,7 @@ public class ResearcherController
             return ResponseEntity.notFound().build();
 
         // TODO(Andrew): try?
-        Contribution newContribution = this.updateMapper.map(dto);
+        Contribution newContribution = this.updateMapper.updateResearcherDTOToContribution(dto);
 
         Contribution contribution
             = this  .contributionService
@@ -212,7 +212,8 @@ public class ResearcherController
         if (contract == null || project == null)
             return ResponseEntity.notFound().build();
 
-        contribution = this.updateMapper.map(dto);
+        //contribution = this.updateMapper.map(dto);
+        contribution = this.updateMapper.updateResearcherDTOToContribution(dto);
         contribution.setContract(contract);
         contribution.setProject(project);
 
