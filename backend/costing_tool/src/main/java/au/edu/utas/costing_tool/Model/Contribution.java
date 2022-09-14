@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.ToString;
 
 
 @Data
@@ -53,6 +54,7 @@ public class Contribution
     @ManyToOne
     @MapsId(value="contractID")
     @JsonBackReference
+    @ToString.Exclude
     private Contract contract;
     public void setContract(Contract contract)
     {
@@ -70,12 +72,13 @@ public class Contribution
     @ManyToOne
     @MapsId("projectID")
     @JsonBackReference
+    @ToString.Exclude
     private Project project;
     public void setProject(Project project)
     {
         this.project = project;
 
-        Long projectID = project != null ? project.getID() : null;
+        Long projectID = project != null ? project.getId() : null;
 
         this.setProjectID(projectID);
         

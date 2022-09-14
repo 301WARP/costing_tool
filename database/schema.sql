@@ -25,9 +25,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `researcher`
 (
 	`staff_id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	`title` ENUM('Mr', 'Miss', 'Mrs', 'Ms', 'Dr', 'Prof') NOT NULL,
-	`first_name` VARCHAR(50) NOT NULL,
-	`last_name` VARCHAR(50) NOT NULL,
+	`title` ENUM('NONE', 'Mr', 'Miss', 'Mrs', 'Ms', 'Dr', 'Prof'),
+	`first_name` VARCHAR(50),
+	`last_name` VARCHAR(50),
 	PRIMARY KEY (`staff_id`)
 ) Engine=InnoDB;
 
@@ -37,8 +37,8 @@ CREATE TABLE `contribution`
 (
 	`contract_id` INTEGER(6) UNSIGNED NOT NULL,
 	`project_id` INTEGER(6) UNSIGNED NOT NULL,
-	`role` VARCHAR(25) NOT NULL,
-    `in_kind_%` DOUBLE(5,2) NOT NULL
+	`role` VARCHAR(25),
+    `in_kind_%` DOUBLE(5,2)
 		CHECK (`in_kind_%` BETWEEN 0 AND 100),
 	PRIMARY KEY (`contract_id`, `project_id`)
 ) Engine=InnoDB;
@@ -84,19 +84,23 @@ CREATE TABLE `contract`
 CREATE TABLE `project`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `lead_researcher_id` INTEGER(6) UNSIGNED NOT NULL,
-    `category` ENUM('ONE', 'TWO', 'THREE', 'FOUR', 'CONSULTANCY', 'EXEMPTION') NOT NULL,
-    `amc_menzies` ENUM('AMC', 'MENZIES', 'NONE') NOT NULL
+    `name` VARCHAR(255),
+    `description` VARCHAR(255),
+    `lead_researcher_id` INTEGER(6) UNSIGNED,
+    `category` ENUM('ONE', 'TWO', 'THREE', 'FOUR', 'CONSULTANCY', 'EXEMPTION'),
+    `amc_menzies` ENUM('AMC', 'MENZIES', 'NONE')
 		DEFAULT 'NONE',
-    `start_date` DATE NOT NULL,
-	`end_date` DATE NOT NULL,
-    `year_end_type` ENUM('CALENDAR', 'FINANCIAL') NOT NULL DEFAULT 'CALENDAR',
-    `utas_cash` DOUBLE(9,2) NOT NULL,
-    `partner_cash` DOUBLE(9,2) NOT NULL,
-    `entity` ENUM('IMAS') NOT NULL,												-- values?
-    `crowd_funding_provider` ENUM('?', 'NONE') NOT NULL,									-- values?
+    `amc_national_centre` ENUM('NCMEH', 'NCPS', 'NONE')
+		DEFAULT 'NONE',
+    `start_date` DATE,
+	`end_date` DATE,
+    `year_end_type` ENUM('CALENDAR', 'FINANCIAL')
+		DEFAULT 'CALENDAR',
+    `utas_cash` DOUBLE(9,2),
+    `partner_cash` DOUBLE(9,2),
+    `entity` ENUM('NONE', 'IMAS')												-- values?
+		DEFAULT 'NONE',
+    `crowd_funding_provider` ENUM('?', 'NONE'),									-- values?
 
 	-- Specific to Category 1 projects
 	`category_1_subtype` ENUM('NONE'),
@@ -133,32 +137,32 @@ CREATE TABLE `project`
 	`pure_basic` DOUBLE(5,2),
 
 	-- Ethics
-    `human_medical` BOOLEAN NOT NULL,
+    `human_medical` BOOLEAN,
     `human_medical_ref` INTEGER(6),
-    `human_social_science` BOOLEAN NOT NULL,
+    `human_social_science` BOOLEAN,
     `human_social_science_ref` INTEGER(6),
-    `animals` BOOLEAN NOT NULL,
+    `animals` BOOLEAN,
     `animals_ref` INTEGER(6),
-    `gmo` BOOLEAN NOT NULL,
+    `gmo` BOOLEAN,
     `gmo_ref` INTEGER(6),
-    `radiation` BOOLEAN NOT NULL,
+    `radiation` BOOLEAN,
     `radiation_ref` INTEGER(6),
-    `carcinogen_teratogen` BOOLEAN NOT NULL,
+    `carcinogen_teratogen` BOOLEAN,
     `carcinogen_teratogen_ref` INTEGER(6),
 
 	-- Endorsements
 	-- CI Endoresement
-    `ci_endorsement` BOOLEAN NOT NULL,
+    `ci_endorsement` BOOLEAN,
     `ci_endorsement_date` DATE,
-    `risk_assessment` BOOLEAN NOT NULL,
-    `risks_managed` BOOLEAN NOT NULL,
-    `utas_insurance` BOOLEAN NOT NULL,
-    `defence_strategic_goods` BOOLEAN NOT NULL,
-    `conflict_of_interest` BOOLEAN NOT NULL,
-    `foreign_principals` BOOLEAN NOT NULL,
+    `risk_assessment` BOOLEAN,
+    `risks_managed` BOOLEAN,
+    `utas_insurance` BOOLEAN,
+    `defence_strategic_goods` BOOLEAN,
+    `conflict_of_interest` BOOLEAN,
+    `foreign_principals` BOOLEAN,
 	-- Diretor Endoresement
-	`organisational_unit_1` VARCHAR(256) NOT NULL,
-	`organisational_unit_1_split` DOUBLE(5,2) NOT NULL,
+	`organisational_unit_1` VARCHAR(256),
+	`organisational_unit_1_split` DOUBLE(5,2),
     `director_endorsement_1` BOOLEAN,
     `director_endorsement_1_date`DATE,
 	`organisational_unit_2` VARCHAR(256),
@@ -179,9 +183,9 @@ CREATE TABLE `expense`
     `project_id` INTEGER(6) UNSIGNED NOT NULL,
     `expense_type` ENUM('TRAVEL', 'FACILITY_HIRE', 'EQUIPMENT', 'CONSUMABLES',
 						'PARTNER_ORGANISATIONS', 'EXTERNAL_CONTRACTING',
-						'RHD_NON-STIPEND_COSTS', 'OTHER') NOT NULL,
-    `cost_per_unit` DOUBLE(9,2) NOT NULL,
-    `in_kind_%` DOUBLE(9,2) NOT NULL,
+						'RHD_NON-STIPEND_COSTS', 'OTHER', 'NONE'),
+    `cost_per_unit` DOUBLE(9,2),
+    `in_kind_%` DOUBLE(9,2),
 
 	-- Travel
     `num_travellers` INTEGER(4),
@@ -193,8 +197,8 @@ CREATE TABLE `expense`
     `accommodation` DOUBLE(9,2),
 
 	-- Facility  Hire
-    `facility` ENUM('LABS_R_US'),
-    `time_unit` ENUM('MINUTES', 'HOURS', 'DAYS', 'WEEKS', 'MONTHS'),
+    `facility` ENUM('NONE', 'LABS_R_US'),
+    `time_unit` ENUM('NONE', 'MINUTES', 'HOURS', 'DAYS', 'WEEKS', 'MONTHS'),
 
 	-- Partner Organisation
     `organisation` ENUM('UMELB', '?', 'NONE'),
@@ -207,7 +211,7 @@ CREATE TABLE `annual_expense`
 (
 	`expense_id` INTEGER(6) UNSIGNED NOT NULL,
 	`year` INTEGER(4) NOT NULL,
-	`units` DOUBLE(9,2) NOT NULL,
+	`units` DOUBLE(9,2),
     PRIMARY KEY (`expense_id`, `year`)
 ) Engine=InnoDB;
 

@@ -29,7 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
-
+import lombok.ToString;
 
 // ============================================================================= 
 // Project Imports
@@ -64,6 +64,7 @@ public abstract class Contract
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="researcher_id", referencedColumnName="staff_id")
     @JsonBackReference
+    @ToString.Exclude
     protected Researcher researcher;
 
     @OneToMany( cascade=CascadeType.ALL,

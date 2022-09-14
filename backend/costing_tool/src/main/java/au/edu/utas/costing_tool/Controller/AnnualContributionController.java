@@ -14,14 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Database.AnnualContributionRepository;
 import au.edu.utas.costing_tool.Model.AnnualContribution;
 import au.edu.utas.costing_tool.Model.AnnualContributionID;
+import au.edu.utas.costing_tool.Repository.AnnualContributionRepository;
 
 
 @RestController

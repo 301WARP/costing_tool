@@ -5,25 +5,40 @@ package au.edu.utas.costing_tool.Controller;
 // External Imports
 // =============================================================================
 
-import java.util.ArrayList;
+import java.net.URI;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import lombok.RequiredArgsConstructor;
 
 
 // =============================================================================
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Database.ProjectRepository;
+import au.edu.utas.costing_tool.DTO.ProjectDetailsDTO;
+import au.edu.utas.costing_tool.DTO.ProjectListDTO;
+import au.edu.utas.costing_tool.DTO.ProjectRecommendationDTO;
+import au.edu.utas.costing_tool.Mapper.ProjectDetailsMapper;
+import au.edu.utas.costing_tool.Mapper.ProjectListMapper;
 import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Service.ProjectService;
 
 
+@RequiredArgsConstructor
 @RestController
 public class ProjectController
 {
@@ -32,18 +47,13 @@ public class ProjectController
     // =========================================================================
 
     @Autowired
-    private final ProjectRepository projectRepository;
-    private ProjectRepository projRepos() {return this.projectRepository;}
+    private final ProjectService projectService;
 
+    @Autowired
+    private final ProjectListMapper listMapper;
 
-    // =========================================================================
-    // Constructors
-    // =========================================================================
-
-    public ProjectController(ProjectRepository projectRepos)
-    {
-        this.projectRepository = projectRepos;
-    }
+    @Autowired
+    private final ProjectDetailsMapper detailsMapper;
 
 
     // =========================================================================
@@ -52,71 +62,129 @@ public class ProjectController
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/projects")
-    List<Project> all()
+    ResponseEntity<List<ProjectListDTO>>
+    fetchProjectList()
     {
-        List<Project> projects = new ArrayList<Project>();
-        this.projRepos().findAll().forEach(projects::add);
-        return projects;
+        List<ProjectListDTO> projects =
+            this.projectService
+                .listAllProjects()
+                .stream()
+                // TODO(Andrew): some level of authentication is required here
+                //               to fetch information by userId
+                .map(p -> this.listMapper.map(p, null))
+                .collect(Collectors.toList());
+        
+        if (projects.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok().body(projects);
     }
 
 
     @CrossOrigin(origins="*")
     @GetMapping(path="/projects/{id}")
-    Project one(@PathVariable Long id)
+    ResponseEntity<ProjectDetailsDTO>
+    fetchProjectDetails(@PathVariable Long id)
     {
-        Optional<Project> project = this.projRepos().findById(id);
+        if (id == null)
+            return ResponseEntity.badRequest().build();
 
-        // TODO(Andrew): return some sort of 404 message
-        if (!project.isPresent())
-            return null;
+        Project project = this.projectService.findProject(id);
 
-        return project.get();
+        if (project == null)
+            return ResponseEntity.notFound().build();
+        
+        return ResponseEntity
+            .ok()
+            .body(this.detailsMapper.map(project));
     }
-    /*
-    public List<Project> loadProjects()
+    
+
+    @CrossOrigin(origins="*")
+    @GetMapping(path="/projects/find/{partialName}")
+    ResponseEntity<List<ProjectRecommendationDTO>>
+    recommendProjects(@PathVariable String partialName)
     {
-        // TODO: not yet implemented
-        return null;
+        if (partialName == null)
+            return ResponseEntity.badRequest().build();
+        
+        List<ProjectRecommendationDTO> recommendations = 
+            this.projectService.recommend(partialName);
+        
+        if (recommendations == null || recommendations.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok().body(recommendations);
+   }
+
+
+    @CrossOrigin(origins="*")
+    @PostMapping(path="/projects")
+    ResponseEntity<ProjectDetailsDTO>
+    createProject(@RequestBody ProjectDetailsDTO dto)
+    {
+        if (dto == null)
+            return ResponseEntity.badRequest().build();
+
+        Project project = new Project();
+        this.detailsMapper.map(dto, project);
+
+        project = this.projectService.save(project);
+    
+        if (project.getId() == null)
+            return ResponseEntity.internalServerError().build();
+        
+        ProjectDetailsDTO response = this.detailsMapper.map(project);
+
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(project.getId())
+            .toUri();
+
+        return ResponseEntity.created(location).body(response);
     }
 
-    public void loadProjectDetails(Project p)
-    {
-        // TODO: not yet implemented
-    }
 
-    public Project createProject()
+    @CrossOrigin(origins="*")
+    @PutMapping(path="/projects/{id}")
+    ResponseEntity<ProjectDetailsDTO>
+    updateProject(  @PathVariable Long id,
+                    @RequestBody ProjectDetailsDTO dto)
     {
-        // TODO: not yet implemented
-        return null;
-    }
+        if (id == null || dto == null)
+            return ResponseEntity.badRequest().build();
 
-    public void updateProject(Project p)
-    {
-        // TODO: not yet implemented
-    }
+        Project project = this.projectService.findProject(id);
+        
+        this.detailsMapper.map(dto, project);
 
-    public List<Project> filterByOwner(Researcher r)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
+        project = this.projectService.save(project);
+    
+        if (project.getId() == null)
+            return ResponseEntity.internalServerError().build();
 
-    public List<Project> filterByMember(Researcher r)
-    {
-        // TODO: not yet implemented
-        return null;
-    }
+        ProjectDetailsDTO response = this.detailsMapper.map(project);
 
-    public List<Project> filterByYear(LocalDate date)
-    {
-        // TODO: not yet implemented
-        return null;
+        return ResponseEntity.ok().body(response);
     }
+    
 
-    public List<Project> filterByName(String name)
+    @CrossOrigin(origins="*")
+    @DeleteMapping(path="/projects/{id}")
+    ResponseEntity<Void>
+    deleteProject(@PathVariable Long id)
     {
-        // TODO: not yet implemented
-        return null;
+        if (id == null)
+            return ResponseEntity.badRequest().build();
+
+        Project project = this.projectService.findProject(id);
+
+        if (project == null)
+            return ResponseEntity.notFound().build();
+        
+        this.projectService.deleteProject(project);
+
+        return ResponseEntity.ok().build();
     }
-    */
 }

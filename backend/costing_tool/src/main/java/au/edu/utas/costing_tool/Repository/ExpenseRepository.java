@@ -1,4 +1,4 @@
-package au.edu.utas.costing_tool.Database;
+package au.edu.utas.costing_tool.Repository;
 
 
 // =============================================================================
@@ -12,9 +12,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Model.Expense;
 
 
-public interface ProjectRepository extends JpaRepository<Project, Long>
+public interface ExpenseRepository extends JpaRepository<Expense, Long>
 {
+
 }

@@ -28,7 +28,6 @@ import lombok.ToString;
 @Entity
 @Table(name="annual_contribution")
 @IdClass(value=AnnualContributionID.class)
-@ToString(exclude="contribution")
 public class AnnualContribution
 {
     // ========================================================================= 
@@ -61,6 +60,7 @@ public class AnnualContribution
         @JoinColumn(name="contract_id", referencedColumnName="contract_id"),
         @JoinColumn(name="project_id", referencedColumnName="project_id")
     })
+    @ToString.Exclude
     @JsonBackReference
     protected Contribution contribution;
     public void setContribution(Contribution contribution)
@@ -118,7 +118,7 @@ public class AnnualContribution
                                 Double units)
     {
         this.setContractID(contract.getId());
-        this.setProjectID(project.getID());
+        this.setProjectID(project.getId());
         this.setYear(year);
         this.setUnits(units);
     }

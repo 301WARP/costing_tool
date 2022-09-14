@@ -69,10 +69,6 @@ public class ResearcherController
 
     @Autowired
     private final ResearcherDetailsMapper detailsMapper;
-    /*
-    private final ResearcherDetailsMapper detailsMapper
-        = new ResearcherDetailsMapper();
-    */
 
     @Autowired
     private final UpdateContributionMapper updateMapper;
@@ -291,7 +287,7 @@ public class ResearcherController
         
         List<ResearcherRecommendationDTO> recommendations
             = this  .contributionService
-                    .recommendResearchers(title, firstName,lastName);
+                    .recommendResearchers(title, firstName, lastName);
         
         // No matches
         if (recommendations.isEmpty())

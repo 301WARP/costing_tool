@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 // =============================================================================
 
 import au.edu.utas.costing_tool.Model.Expense;
-import au.edu.utas.costing_tool.Database.ExpenseRepository;
+import au.edu.utas.costing_tool.Repository.ExpenseRepository;
 
 
 @RestController

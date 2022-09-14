@@ -3,8 +3,8 @@ package au.edu.utas.costing_tool.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import au.edu.utas.costing_tool.Database.ContractRepository;
 import au.edu.utas.costing_tool.Model.Contract;
+import au.edu.utas.costing_tool.Repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
