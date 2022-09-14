@@ -18,6 +18,7 @@ INSERT INTO `project`
     `lead_researcher_id`,
     `category`,
     `amc_menzies`,
+    `amc_national_centre`,
     `start_date`,
 	`end_date`,
     `year_end_type`,
@@ -77,6 +78,7 @@ INSERT INTO `project`
     '1',											-- lead researcher id
     'ONE',											-- category
     'NONE',											-- AMC/Menzies
+    'NONE',											-- AMC National Centre
     '2022-01-31',									-- start date
 	'2023-12-31',									-- end date
     'Calendar',										-- year-end type

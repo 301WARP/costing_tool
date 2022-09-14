@@ -18,12 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 // =============================================================================
-// Package Imports
+// Project Imports
 // =============================================================================
-
-import au.edu.utas.costing_tool.Database.AnnualContributionRepository;
-import au.edu.utas.costing_tool.Database.ContributionRepository;
-import au.edu.utas.costing_tool.Database.ResearcherRepository;
 
 import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
 import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
@@ -38,6 +34,9 @@ import au.edu.utas.costing_tool.Model.Contribution;
 import au.edu.utas.costing_tool.Model.ContributionID;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.Repository.AnnualContributionRepository;
+import au.edu.utas.costing_tool.Repository.ContributionRepository;
+import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 
 
 @Service

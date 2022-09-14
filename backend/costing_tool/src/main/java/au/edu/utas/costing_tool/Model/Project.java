@@ -1,12 +1,15 @@
 package au.edu.utas.costing_tool.Model;
 
 
-import java.util.ArrayList;
-
 // =============================================================================
 // External Imports
 // =============================================================================
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.time.LocalDate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
@@ -25,9 +28,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 
 // =============================================================================
@@ -35,6 +37,7 @@ import java.time.LocalDate;
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.AMCMenzies;
+import au.edu.utas.costing_tool.Enums.AMCNationalCentre;
 import au.edu.utas.costing_tool.Enums.Category1Subtype;
 import au.edu.utas.costing_tool.Enums.CrowdFunding;
 import au.edu.utas.costing_tool.Enums.ProjectCategory;
@@ -47,6 +50,8 @@ import au.edu.utas.costing_tool.Enums.YearEndType;
 //enum SEOCodes {}
 
 
+@Data
+@AllArgsConstructor
 @Entity
 @Table(name="project")
 public class Project
@@ -59,85 +64,61 @@ public class Project
     @GeneratedValue
     @Column(name="id")
     private Long id;
-    public Long getID() {return this.id;}
-    public void setID(Long id) {this.id = id;}
 
     @Column(name="name")
     private String name;
-    public String getName() {return this.name;}
-    public void setName(String name) {this.name = name;}
 
     @Column(name="description")
     private String description;
-    public String getDescription() {return this.description;}
-    public void setDescription(String description) {this.description = description;}
 
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(cascade={ CascadeType.MERGE,
+                        CascadeType.REFRESH,
+                        CascadeType.PERSIST})
     @JoinColumn(name="lead_researcher_id", referencedColumnName="staff_id")
     private Researcher leadResearcher;
-    public Researcher getLeadResearcher() {return this.leadResearcher;}
-    public void setLeadResearcher(Researcher leadResearcher) {this.leadResearcher = leadResearcher;}
 
     @Column(name="category")
     @Enumerated(value=EnumType.STRING)
     private ProjectCategory category;
-    public ProjectCategory getCategory() {return this.category;}
-    public void setCategory(ProjectCategory category) {this.category = category;}
-
-    @Column(name="amc_menzies")
-    @Enumerated(value=EnumType.STRING)
-    private AMCMenzies amcMenzies;
-    public AMCMenzies getAmcMenzies() {return this.amcMenzies;}
-    public void setAmcMenzies(AMCMenzies amcMenzies) {this.amcMenzies = amcMenzies;}
 
     @Column(name="category_1_subtype")
     @Enumerated(value=EnumType.STRING)
     private Category1Subtype category1Subtype;
-    public Category1Subtype getCategory1Subtype() {return this.category1Subtype;}
-    public void setCategory1Subtype(Category1Subtype category1Subtype) {this.category1Subtype = category1Subtype;}
+
+    @Column(name="amc_menzies")
+    @Enumerated(value=EnumType.STRING)
+    private AMCMenzies amcMenzies;
+
+    @Column(name="amc_national_centre")
+    @Enumerated(value=EnumType.STRING)
+    private AMCNationalCentre amcNationalCentre;
 
     @Column(name="profit_margin")
     private Double profitMargin;
-    public Double getProfitMargin() {return this.profitMargin;}
-    public void setProfitMargin(Double profitMargin) {this.profitMargin = profitMargin;}
 
     @Column(name="start_date")
     private LocalDate startDate;
-    public LocalDate getStartDate() {return this.startDate;}
-    public void setStartDate(LocalDate startDate) {this.startDate = startDate;}
 
     @Column(name="end_date")
     private LocalDate endDate;
-    public LocalDate getEndDate() {return this.endDate;}
-    public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
 
     @Column(name="year_end_type")
     @Enumerated(value=EnumType.STRING)
     private YearEndType yearEnd;
-    public YearEndType getYearEnd() {return this.yearEnd;}
-    public void setYearEnd(YearEndType yearEnd) {this.yearEnd = yearEnd;}
 
     @Column(name="utas_cash")
     private Double utasCashContribution;
-    public Double getUTASCashContribution() {return this.utasCashContribution;}
-    public void setUTASCashContribution(Double cash) {this.utasCashContribution = cash;}
 
     @Column(name="partner_cash")
     private Double partnerCashContribution;
-    public Double getPartnerCashContribution() {return this.partnerCashContribution;}
-    public void setPartnerCashContribution(Double cash) {this.partnerCashContribution = cash;}
 
     @Column(name="entity")
     @Enumerated(value=EnumType.STRING)
     private ResearchEntity entity;
-    public ResearchEntity getEntity() {return this.entity;}
-    public void setEntity(ResearchEntity entity) {this.entity = entity;}
 
     @Column(name="crowd_funding_provider")
     @Enumerated(value=EnumType.STRING)
     private CrowdFunding crowdFundingProvider;
-    public CrowdFunding getCrowdFundingProvider() {return this.crowdFundingProvider;}
-    public void setCrowdFundingProvider(CrowdFunding provider) {this.crowdFundingProvider = provider;}
 
     @Embedded
     @AttributeOverrides({
@@ -149,8 +130,6 @@ public class Project
         @AttributeOverride(name="percent3", column=@Column(name="`for_%_3`"))
     })
     private FORCodes forCodes;
-    public FORCodes getForCodes() {return this.forCodes;}
-    public void getForCodes(FORCodes codes) {this.forCodes = codes;}
 
     @Embedded
     @AttributeOverrides({
@@ -162,8 +141,6 @@ public class Project
         @AttributeOverride(name="percent3", column=@Column(name="`seo_%_3`"))
     })
     private SEOCodes seoCodes;
-    public SEOCodes getSeoCodes() {return this.seoCodes;}
-    public void getSeoCodes(SEOCodes codes) {this.seoCodes = codes;}
 
     @Embedded
     @AttributeOverrides({
@@ -173,8 +150,6 @@ public class Project
         @AttributeOverride(name="pureBasic", column=@Column(name="pure_basic")),
     })
     private ResearchAreas researchAreas;
-    public ResearchAreas getResearcherAreas() {return this.researchAreas;}
-    public void getResearcherAreas(ResearchAreas areas) {this.researchAreas = areas;}
 
     @Embedded
     @AttributeOverrides({
@@ -192,8 +167,6 @@ public class Project
         @AttributeOverride(name="carcinogenTeratogenRef", column=@Column(name="carcinogen_teratogen_ref")),
     })
     EthicsChecklist ethicsChecklist;
-    public EthicsChecklist getEthicsChecklist() {return this.ethicsChecklist;}
-    public void setEthicsChecklist(EthicsChecklist ethics) {this.ethicsChecklist = ethics;}
 
     @Embedded
     @AttributeOverrides({
@@ -207,8 +180,6 @@ public class Project
         @AttributeOverride(name="foreignPrincipals", column=@Column(name="foreign_principals")),
     })
     private CIEndorsement ciEndorsement;
-    public CIEndorsement getCIEndorsement() {return this.ciEndorsement;}
-    public void getCIEndorsement(CIEndorsement endorsement) {this.ciEndorsement = endorsement;}
 
     @Embedded
     @AttributeOverrides({
@@ -222,8 +193,6 @@ public class Project
         @AttributeOverride(name="directorEndorsement2Date", column=@Column(name="director_endorsement_2_date")),
     })
     private DirectorEndorsement directorEndorsement;
-    public DirectorEndorsement getDirectorEndorsement() {return this.directorEndorsement;}
-    public void getDirectorEndorsement(DirectorEndorsement endorsement) {this.directorEndorsement = endorsement;}
 
     // FIXME(Andrew): only displays endorsement
     @Embedded
@@ -232,25 +201,18 @@ public class Project
         @AttributeOverride(name="date", column=@Column(name="college_endorsement_date"))
     })
     private CollegeEndorsement collegeEndorsement;
-    public CollegeEndorsement getCollegeEndorsement() {return this.collegeEndorsement;}
-    public void getCollegeEndorsement(CollegeEndorsement endorsement) {this.collegeEndorsement = endorsement;}
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
                 mappedBy="project")
     @JsonManagedReference
     private List<Contribution> contributions;
-    public List<Contribution> getContributions() {return this.contributions;}
-    public void setContributions(List<Contribution> contributions) {this.contributions = contributions;}
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
                 mappedBy="project")
     @JsonManagedReference
     private List<Expense> expenses;
-    public List<Expense> getExpenses() {return this.expenses;}
-    public void setExpenses(List<Expense> expenses) {this.expenses = expenses;}
-
 
 
     // =========================================================================
@@ -263,33 +225,6 @@ public class Project
         this.setExpenses(new ArrayList<Expense>());
     }
 
-    public Project( Long id,
-                    String name,
-                    String description,
-                    Researcher leadResearcher,
-                    AMCMenzies amcMenzies,
-                    LocalDate startDate,
-                    LocalDate endDate,
-                    YearEndType yearEnd,
-                    Double utasCashContribution,
-                    Double partnerCashContribution,
-                    ResearchEntity entity,
-                    CrowdFunding crowdFundingProvider)
-    {
-        this();
-        this.setID(id);
-        this.setName(name);
-        this.setDescription(description);
-        this.setLeadResearcher(leadResearcher);
-        this.setAmcMenzies(amcMenzies);
-        this.setStartDate(startDate);
-        this.setEndDate(endDate);
-        this.setYearEnd(yearEnd);
-        this.setUTASCashContribution(utasCashContribution);
-        this.setPartnerCashContribution(partnerCashContribution);
-        this.setEntity(entity);
-        this.setCrowdFundingProvider(crowdFundingProvider);
-    }
 
     // =========================================================================
     // Methods
