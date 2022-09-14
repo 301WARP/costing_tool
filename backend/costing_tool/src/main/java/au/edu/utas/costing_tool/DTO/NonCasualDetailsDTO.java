@@ -28,7 +28,7 @@ public class NonCasualDetailsDTO extends ContributionDetailsDTO
 
     Double startingSalary;
     Double wageAdjustment; 
-    Double SalaryOnCostRate;
+    Double salaryOnCostRate;
 
     // <year, FTE>
     Map<Integer, Double> annualContributions;

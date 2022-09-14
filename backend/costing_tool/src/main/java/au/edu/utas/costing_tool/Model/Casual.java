@@ -12,6 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
@@ -27,6 +28,7 @@ import au.edu.utas.costing_tool.Enums.PayCode;
 
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @DiscriminatorValue("CASUAL")
 @DiscriminatorOptions(force=true)

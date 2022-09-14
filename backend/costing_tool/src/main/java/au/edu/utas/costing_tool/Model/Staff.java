@@ -9,7 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import lombok.Data;
-
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 // =============================================================================
 // Project Imports
@@ -19,6 +20,8 @@ import au.edu.utas.costing_tool.Enums.ContractType;
 
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
 @Entity
 public abstract class Staff extends Contract
 {
@@ -36,8 +39,6 @@ public abstract class Staff extends Contract
     // =========================================================================
     // Constructors
     // =========================================================================
-
-    public Staff() {super();}
 
     public Staff(Researcher researcher, ContractType type)
     {

@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 // =============================================================================
 // Project Imports
@@ -20,101 +20,32 @@ import org.modelmapper.ModelMapper;
 import au.edu.utas.costing_tool.DTO.UpdateResearcherDTO;
 
 import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
-import au.edu.utas.costing_tool.Model.Project;
 
 
-public class UpdateContributionMapper extends ModelMapper
+@Mapper
+public interface UpdateContributionMapper
 {
-    // =========================================================================
-    // Constructors
-    // =========================================================================
+    @Mapping(target="role", source="role")
+    @Mapping(target="inKindPercent", source="inKindPercent")
+    @Mapping(   target="annualContributions", source="annualContributions",
+                qualifiedByName="mapAnnualContributions")
+    @Mapping(target="contract", ignore=true)
+    @Mapping(target="project", ignore=true)
+    @Mapping(target="contractID", ignore=true)
+    @Mapping(target="projectID", ignore=true)
+    Contribution updateResearcherDTOToContribution(UpdateResearcherDTO dto);
 
-    public UpdateContributionMapper()
+    @Named("mapAnnualContributions")
+    static
+    List<AnnualContribution>
+    mapAnnualContributions(Map<Integer,Double> acs)
     {
-        super();
-        initMappings();
-    }
-
-
-    // =========================================================================
-    // Methods
-    // =========================================================================
-
-    public void initMappings()
-    {
-        this.typeMap(UpdateResearcherDTO.class, Contribution.class)
-            .addMappings(mapper ->
-        {
-            mapper.map( UpdateResearcherDTO::getRole,
-                        Contribution::setRole);
-
-            mapper.map( UpdateResearcherDTO::getInKindPercent,
-                        Contribution::setInKindPercent);
-        });
-    }
-
-    /*
-    public
-    Converter<Map<Integer, Double>, List<AnnualContribution>>
-    makeAnnualContributionConverter(Contract contract, Project project)
-    {
-        return new AbstractConverter<Map<Integer, Double>, List<AnnualContribution>>() {
-
-            protected List<AnnualContribution> convert(Map<Integer, Double> acMap)
-            {
-                return acMap.entrySet().stream()
-                    .map(e -> new AnnualContribution(   project.getID(),
-                                                        contract.getId(),
-                                                        e.getKey(),
-                                                        e.getValue()))
-                    .collect(Collectors.toList());
-            }
-        };
-    }
-    */
-
-    Converter<Map<Integer, Double>, List<AnnualContribution>> acConverter =
-        new AbstractConverter<Map<Integer, Double>, List<AnnualContribution>>()
-    {
-        protected List<AnnualContribution> convert(Map<Integer, Double> acMap)
-        {
-            return acMap.entrySet().stream()
-                .map(e -> new AnnualContribution(e.getKey(), e.getValue()))
-                .collect(Collectors.toList());
-        }
-    };
-
-    /*
-    public Contribution map(UpdateResearcherDTO dto, Contribution contribution)
-    {
-        this
-            .getTypeMap(UpdateResearcherDTO.class, Contribution.class)
-            .addMappings(mapper ->
-                mapper
-                    .using( this.makeAnnualContributionConverter(contribution))
-                    .map(   UpdateResearcherDTO::getAnnualContributions,
-                            Contribution::setAnnualContributions)
-                        );
-
-        super.map(dto, contribution);
-
-        return contribution;
-    }
-    */
-
-    public Contribution map(UpdateResearcherDTO dto)
-    {
-        this
-            .getTypeMap(UpdateResearcherDTO.class, Contribution.class)
-            .addMappings(mapper ->
-                mapper
-                    .using( acConverter)
-                    .map(   UpdateResearcherDTO::getAnnualContributions,
-                            Contribution::setAnnualContributions)
-                        );
-
-        return super.map(dto, Contribution.class);
+        if (acs == null)
+            return null;
+        
+        return acs.entrySet().stream()
+            .map(e -> new AnnualContribution(e.getKey(), e.getValue()))
+            .collect(Collectors.toList());
     }
 }

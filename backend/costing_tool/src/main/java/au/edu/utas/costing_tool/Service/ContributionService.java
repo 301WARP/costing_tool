@@ -10,15 +10,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import au.edu.utas.costing_tool.DTO.CasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
-import au.edu.utas.costing_tool.DTO.NonCasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.RHDDetailsDTO;
-import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
 
 // =============================================================================
 // Package Imports
@@ -27,18 +24,20 @@ import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
 import au.edu.utas.costing_tool.Database.AnnualContributionRepository;
 import au.edu.utas.costing_tool.Database.ContributionRepository;
 import au.edu.utas.costing_tool.Database.ResearcherRepository;
+
+import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
+import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
+
 import au.edu.utas.costing_tool.Enums.Title;
+
 import au.edu.utas.costing_tool.Mapper.ResearcherDetailsMapper;
+
 import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Casual;
 import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.Contribution;
 import au.edu.utas.costing_tool.Model.ContributionID;
-import au.edu.utas.costing_tool.Model.NonCasual;
 import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.RHD;
 import au.edu.utas.costing_tool.Model.Researcher;
-import lombok.Data;
 
 
 @Service
@@ -58,8 +57,8 @@ public class ContributionService
     @Autowired
     private final ResearcherRepository rRepos;
 
-    private final ResearcherDetailsMapper detailsMapper
-        = new ResearcherDetailsMapper();
+    @Autowired
+    private final ResearcherDetailsMapper detailsMapper;
 
 
     // =========================================================================
@@ -74,6 +73,11 @@ public class ContributionService
     public List<Contribution> listAllContributions()
     {
         return cRepos.findAll();
+    }
+
+    public List<Contribution> listAllContributionsforProject(Long projectID)
+    {
+        return cRepos.findAllByProject(projectID);
     }
 
     public Contribution findContribution(ContributionID id)
@@ -225,13 +229,6 @@ public class ContributionService
         if (contract == null)
             return null;
         
-        if (contract instanceof NonCasual)
-            return detailsMapper.map(contribution, NonCasualDetailsDTO.class);
-        if (contract instanceof Casual)
-            return detailsMapper.map(contribution, CasualDetailsDTO.class);
-        if (contract instanceof RHD)
-            return detailsMapper.map(contribution, RHDDetailsDTO.class);
-        else    // unkown researcher type
-            return null;
+        return this.detailsMapper.map(contribution);
     }
 }
