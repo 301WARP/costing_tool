@@ -271,7 +271,7 @@ public class ResearcherController
         if (recommendations.isEmpty())
             return ResponseEntity.noContent().build();
         
-        return ResponseEntity.ok().body(recommendations);
+        return ResponseEntity.ok(recommendations);
     }
     
     @CrossOrigin(origins="*")
@@ -293,6 +293,6 @@ public class ResearcherController
         if (recommendations.isEmpty())
             return ResponseEntity.noContent().build();
         
-        return ResponseEntity.ok().body(recommendations);
+        return ResponseEntity.ok(recommendations);
     }
 }
