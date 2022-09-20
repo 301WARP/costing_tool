@@ -71,6 +71,9 @@ public class Project
     @Column(name="description")
     private String description;
 
+    @Column(name="herdc")
+    private String herdc;
+
     @OneToOne(cascade={ CascadeType.MERGE,
                         CascadeType.REFRESH,
                         CascadeType.PERSIST})
@@ -153,18 +156,12 @@ public class Project
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name="humanMedical", column=@Column(name="human_medical")),
-        @AttributeOverride(name="humanMedicalRef", column=@Column(name="human_medical_ref")),
-        @AttributeOverride(name="humanSocialScience", column=@Column(name="human_social_science")),
-        @AttributeOverride(name="humanSocialScienceRef", column=@Column(name="human_social_science_ref")),
-        @AttributeOverride(name="animals", column=@Column(name="animals")),
-        @AttributeOverride(name="animalsRef", column=@Column(name="animals_ref")),
-        @AttributeOverride(name="gmo", column=@Column(name="gmo")),
-        @AttributeOverride(name="gmoRef", column=@Column(name="gmo_ref")),
-        @AttributeOverride(name="radiation", column=@Column(name="radiation")),
-        @AttributeOverride(name="radiationRef", column=@Column(name="radiation_ref")),
-        @AttributeOverride(name="carcinogenTeratogen", column=@Column(name="carcinogen_teratogen")),
-        @AttributeOverride(name="carcinogenTeratogenRef", column=@Column(name="carcinogen_teratogen_ref")),
+        @AttributeOverride(name="human", column=@Column(name="human")),
+        @AttributeOverride(name="humanRef", column=@Column(name="human_ref")),
+        @AttributeOverride(name="animal", column=@Column(name="animal")),
+        @AttributeOverride(name="animalRef", column=@Column(name="animal_ref")),
+        @AttributeOverride(name="drugs", column=@Column(name="drugs")),
+        @AttributeOverride(name="clinicalTrial", column=@Column(name="clinical_trial")),
     })
     EthicsChecklist ethicsChecklist;
 
@@ -173,7 +170,6 @@ public class Project
         @AttributeOverride(name="ciEndorsement", column=@Column(name="ci_endorsement")),
         @AttributeOverride(name="ciEndorsementDate", column=@Column(name="ci_endorsement_date")),
         @AttributeOverride(name="riskAssessment", column=@Column(name="risk_assessment")),
-        @AttributeOverride(name="risksManaged", column=@Column(name="risks_managed")),
         @AttributeOverride(name="utasInsurance", column=@Column(name="utas_insurance")),
         @AttributeOverride(name="defenceStrategicGoods", column=@Column(name="defence_strategic_goods")),
         @AttributeOverride(name="conflictOfInterest", column=@Column(name="conflict_of_interest")),
@@ -181,26 +177,17 @@ public class Project
     })
     private CIEndorsement ciEndorsement;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name="org1", column=@Column(name="organisational_unit_1")),
-        @AttributeOverride(name="org1Split", column=@Column(name="organisational_unit_1_split")),
-        @AttributeOverride(name="directorEndorsement1", column=@Column(name="director_endorsement_1")),
-        @AttributeOverride(name="directorEndorsement1Date", column=@Column(name="director_endorsement_1_date")),
-        @AttributeOverride(name="org2", column=@Column(name="organisational_unit_2")),
-        @AttributeOverride(name="org2Split", column=@Column(name="organisational_unit_2_split")),
-        @AttributeOverride(name="directorEndorsement2", column=@Column(name="director_endorsement_2")),
-        @AttributeOverride(name="directorEndorsement2Date", column=@Column(name="director_endorsement_2_date")),
-    })
-    private DirectorEndorsement directorEndorsement;
+    @OneToMany( cascade=CascadeType.ALL,
+                fetch=FetchType.LAZY,
+                mappedBy="project")
+    @JsonManagedReference
+    private List<DirectorEndorsement> directorEndorsements;
 
-    // FIXME(Andrew): only displays endorsement
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name="endorsement", column=@Column(name="college_endorsement")),
-        @AttributeOverride(name="date", column=@Column(name="college_endorsement_date"))
-    })
-    private CollegeEndorsement collegeEndorsement;
+    @OneToMany( cascade=CascadeType.ALL,
+                fetch=FetchType.LAZY,
+                mappedBy="project")
+    @JsonManagedReference
+    private List<CollegeEndorsement> collegeEndorsements;
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,

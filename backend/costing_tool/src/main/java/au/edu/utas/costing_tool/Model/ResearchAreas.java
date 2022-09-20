@@ -7,45 +7,16 @@ package au.edu.utas.costing_tool.Model;
 
 import javax.persistence.Embeddable;
 
+import lombok.Data;
 
+
+// TODO(Andrew): Consider renaming to Activities in line with clearance form
+@Data
 @Embeddable
 public class ResearchAreas
 {
-    // =========================================================================
-    // Properties
-    // =========================================================================
-
     private Double appliedResearch;
-    public Double getAppliedResearch() {return this.appliedResearch;}
-    public void setAppliedResearch(Double percent) {this.appliedResearch = percent;}
-
     private Double experimentalDevelopment;
-    public Double getExperimentalDevelopment() {return this.experimentalDevelopment;}
-    public void setExperimentalDevelopment(Double percent) {this.experimentalDevelopment = percent;}
-
     private Double strategicBasic;
-    public Double getStrategicBasic() {return this.strategicBasic;}
-    public void setStrategicBasic(Double percent) {this.strategicBasic = percent;}
-
     private Double pureBasic;
-    public Double getPureBasic() {return this.pureBasic;}
-    public void setPureBasic(Double percent) {this.pureBasic = percent;}
-
-
-    // =========================================================================
-    // Constructors
-    // =========================================================================
-
-    public ResearchAreas() {}
-
-    public ResearchAreas(   Double appliedResearch,
-                            Double experimentalDevelopment,
-                            Double strategicBasic,
-                            Double pureBasic)
-    {
-        this.setAppliedResearch(appliedResearch);
-        this.setExperimentalDevelopment(experimentalDevelopment);
-        this.setStrategicBasic(strategicBasic);
-        this.setPureBasic(pureBasic);
-    }
 }

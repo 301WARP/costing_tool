@@ -7,7 +7,7 @@ USE warp;
 
 -- Researchers
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Dr', 'First', 'Last');
+VALUES ('DR', 'First', 'Last');
 
 
 -- Project
@@ -49,29 +49,19 @@ INSERT INTO `project`
 	`pure_basic`,
 
 	-- Ethics
-    `human_medical`, `human_medical_ref`,
-    `human_social_science`, `human_social_science_ref`,
-    `animals`, `animals_ref`,
-    `gmo`, `gmo_ref`,
-    `radiation`, `radiation_ref`,
-    `carcinogen_teratogen`, `carcinogen_teratogen_ref`,
+    `human`, `human_ref`,
+    `animal`, `animal_ref`,
+    `drugs`,
+    `clinical_trial`,
 
 	-- Endorsements
 	-- CI Endoresement
     `ci_endorsement`, `ci_endorsement_date`,
     `risk_assessment`,
-    `risks_managed`,
     `utas_insurance`,
     `defence_strategic_goods`,
     `conflict_of_interest`,
-    `foreign_principals`,
-	-- Diretor Endoresement
-	`organisational_unit_1`, `organisational_unit_1_split`,
-    `director_endorsement_1`, `director_endorsement_1_date`,
-	`organisational_unit_2`, `organisational_unit_2_split`,
-    `director_endorsement_2`, `director_endorsement_2_date`,
-	-- College Endoresement
-    `college_endorsement`, `college_endorsement_date`
+    `foreign_principals`
 ) VALUES (
     'Test Project',									-- project name
     'A project to test the system.',				-- project description
@@ -106,27 +96,19 @@ INSERT INTO `project`
 	'0.00',											-- pure basic
 
 	-- Ethics
-	FALSE, NULL,								-- human medical
-	FALSE, NULL,								-- human social science
-	FALSE, NULL,								-- animals
-	FALSE, NULL,								-- GMO
-	FALSE, NULL,								-- radiation
-	FALSE, NULL,								-- carcinogen/teratogen
+	FALSE, NULL,									-- human
+	FALSE, NULL,									-- animals
+	FALSE,											-- drugs
+	FALSE,											-- clinical trial
 
 	-- Endorsements
 	-- CI Endoresement
-	TRUE, '2022-01-01',							-- CI endorsement
+	TRUE, '2022-01-01',								-- CI endorsement
 	TRUE,											-- risk assessment
-	TRUE,											-- managed risks
 	TRUE,											-- UTAS insurance
 	TRUE,											-- defence strategic goods
 	TRUE,											-- conflict of interest
-	TRUE,											-- foregin principles
-	-- Diretor Endoresement
-	'IMAS', '100.00', TRUE, '2022-01-12',			-- organisational unit 1
-	NULL, NULL, NULL, NULL,					-- organisational unit 2
-	-- College Endoresement
-	NULL, NULL
+	TRUE											-- foregin principals
 );
 
 
@@ -400,4 +382,77 @@ INSERT INTO `annual_expense`
 	'1',												-- expense id
 	'2022',												-- year
 	'30'												-- units
+);
+
+
+-- Units
+INSERT INTO `unit`
+(
+	`id`,
+	`name`,
+	`abbreviation`,
+	`head_id`
+) VALUES (
+	1,
+	'Institute for Marine and Antartic Studies',
+	'IMAS',
+	1
+);
+
+
+-- Colleges
+INSERT INTO `college`
+(
+	`id`,
+	`name`,
+	`executive_dean_id`
+) VALUES (
+	1,
+	'College of Sciences and Engineering',
+	1
+);
+
+
+-- Director Endorsements
+INSERT INTO `director_endorsement`
+(
+	`project_id`,
+	`unit_id`,
+	`project_costs`,
+	`facilities`,
+	`blessing`,
+	`workload`,
+	`conflict_of_interest`,
+	`split`,
+	`endorser_id`,
+	`endorsement`,
+	`endorsement_date`
+) VALUES (
+	1,											-- project id
+	1,											-- unit id
+	TRUE,										-- project costs
+	TRUE,										-- faciltiies
+	TRUE,										-- blessing
+	TRUE,										-- workload
+	TRUE,										-- conflict of interest
+	20.00,										-- split
+	1,											-- endorser id
+	TRUE,										-- endorserment
+	'2022-01-01'								-- endorserment date
+);
+
+-- College Endorsements
+INSERT INTO `college_endorsement`
+(
+	`project_id`,
+	`college_id`,
+	`endorser_id`,
+	`endorsement`,
+	`endorsement_date`
+) VALUES (
+	1,											-- project id
+	1,											-- college id
+	1,											-- endorser id
+	TRUE,										-- endorserment
+	'2022-01-02'								-- endorserment date
 );

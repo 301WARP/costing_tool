@@ -18,6 +18,10 @@ DROP TABLE IF EXISTS `annual_contribution`;
 DROP TABLE IF EXISTS `contribution`;
 DROP TABLE IF EXISTS `contract`;
 DROP TABLE IF EXISTS `researcher`;
+DROP TABLE IF EXISTS `director_endorsement`;
+DROP TABLE IF EXISTS `college_endorsement`;
+DROP TABLE IF EXISTS `unit`;
+DROP TABLE IF EXISTS `college`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -25,7 +29,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `researcher`
 (
 	`staff_id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	`title` ENUM('NONE', 'Mr', 'Miss', 'Mrs', 'Ms', 'Dr', 'Prof'),
+	`title` ENUM('NONE', 'MR', 'MISS', 'MRS', 'MS', 'DR', 'PROF', 'TBA'),
 	`first_name` VARCHAR(50),
 	`last_name` VARCHAR(50),
 	PRIMARY KEY (`staff_id`)
@@ -137,41 +141,22 @@ CREATE TABLE `project`
 	`pure_basic` DOUBLE(5,2),
 
 	-- Ethics
-    `human_medical` BOOLEAN,
-    `human_medical_ref` INTEGER(6),
-    `human_social_science` BOOLEAN,
-    `human_social_science_ref` INTEGER(6),
-    `animals` BOOLEAN,
-    `animals_ref` INTEGER(6),
-    `gmo` BOOLEAN,
-    `gmo_ref` INTEGER(6),
-    `radiation` BOOLEAN,
-    `radiation_ref` INTEGER(6),
-    `carcinogen_teratogen` BOOLEAN,
-    `carcinogen_teratogen_ref` INTEGER(6),
+    `human` BOOLEAN,
+    `human_ref` INTEGER(6),
+    `animal` BOOLEAN,
+    `animal_ref` INTEGER(6),
+    `drugs` BOOLEAN,
+    `clinical_trial` BOOLEAN,
 
 	-- Endorsements
 	-- CI Endoresement
     `ci_endorsement` BOOLEAN,
     `ci_endorsement_date` DATE,
     `risk_assessment` BOOLEAN,
-    `risks_managed` BOOLEAN,
     `utas_insurance` BOOLEAN,
     `defence_strategic_goods` BOOLEAN,
     `conflict_of_interest` BOOLEAN,
     `foreign_principals` BOOLEAN,
-	-- Diretor Endoresement
-	`organisational_unit_1` VARCHAR(256),
-	`organisational_unit_1_split` DOUBLE(5,2),
-    `director_endorsement_1` BOOLEAN,
-    `director_endorsement_1_date`DATE,
-	`organisational_unit_2` VARCHAR(256),
-	`organisational_unit_2_split` DOUBLE(5,2),
-    `director_endorsement_2` BOOLEAN,
-    `director_endorsement_2_date`DATE,
-	-- College Endoresement
-    `college_endorsement` BOOLEAN,
-    `college_endorsement_date` DATE,
 
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
@@ -215,6 +200,53 @@ CREATE TABLE `annual_expense`
     PRIMARY KEY (`expense_id`, `year`)
 ) Engine=InnoDB;
 
+-- Director Endorsement
+CREATE TABLE `director_endorsement`
+(
+	`project_id` INTEGER(6) UNSIGNED NOT NULL,
+	`unit_id` INTEGER(6) UNSIGNED NOT NULL,
+	`project_costs` BOOLEAN,
+	`facilities` BOOLEAN,
+	`blessing` BOOLEAN,
+	`workload` BOOLEAN,
+	`conflict_of_interest` BOOLEAN,
+	`split` DOUBLE(9,2),
+	`endorser_id` INTEGER(6) UNSIGNED,
+	`endorsement` BOOLEAN,
+	`endorsement_date` DATE,
+    PRIMARY KEY (`project_id`, `unit_id`)
+) Engine=InnoDB;
+
+-- Unit
+CREATE TABLE `unit`
+(
+	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`name` VARCHAR(256),
+	`abbreviation` VARCHAR(256),
+	`head_id` INTEGER(6) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`)
+) Engine=InnoDB;
+
+-- College Endorsement
+CREATE TABLE `college_endorsement`
+(
+	`project_id` INTEGER(6) UNSIGNED NOT NULL,
+	`college_id` INTEGER(6) UNSIGNED NOT NULL,
+	`endorser_id` INTEGER(6) UNSIGNED,
+	`endorsement` BOOLEAN,
+	`endorsement_date` DATE,
+    PRIMARY KEY (`project_id`, `college_id`)
+) Engine=InnoDB;
+
+-- College
+CREATE TABLE `college`
+(
+	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`name` VARCHAR(256),
+	`executive_dean_id` INTEGER(6) UNSIGNED,
+    PRIMARY KEY (`id`)
+) Engine=InnoDB;
+
 -- Specify foreign keys
 ALTER TABLE `contract` ADD FOREIGN KEY (`researcher_id`) REFERENCES `researcher` (`staff_id`);
 ALTER TABLE `contribution` ADD FOREIGN KEY (`contract_id`) REFERENCES `contract` (`id`);
@@ -222,7 +254,14 @@ ALTER TABLE `contribution` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (
 ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
 ALTER TABLE `expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 ALTER TABLE `annual_expense` ADD FOREIGN KEY (`expense_id`) REFERENCES `expense` (`id`);
-
+ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
+ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`);
+ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`endorser_id`) REFERENCES `researcher` (`staff_id`);
+ALTER TABLE `unit` ADD FOREIGN KEY (`head_id`) REFERENCES `researcher` (`staff_id`);
+ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
+ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`college_id`) REFERENCES `college` (`id`);
+ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`endorser_id`) REFERENCES `researcher` (`staff_id`);
+ALTER TABLE `college` ADD FOREIGN KEY (`executive_dean_id`) REFERENCES `researcher` (`staff_id`);
 
 -- -----------------------------------------------------------------------------
 -- Test Data
