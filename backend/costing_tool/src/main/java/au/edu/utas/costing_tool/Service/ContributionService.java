@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +60,8 @@ public class ContributionService
 
     @Autowired
     private final ResearcherDetailsMapper detailsMapper;
+
+    private static final Pageable page = PageRequest.of(0, 10);
 
 
     // =========================================================================
@@ -171,17 +175,25 @@ public class ContributionService
     {
         List<Researcher> researchers;
 
-        if (dto.getTitle() == null
-            || dto.getTitle().equals("")
-            || Title.valueOf(dto.getTitle()) == Title.NONE)
-            researchers
-                = rRepos.recommend( dto.getFirstName(),
-                                    dto.getLastName());
+        String fName = dto.getFirstName();
+        String lName = dto.getLastName();
+        Title title;
+
+        try {
+            title = Title.valueOf(dto.getTitle());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+
+        boolean titleAbsent = title == null || title == Title.NONE;
+        boolean nameAbsent = fName == null && lName == null;
+
+        if (titleAbsent && nameAbsent)
+            researchers = rRepos.findAll(page).getContent();
+        else if (titleAbsent)
+            researchers = rRepos.recommend(fName, lName, page);
         else
-            researchers
-                = rRepos.recommend( Title.valueOf(dto.getTitle()),
-                                    dto.getFirstName(),
-                                    dto.getLastName());
+            researchers = rRepos.recommend(title, fName, lName, page);
         
         return researchers
             .stream()
@@ -203,9 +215,9 @@ public class ContributionService
         List<Researcher> researchers;
 
         if (title.equals(Title.NONE) || title.equals(Title.TBA))
-            researchers = this.rRepos.recommend( firstName, lastName);
+            researchers = this.rRepos.recommend( firstName, lastName, page);
         else
-            researchers = this.rRepos.recommend( title, firstName, lastName);
+            researchers = this.rRepos.recommend( title, firstName, lastName, page);
         
         return researchers
             .stream()
