@@ -242,4 +242,5 @@ public class ContributionService
         
         return this.detailsMapper.map(contribution);
     }
+
 }

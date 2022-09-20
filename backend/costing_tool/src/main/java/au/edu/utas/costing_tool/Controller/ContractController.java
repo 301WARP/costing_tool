@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import au.edu.utas.costing_tool.DTO.ContractDTO;
+import au.edu.utas.costing_tool.Mapper.ContractMapper;
 import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Repository.ContractRepository;
 import au.edu.utas.costing_tool.Service.ContractService;
-import au.edu.utas.costing_tool.Service.ContributionService;
+import au.edu.utas.costing_tool.Service.ResearcherService;
 import lombok.Data;
 
 
@@ -24,7 +24,7 @@ public class ContractController
     private final ContractService contractService;
 
     @Autowired
-    private final ContributionService contributionService;
+    private final ResearcherService researcherService;
 
     @Autowired
     private final ContractMapper contractMapper;
@@ -37,10 +37,11 @@ public class ContractController
         if (staffID == null)
             return ResponseEntity.badRequest().build();
         
-        Researcher researcher = this.contributionService.findRes(staffID);
+        if (!this.researcherService.existsById(staffID))
+            return ResponseEntity.notFound().build();
         
         List<Contract> contracts =
-            this.contractService.fetchContractsFor(staffID);
+            this.contractService.findContractsFor(staffID);
         
         if (contracts.isEmpty())
             return ResponseEntity.noContent().build();
