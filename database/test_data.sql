@@ -8,6 +8,17 @@ USE warp;
 -- Researchers
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
 VALUES ('DR', 'First', 'Last');
+VALUES ('Dr', 'First', 'Last');
+INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
+VALUES ('Dr', 'Test', 'User');
+INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
+VALUES ('Prof', 'Test', 'Professor');
+INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
+VALUES ('Mr', 'Another', 'Last');
+INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
+VALUES ('Ms', 'Another', 'Last');
+INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
+VALUES ('Mr', 'First', 'Also');
 
 
 -- Project

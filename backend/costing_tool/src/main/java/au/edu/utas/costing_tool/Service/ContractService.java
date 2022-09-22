@@ -1,5 +1,7 @@
 package au.edu.utas.costing_tool.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,13 @@ public class ContractService
             return false;
         
         return this.contractRepos.existsById(id);
+    }
+
+    public List<Contract> findContractsFor(Long staffID)
+    {
+        if (staffID == null)
+            return null;
+        
+        return this.contractRepos.findForResearcher(staffID);
     }
 }
