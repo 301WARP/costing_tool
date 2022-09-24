@@ -6,6 +6,7 @@
     <RouterLink to="/details">Details</RouterLink>
     <RouterLink to="/researcher">Researcher</RouterLink>
     <RouterLink to="/costs">Costs</RouterLink>
+    <RouterLink to="/clearance">Clearance Form</RouterLink> 
     <RouterView></RouterView>
   </div>
 </template>
