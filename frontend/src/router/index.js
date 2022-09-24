@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Projects from "../views/userProjects.vue";
 import Details from "../views/userDetails.vue";
 import Researcher from "../views/userResearcher.vue";
+import Clearance from "../views/clearanceForm.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: "/researcher",
     name: "Researcher",
     component: Researcher,
+  },
+  {
+    path: "/clearance",
+    name: "Clearance",
+    component: Clearance,
   },
 ];
 
