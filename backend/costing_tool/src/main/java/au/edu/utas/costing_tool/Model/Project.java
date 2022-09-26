@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -42,6 +44,7 @@ import au.edu.utas.costing_tool.Enums.Category1Subtype;
 import au.edu.utas.costing_tool.Enums.CrowdFunding;
 import au.edu.utas.costing_tool.Enums.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.ResearchEntity;
+import au.edu.utas.costing_tool.Enums.RhdInvolvement;
 import au.edu.utas.costing_tool.Enums.YearEndType;
 
 
@@ -51,7 +54,7 @@ import au.edu.utas.costing_tool.Enums.YearEndType;
 
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name="project")
 public class Project
@@ -74,11 +77,30 @@ public class Project
     @Column(name="herdc")
     private String herdc;
 
+    @Column(name="funding_body")
+    private String fundingBody;
+
+    @Column(name="scheme")
+    private String scheme;
+
+    @Column(name="contact_name")
+    private String contactName;
+
+    @Column(name="contact_email")
+    private String contactEmail;
+
+    /*
     @OneToOne(cascade={ CascadeType.MERGE,
                         CascadeType.REFRESH,
                         CascadeType.PERSIST})
     @JoinColumn(name="lead_researcher_id", referencedColumnName="staff_id")
     private Researcher leadResearcher;
+    */
+    @Column(name="lead_researcher_name")
+    private String leadResearcherName;
+
+    @Column(name="lead_researcher_organisation")
+    private String leadResearcherOrg;
 
     @Column(name="category")
     @Enumerated(value=EnumType.STRING)
@@ -165,6 +187,7 @@ public class Project
     })
     EthicsChecklist ethicsChecklist;
 
+    /*
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name="ciEndorsement", column=@Column(name="ci_endorsement")),
@@ -188,6 +211,7 @@ public class Project
                 mappedBy="project")
     @JsonManagedReference
     private List<CollegeEndorsement> collegeEndorsements;
+    */
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
@@ -200,6 +224,49 @@ public class Project
                 mappedBy="project")
     @JsonManagedReference
     private List<Expense> expenses;
+
+    @Column(name="external_researchers")
+    private String externalResearchers;
+    public List<String> getExternalResearchers()
+    {
+        return new ArrayList<String>(
+            Arrays.asList(
+                this.externalResearchers
+                    .split(",")
+                )
+        );
+    }
+    public void setExternalResearchers(List<String> researchers)
+    {
+        this.externalResearchers =
+            researchers
+                .stream()
+                .collect(Collectors.joining(","));
+    }
+
+
+    @Column(name="external_organisations")
+    private String externalOrgs;
+    public List<String> getExternalOrgs()
+    {
+        return new ArrayList<String>(
+            Arrays.asList(
+                this.externalOrgs
+                    .split(",")
+                )
+        );
+    }
+    public void setExternalOrgs(List<String> organsations)
+    {
+        this.externalResearchers =
+            organsations
+                .stream()
+                .collect(Collectors.joining(","));
+    }
+
+
+    @Column(name="rhd_involvement")
+    private RhdInvolvement rhdInvolvement;
 
 
     // =========================================================================

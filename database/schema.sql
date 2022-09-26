@@ -140,11 +140,18 @@ CREATE TABLE `project`
 	`strategic_basic` DOUBLE(5,2),
 	`pure_basic` DOUBLE(5,2),
 
+	-- Details
+	`herdc` VARCHAR(256),
+	`funding_body` VARCHAR(256),
+	`scheme` VARCHAR(256),
+	`contact_name` VARCHAR(256),
+	`contact_email` VARCHAR(256),
+
 	-- Ethics
     `human` BOOLEAN,
-    `human_ref` INTEGER(6),
+    `human_ref` VARCHAR(256),
     `animal` BOOLEAN,
-    `animal_ref` INTEGER(6),
+    `animal_ref` VARCHAR(256),
     `drugs` BOOLEAN,
     `clinical_trial` BOOLEAN,
 

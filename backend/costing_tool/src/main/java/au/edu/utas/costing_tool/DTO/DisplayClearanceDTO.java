@@ -18,7 +18,7 @@ public class DisplayClearanceDTO
     // All other Investigators
     List<Investigator> investigators;
     // Higher Degree Researhcer Students
-    List<Investigator> rhdStudents;
+    List<RhdStudents> rhdStudents;
 
     // Research Codes
     ResearchCodes researchCodes;
@@ -58,11 +58,9 @@ public class DisplayClearanceDTO
         String endDate;
         // TODO(Andrew): New entity?
         String fundingBody;
-        // TODO(Andrew): What is this?
         String scheme;
 
         // Contract research and consultancies only
-        // TODO(Andrew): New entity?
         String contactName;
         String contactEmail;
     }
@@ -72,7 +70,7 @@ public class DisplayClearanceDTO
     public static class Investigator
     {
         // One of UTAS, non-UTAS, RHD
-        String type;
+        //String type;
 
         String name;
 
@@ -82,6 +80,20 @@ public class DisplayClearanceDTO
 
         // UTAS investigators only
         Double fte;
+
+        // RHD only
+        // One of: UNPAID, CASUAL, SCHOLARSHIP
+        //String involvement;
+    }
+
+
+    @Data
+    @Builder
+    public static class RhdStudents
+    {
+        List<String> names;
+
+        String unit;
 
         // RHD only
         // One of: UNPAID, CASUAL, SCHOLARSHIP
@@ -109,10 +121,9 @@ public class DisplayClearanceDTO
     public static class Ethics
     {
         Boolean human;
-        // TODO(Andrew): Reference number formats?
-        Long humanRefNo;
+        String humanRefNo;
         Boolean animal;
-        Long animalRefNo;
+        String animalRefNo;
         Boolean controlledDrugs;
         Boolean clinicalTrial;
     }
@@ -141,9 +152,8 @@ public class DisplayClearanceDTO
 
         // Cash
         Map<String, Double> cashUTAS;           // <discipline/unit, cash $>
-        // TODO(Andrew): Deputy Vice Chancellor (Research)?
-        Double utasDVCR;
-        Map<String, Double> castPartner;        // <discipline/unit, cash $>
+        Double cashDVCR;
+        Map<String, Double> cashPartner;        // <discipline/unit, cash $>
 
         // Total cost of project
         Double actualCost;

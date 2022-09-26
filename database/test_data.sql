@@ -8,17 +8,17 @@ USE warp;
 -- Researchers
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
 VALUES ('DR', 'First', 'Last');
-VALUES ('Dr', 'First', 'Last');
+VALUES ('DR', 'First', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Dr', 'Test', 'User');
+VALUES ('DR', 'Test', 'User');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Prof', 'Test', 'Professor');
+VALUES ('PROF', 'Test', 'Professor');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Mr', 'Another', 'Last');
+VALUES ('MR', 'Another', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Ms', 'Another', 'Last');
+VALUES ('MS', 'Another', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Mr', 'First', 'Also');
+VALUES ('MR', 'First', 'Also');
 
 
 -- Project
@@ -43,6 +43,13 @@ INSERT INTO `project`
 
 	-- Specific to Consultancy projects
 	`profit_margin`,
+
+	-- Details
+	`herdc`,
+	`funding_body`,
+	`scheme`,
+	`contact_name`,
+	`contact_email`,
 
 	-- Codes
 	-- Field of Research
@@ -90,6 +97,13 @@ INSERT INTO `project`
 
     'NONE',											-- category 1 subtype
 	'50.00',										-- profit margin
+
+	-- Details
+	'herdc string',									-- herdc
+	'funding body name',							-- funding body name
+	'scheme string',								-- scheme
+	'Mr. Contact Name',								-- contact name
+	'Contact.Name@email.com',						-- contact email
 
 	-- Codes
 	-- Field of Research

@@ -26,17 +26,11 @@ import au.edu.utas.costing_tool.Model.FORCodes;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
 import au.edu.utas.costing_tool.Model.SEOCodes;
-//import au.edu.utas.costing_tool.Model.DirectorEndorsement;
+
 
 @Mapper
-//@Data
 public interface ClearanceMapper
 {
-    /*
-    @Autowired
-    private final ContributionService contributionService;
-    */
-
     @Mapping(source="project", target="projectDetails", qualifiedBy=ProjectDetailsMap.class)
     @Mapping(source="project", target="leadInvestigator", qualifiedBy=InvestogatorMap.LeadProxy.class)
     @Mapping(source="project", target="investigators", qualifiedBy=InvestogatorMap.ListProxy.class)
@@ -48,22 +42,30 @@ public interface ClearanceMapper
     DisplayClearanceDTO
     map(Project project);
 
-    // TODO(Andrew): Incomplete source information
+
+    // =============================================================================
+    // Project Details
+    // =============================================================================
+
     @Mapping(source="category", target="category")
     @Mapping(source="name", target="projectTitle")
-    // TODO(Andrew): @Mapping(source="", target="herdc")
+    @Mapping(source="herdc", target="herdc")
     @Mapping(source="description", target="description")
     @Mapping(source="startDate", target="startDate")
     @Mapping(source="endDate", target="endDate")
-    // TODO(Andrew): @Mapping(source="", target="fundingBody")
-    // TODO(Andrew): @Mapping(source="", target="scheme")
-    // TODO(Andrew): @Mapping(source="", target="contactName")
-    // TODO(Andrew): @Mapping(source="", target="contactEmail")
+    @Mapping(source="fundingBody", target="fundingBody")
+    @Mapping(source="scheme", target="scheme")
+    @Mapping(source="contactName", target="contactName")
+    @Mapping(source="contactEmail", target="contactEmail")
     @BeanMapping(ignoreByDefault=true)
     @ProjectDetailsMap
     DisplayClearanceDTO.ProjectDetails
     projectDetailsMap(Project project);
 
+
+    // =============================================================================
+    // Investigators
+    // =============================================================================
 
     @InvestogatorMap.LeadProxy
     default DisplayClearanceDTO.Investigator
@@ -71,6 +73,7 @@ public interface ClearanceMapper
     {
         return this.investigatorMap(project.getLeadResearcher(), project);
     }
+
 
     @InvestogatorMap.ListProxy
     default List<DisplayClearanceDTO.Investigator>
@@ -88,6 +91,7 @@ public interface ClearanceMapper
             .map(r -> this.investigatorMap(r, project))
             .collect(Collectors.toList());
     }
+
 
     @InvestogatorMap.RhdProxy
     default List<DisplayClearanceDTO.Investigator>
@@ -120,7 +124,7 @@ public interface ClearanceMapper
 
 
     @InvestogatorMap.Name
-    static String
+    default String
     investigatorNameMap(Researcher r)
     {
         if (r == null)
@@ -133,6 +137,7 @@ public interface ClearanceMapper
             .toString();
     }
 
+
     @InvestogatorMap.Type
     default String
     investigatorTypeMap(Researcher r, @Context Project p)
@@ -142,6 +147,10 @@ public interface ClearanceMapper
         return null;
     }
 
+
+    // =============================================================================
+    // Researcher Codes
+    // =============================================================================
 
     @Mapping(source="forCodes", target="forCodes", qualifiedBy=ForCodesMap.class)
     @Mapping(source="seoCodes", target="seoCodes", qualifiedBy=SeoCodesMap.class)
@@ -194,6 +203,10 @@ public interface ClearanceMapper
     }
 
 
+    // =============================================================================
+    // Ethics
+    // =============================================================================
+
     @Mapping(source="human", target="human")
     @Mapping(source="humanRef", target="humanRefNo")
     @Mapping(source="animal", target="animal")
@@ -206,6 +219,9 @@ public interface ClearanceMapper
     ethicsMap(EthicsChecklist ethics);
 
 
+    // =============================================================================
+    // Endorsements
+    // =============================================================================
 
     @Mapping(source="riskAssessment", target="riskAssessment")
     @Mapping(source="utasInsurance", target="utasInsurance")
@@ -243,6 +259,9 @@ public interface ClearanceMapper
 
 
 
+    // =============================================================================
+    // Annotations
+    // =============================================================================
 
     @Qualifier
     @Target(ElementType.METHOD)

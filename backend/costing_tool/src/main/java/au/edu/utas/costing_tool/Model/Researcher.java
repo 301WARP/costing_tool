@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 import java.util.List;
+//import java.util.StringJoiner;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,6 +40,8 @@ public class Researcher
     // =========================================================================
     // Properties
     // =========================================================================
+
+    //public static final Long EXTERNAL_ID = 1L;
 
     // TODO(Andrew): I'm not sure if staff ids should be generated
     @Id
@@ -93,6 +96,20 @@ public class Researcher
     // =========================================================================
     // Methods
     // =========================================================================
+
+    /*
+    public String getName()
+    {
+        if (this.staffID.equals(Researcher.EXTERNAL_ID))
+            return this.getExternal().getName();
+        
+        return new StringJoiner(" ")
+            .add(this.getTitle().toString())
+            .add(this.getFirstName())
+            .add(this.getLastName())
+            .toString();
+    }
+    */
 
     public boolean addContract(Contract contract)
     {

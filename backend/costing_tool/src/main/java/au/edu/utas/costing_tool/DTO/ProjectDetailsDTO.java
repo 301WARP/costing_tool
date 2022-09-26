@@ -23,10 +23,14 @@ public class ProjectDetailsDTO
     String name;
     String description;
 
+    /*
     Long leadResearcherId;
     String leadResearcherTitle;
     String leadResearcherFirstName;
     String leadResearcherLastName;
+    */
+    String leadResearcherName;
+    String leadResearcherOrg;
 
     String category;
     String category1Subtype;
