@@ -8,7 +8,6 @@ USE warp;
 -- Researchers
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
 VALUES ('DR', 'First', 'Last');
-VALUES ('DR', 'First', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
 VALUES ('DR', 'Test', 'User');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
@@ -21,12 +20,42 @@ INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
 VALUES ('MR', 'First', 'Also');
 
 
+-- Units
+INSERT INTO `unit`
+(
+	`id`,
+	`name`,
+	`abbreviation`,
+	`head_id`
+) VALUES (
+	1,
+	'Institute for Marine and Antartic Studies',
+	'IMAS',
+	1
+);
+
+
+-- Colleges
+INSERT INTO `college`
+(
+	`id`,
+	`name`,
+	`executive_dean_id`
+) VALUES (
+	1,
+	'College of Sciences and Engineering',
+	1
+);
+
+
 -- Project
 INSERT INTO `project`
 (
     `name`,
     `description`,
-    `lead_researcher_id`,
+    -- `lead_researcher_id`,
+    `lead_researcher_name`,
+    `lead_researcher_organisation`,
     `category`,
     `amc_menzies`,
     `amc_national_centre`,
@@ -34,6 +63,7 @@ INSERT INTO `project`
 	`end_date`,
     `year_end_type`,
     `utas_cash`,
+    `utas_dvcr_cash`,
     `partner_cash`,
     `entity`,
     `crowd_funding_provider`,
@@ -79,11 +109,20 @@ INSERT INTO `project`
     `utas_insurance`,
     `defence_strategic_goods`,
     `conflict_of_interest`,
-    `foreign_principals`
+    `foreign_principals`,
+
+	-- External Researchers
+    `external_researchers`,
+
+	-- RHD Information
+    `rhd_involvement`,
+    `rhd_unit_id`
 ) VALUES (
     'Test Project',									-- project name
     'A project to test the system.',				-- project description
-    '1',											-- lead researcher id
+    -- '1',											-- lead researcher id
+    'Dr. First Last',								-- lead researcher name
+    'IMAS',											-- lead researcher organisation
     'ONE',											-- category
     'NONE',											-- AMC/Menzies
     'NONE',											-- AMC National Centre
@@ -91,6 +130,7 @@ INSERT INTO `project`
 	'2023-12-31',									-- end date
     'Calendar',										-- year-end type
     '25000.50',										-- UTAS cash
+    '0.00',											-- UTAS DVC-R cash
     '0.00',											-- partner organisation cash
     'IMAS',											-- entity
     'NONE',											-- crowd funding provider
@@ -133,7 +173,14 @@ INSERT INTO `project`
 	TRUE,											-- UTAS insurance
 	TRUE,											-- defence strategic goods
 	TRUE,											-- conflict of interest
-	TRUE											-- foregin principals
+	TRUE,											-- foregin principals
+
+	-- External Researchers
+    'Dr. First Last,ANU;Prof. Also Researcher,UNSW;Mrs. Anne Researcher,UQ',
+
+	-- RHD Information
+    'SCHOLARSHIP',
+    '1'
 );
 
 
@@ -150,9 +197,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'NON_CASUAL',									-- contract type
@@ -164,9 +209,7 @@ INSERT INTO `contract`
     '1',											-- step
     NULL,											-- pay code
     '100000.00',									-- salary
-    NULL,											-- hourly rate
-    '100.00',										-- wage adjustment
-    '1.00'											-- on cost rate
+    NULL											-- hourly rate
 );
 
 INSERT INTO `contract`
@@ -181,9 +224,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'CASUAL',										-- contract type
@@ -195,9 +236,7 @@ INSERT INTO `contract`
     NULL,											-- step
     '1',											-- pay code
     NULL,											-- salary
-    '50.00',										-- hourly rate
-    '1.00',											-- wage adjustment
-    '123.00'										-- on cost rate
+    '50.00'											-- hourly rate
 );
 
 INSERT INTO `contract`
@@ -212,9 +251,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'RHD',											-- contract type
@@ -226,9 +263,7 @@ INSERT INTO `contract`
     NULL,											-- step
     '1',											-- pay code
     '25000.00',										-- salary
-    NULL,											-- hourly rate
-    NULL,											-- wage adjustment
-    NULL											-- on cost rate
+    NULL											-- hourly rate
 );
 
 -- contribution of project to contract
@@ -237,12 +272,16 @@ INSERT INTO `contribution`
 	`contract_id`,
 	`project_id`,
 	`role`,
-    `in_kind_%`
+    `in_kind_%`,
+    `wage_adjustment`,
+    `on_cost_rate`
 ) VALUES (
 	'1',											-- contract id
 	'1',											-- project id
 	'CI',											-- project role
-    '50.00'											-- in kind percent
+    '50.00',										-- in kind percent
+    '1000.00',										-- wage adjustment
+    NULL											-- on cost rate
 );
 /*
 INSERT INTO `contribution`
@@ -263,18 +302,22 @@ INSERT INTO `contribution`
 	`contract_id`,
 	`project_id`,
 	`role`,
-    `in_kind_%`
+    `in_kind_%`,
+    `wage_adjustment`,
+    `on_cost_rate`
 ) VALUES (
 	'3',											-- contract id
 	'1',											-- project id
 	'RHD Student',									-- project role
-    '100.00'										-- in kind percent
+    '100.00',										-- in kind percent
+    '500.00',										-- wage adjustment
+    NULL											-- on cost rate
 );
 
 
 
 
--- contribution of project to contract
+-- annual contribution of project to contract
 INSERT INTO `annual_contribution`
 (
 	`contract_id`,
@@ -407,34 +450,6 @@ INSERT INTO `annual_expense`
 	'1',												-- expense id
 	'2022',												-- year
 	'30'												-- units
-);
-
-
--- Units
-INSERT INTO `unit`
-(
-	`id`,
-	`name`,
-	`abbreviation`,
-	`head_id`
-) VALUES (
-	1,
-	'Institute for Marine and Antartic Studies',
-	'IMAS',
-	1
-);
-
-
--- Colleges
-INSERT INTO `college`
-(
-	`id`,
-	`name`,
-	`executive_dean_id`
-) VALUES (
-	1,
-	'College of Sciences and Engineering',
-	1
 );
 
 

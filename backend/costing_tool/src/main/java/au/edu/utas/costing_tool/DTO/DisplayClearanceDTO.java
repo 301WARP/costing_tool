@@ -15,10 +15,12 @@ public class DisplayClearanceDTO
 
     // Lead Investigator
     Investigator leadInvestigator;
-    // All other Investigators
+    // All other (UTAS) Investigators
     List<Investigator> investigators;
+    // All other (external) Investigators
+    List<Investigator> externalInvestigators;
     // Higher Degree Researhcer Students
-    List<RhdStudents> rhdStudents;
+    RhdStudents rhdStudents;
 
     // Research Codes
     ResearchCodes researchCodes;
@@ -32,6 +34,7 @@ public class DisplayClearanceDTO
     // External Payments
     ExternalPayments externalPayments;
 
+    /*
     // Chief Investigator Endorsement
     CiEndorsement ciEndorsement;
 
@@ -40,6 +43,7 @@ public class DisplayClearanceDTO
 
     // College Endorsements
     List<CollegeEndorsement> collegeEndorsements;
+    */
 
 
     // =========================================================================

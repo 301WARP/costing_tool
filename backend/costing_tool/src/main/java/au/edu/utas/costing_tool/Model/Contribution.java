@@ -51,6 +51,12 @@ public class Contribution
     @Column(name="`in_kind_%`")
     private Double inKindPercent; 
 
+    @Column(name="`wage_adjustment`")
+    private Double wageAdjustment; 
+
+    @Column(name="`on_cost_rate`")
+    private Double onCostRate; 
+
     @ManyToOne
     @MapsId(value="contractID")
     @JsonBackReference
@@ -78,7 +84,7 @@ public class Contribution
     {
         this.project = project;
 
-        Long projectID = project != null ? project.getId() : null;
+        Long projectID = project == null ? null : project.getId();
 
         this.setProjectID(projectID);
         
@@ -94,7 +100,7 @@ public class Contribution
     @JsonManagedReference
     // TODO(Andrew): final?
     private List<AnnualContribution> annualContributions;
-    
+
     
     // ========================================================================= 
     // Constructors
@@ -235,12 +241,7 @@ public class Contribution
 
     public Double AnnualPrice(Integer year)
     {
-        Contract contract = this.getContract();
-
-        if (contract == null)
-            return null;
-
-        Double rate = contract.CostRate(); 
+        Double rate = this.getOnCostRate(); 
 
         if (rate == null)
             return null;
@@ -258,16 +259,19 @@ public class Contribution
 
     public Double AnnualPrice(AnnualContribution ac)
     {
-        Contract contract = this.getContract();
-
-        if (ac == null || contract == null)
+        if (ac == null)
             return null;
 
-        Double rate = contract.CostRate(); 
+        Double rate = this.getOnCostRate(); 
         Double fte = ac.getFTE();
         Double hours = ac.getHours();
 
         if (rate == null || fte == null || hours == null)
+            return null;
+
+        Contract contract = this.getContract();
+
+        if (contract == null)
             return null;
 
         if (contract instanceof NonCasual || contract instanceof RHD)

@@ -1,6 +1,8 @@
 package au.edu.utas.costing_tool.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import javax.persistence.AttributeOverride;
@@ -29,10 +32,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.ToString;
 
 // =============================================================================
 // Project Imports
@@ -46,6 +50,7 @@ import au.edu.utas.costing_tool.Enums.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.ResearchEntity;
 import au.edu.utas.costing_tool.Enums.RhdInvolvement;
 import au.edu.utas.costing_tool.Enums.YearEndType;
+import au.edu.utas.costing_tool.Util.Log;
 
 
 // TODO(Andrew): Could convert codes to enums
@@ -225,6 +230,7 @@ public class Project
     @JsonManagedReference
     private List<Expense> expenses;
 
+    /*
     @Column(name="external_researchers")
     private String externalResearchers;
     public List<String> getExternalResearchers()
@@ -256,17 +262,63 @@ public class Project
                 )
         );
     }
-    public void setExternalOrgs(List<String> organsations)
+    public void setExternalOrgs(List<String> organisations)
     {
         this.externalResearchers =
-            organsations
+            organisations
                 .stream()
                 .collect(Collectors.joining(","));
     }
+    */
+    
 
+    @Column(name="external_researchers")
+    private String externalResearchers;
+    public List<ExternalResearcher> getExternalResearchers()
+    {
+        List<String> researcherStrings =
+            Arrays.asList(this.externalResearchers .split(";"));
+        
+        return researcherStrings
+            .stream()
+            .map(s -> s.split(","))
+            .map(s -> ExternalResearcher
+                .builder()
+                .name(s.length > 0 ? s[0] : null)
+                .organisation(s.length > 1 ? s[1] : null)
+                .build())
+            .collect(Collectors.toList());
+    }
+    public void setExternalResearchers(List<ExternalResearcher> researchers)
+    {
+        this.externalResearchers =
+            researchers
+                .stream()
+                .map(r -> new StringJoiner(",")
+                    .add(r.getName())
+                    .add(r.getOrganisation())
+                    .toString()
+                )
+                .collect(Collectors.joining(";"));
+    }
+
+    @Transient
+    private List<ExternalResearcher> externalResearchersList;
 
     @Column(name="rhd_involvement")
+    @Enumerated(value=EnumType.STRING)
     private RhdInvolvement rhdInvolvement;
+
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="rhd_unit_id", referencedColumnName="id")
+    @JsonBackReference
+    @ToString.Exclude
+    protected Unit rhdUnit;
+    
+
+    @Column(name="utas_dvcr_cash")
+    private Double dvcrCash;
 
 
     // =========================================================================

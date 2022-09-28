@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
@@ -29,6 +31,8 @@ import au.edu.utas.costing_tool.Enums.PayCode;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
+@NoArgsConstructor
+@SuperBuilder
 @Entity
 @DiscriminatorValue("CASUAL")
 @DiscriminatorOptions(force=true)
@@ -61,6 +65,7 @@ public class Casual extends Staff
     // Constructors
     // =========================================================================
 
+    /*
     public Casual() {super();}
 
     public Casual(Researcher researcher)
@@ -81,16 +86,19 @@ public class Casual extends Staff
         this.setPayCode(payCode);
         this.setHourlyRate(hourlyRate);
     }
+    */
 
 
     // =========================================================================
     // Methods
     // =========================================================================
 
+    /*
     // TODO(Andrew): null checking and correct formula
     @Override
     public Double CostRate()
     {
         return this.getHourlyRate();
     }
+    */
 }

@@ -44,6 +44,8 @@ CREATE TABLE `contribution`
 	`role` VARCHAR(25),
     `in_kind_%` DOUBLE(5,2)
 		CHECK (`in_kind_%` BETWEEN 0 AND 100),
+    `wage_adjustment` DOUBLE(9,2),						-- per contract or project?
+    `on_cost_rate` DOUBLE(9,2),							-- per contract or project?
 	PRIMARY KEY (`contract_id`, `project_id`)
 ) Engine=InnoDB;
 
@@ -78,8 +80,7 @@ CREATE TABLE `contract`
 		CHECK (`salary` >= 0),
     `hourly_rate` DOUBLE(9,2)
 		CHECK (`hourly_rate` >= 0),
-    `wage_adjustment` DOUBLE(9,2),						-- per contract or project?
-    `on_cost_rate` DOUBLE(9,2),					-- per contract or project?
+	`unit_id` INTEGER(6) UNSIGNED,
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
 
@@ -88,9 +89,10 @@ CREATE TABLE `contract`
 CREATE TABLE `project`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `name` VARCHAR(255),
-    `description` VARCHAR(255),
-    `lead_researcher_id` INTEGER(6) UNSIGNED,
+    `name` VARCHAR(256),
+    `description` VARCHAR(256),
+    `lead_researcher_name` VARCHAR(256),
+    `lead_researcher_organisation` VARCHAR(256),
     `category` ENUM('ONE', 'TWO', 'THREE', 'FOUR', 'CONSULTANCY', 'EXEMPTION'),
     `amc_menzies` ENUM('AMC', 'MENZIES', 'NONE')
 		DEFAULT 'NONE',
@@ -101,6 +103,7 @@ CREATE TABLE `project`
     `year_end_type` ENUM('CALENDAR', 'FINANCIAL')
 		DEFAULT 'CALENDAR',
     `utas_cash` DOUBLE(9,2),
+    `utas_dvcr_cash` DOUBLE(9,2),
     `partner_cash` DOUBLE(9,2),
     `entity` ENUM('NONE', 'IMAS')												-- values?
 		DEFAULT 'NONE',
@@ -164,6 +167,13 @@ CREATE TABLE `project`
     `defence_strategic_goods` BOOLEAN,
     `conflict_of_interest` BOOLEAN,
     `foreign_principals` BOOLEAN,
+
+	-- External Researchers
+    `external_researchers` MEDIUMTEXT,
+
+	-- RHD Information
+    `rhd_involvement` ENUM('NONE', 'UNPAID', 'CASUAL', 'SCHOLARSHIP'),
+    `rhd_unit_id` INTEGER(6) UNSIGNED,
 
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
@@ -256,9 +266,11 @@ CREATE TABLE `college`
 
 -- Specify foreign keys
 ALTER TABLE `contract` ADD FOREIGN KEY (`researcher_id`) REFERENCES `researcher` (`staff_id`);
+ALTER TABLE `contract` ADD FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`);
 ALTER TABLE `contribution` ADD FOREIGN KEY (`contract_id`) REFERENCES `contract` (`id`);
 ALTER TABLE `contribution` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
-ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
+-- ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
+ALTER TABLE `project` ADD FOREIGN KEY (`rhd_unit_id`) REFERENCES `unit` (`id`);
 ALTER TABLE `expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 ALTER TABLE `annual_expense` ADD FOREIGN KEY (`expense_id`) REFERENCES `expense` (`id`);
 ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);

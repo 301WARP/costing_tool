@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
@@ -21,7 +23,6 @@ import org.hibernate.annotations.DiscriminatorOptions;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.NonCasualClassification;
 import au.edu.utas.costing_tool.Enums.NonCasualStaffType;
 import au.edu.utas.costing_tool.Enums.Step;
@@ -29,6 +30,8 @@ import au.edu.utas.costing_tool.Enums.Step;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
+@NoArgsConstructor
+@SuperBuilder
 @Entity
 @DiscriminatorValue("NON_CASUAL")
 @DiscriminatorOptions(force=true)
@@ -58,6 +61,7 @@ public class NonCasual extends Staff
     // Constructors
     // =========================================================================
 
+    /*
     public NonCasual() {super();}
 
     public NonCasual(Researcher researcher)
@@ -81,16 +85,19 @@ public class NonCasual extends Staff
         this.setStep(step);
         this.setStartingSalary(startingSalary);
     }
+    */
     
 
     // =========================================================================
     // Methods
     // =========================================================================
 
+    /*
     // TODO(Andrew): null checking and correct formula
     @Override
     public Double CostRate()
     {
         return this.getStartingSalary();
     }
+    */
 }

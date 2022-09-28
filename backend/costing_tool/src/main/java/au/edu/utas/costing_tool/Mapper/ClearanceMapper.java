@@ -14,30 +14,33 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Qualifier;
 
 import au.edu.utas.costing_tool.DTO.DisplayClearanceDTO;
+import au.edu.utas.costing_tool.DTO.UpdateClearanceDTO;
 import au.edu.utas.costing_tool.Enums.ContractType;
-import au.edu.utas.costing_tool.Model.CIEndorsement;
-import au.edu.utas.costing_tool.Model.CollegeEndorsement;
-import au.edu.utas.costing_tool.Model.DirectorEndorsement;
+import au.edu.utas.costing_tool.Model.Contract;
 import au.edu.utas.costing_tool.Model.EthicsChecklist;
+import au.edu.utas.costing_tool.Model.ExternalResearcher;
 import au.edu.utas.costing_tool.Model.FORCodes;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
 import au.edu.utas.costing_tool.Model.SEOCodes;
+import au.edu.utas.costing_tool.Util.Log;
 
 
 @Mapper
 public interface ClearanceMapper
 {
     @Mapping(source="project", target="projectDetails", qualifiedBy=ProjectDetailsMap.class)
-    @Mapping(source="project", target="leadInvestigator", qualifiedBy=InvestogatorMap.LeadProxy.class)
-    @Mapping(source="project", target="investigators", qualifiedBy=InvestogatorMap.ListProxy.class)
-    @Mapping(source="project", target="rhdStudents", qualifiedBy=InvestogatorMap.RhdProxy.class)
+    @Mapping(source="project", target="leadInvestigator", qualifiedBy=InvestigatorMap.LeadProxy.class)
+    @Mapping(source="project", target="investigators", qualifiedBy=InvestigatorMap.ListProxy.class)
+    @Mapping(source="project.externalResearchers", target="externalInvestigators", qualifiedBy=InvestigatorMap.External.class)
+    @Mapping(source="project", target="rhdStudents", qualifiedBy=InvestigatorMap.RhdProxy.class)
     @Mapping(source="project", target="researchCodes", qualifiedBy=ResearchCodesMap.class)
     @Mapping(source="ethicsChecklist", target="ethics", qualifiedBy=EthicsMap.class)
-    @Mapping(source="ciEndorsement", target="ciEndorsement", qualifiedBy=CiEndorsementMap.class)
+    //@Mapping(source="ciEndorsement", target="ciEndorsement", qualifiedBy=CiEndorsementMap.class)
     @BeanMapping(ignoreByDefault=true)
     DisplayClearanceDTO
     map(Project project);
@@ -67,63 +70,75 @@ public interface ClearanceMapper
     // Investigators
     // =============================================================================
 
-    @InvestogatorMap.LeadProxy
+    @InvestigatorMap.LeadProxy
     default DisplayClearanceDTO.Investigator
     leadInvestigatorMapProxy(Project project)
     {
-        return this.investigatorMap(project.getLeadResearcher(), project);
+        return DisplayClearanceDTO.Investigator.builder()
+            .name(project.getLeadResearcherName())
+            .organisation(project.getLeadResearcherOrg())
+            .build();
     }
 
 
-    @InvestogatorMap.ListProxy
+    @InvestigatorMap.ListProxy
     default List<DisplayClearanceDTO.Investigator>
     investigatorsMapProxy(Project project)
     {
-        List<Researcher> researchers = project.getContributions()
+        return project.getContributions()
             .stream()
             .map(c -> c.getContract())
             .filter(c -> c.getContractType() != ContractType.RHD)
-            .map(c -> c.getResearcher())
-            .filter(r -> r != project.getLeadResearcher())
-            .collect(Collectors.toList());
-
-        return researchers.stream()
-            .map(r -> this.investigatorMap(r, project))
+            .map(c -> this.investigatorMap(c, project))
             .collect(Collectors.toList());
     }
 
 
-    @InvestogatorMap.RhdProxy
-    default List<DisplayClearanceDTO.Investigator>
+    @InvestigatorMap.RhdProxy
+    default DisplayClearanceDTO.RhdStudents
     rhdStudentsMapProxy(Project project)
     {
-        List<Researcher> researchers = project.getContributions()
+        List<String> names = project.getContributions()
             .stream()
             .map(c -> c.getContract())
             .filter(c -> c.getContractType() == ContractType.RHD)
-            .map(c -> c.getResearcher())
-            .filter(r -> r != project.getLeadResearcher())
+            .map(c -> this.investigatorNameMap(c.getResearcher()))
             .collect(Collectors.toList());
+        
+        String involvement = project.getRhdInvolvement() == null
+            ? null
+            : project.getRhdInvolvement().toString();
+        
+        String unit = project.getRhdUnit() == null
+            ? null
+            : project.getRhdUnit().getName();
 
-        return researchers.stream()
-            .map(r -> this.investigatorMap(r, project))
-            .collect(Collectors.toList());
+        return DisplayClearanceDTO.RhdStudents.builder()
+            .involvement(involvement)
+            .unit(unit)
+            .names(names)
+            .build();
     }
 
 
-    // TODO(Andrew):    cannot do
-    //  organisation - not stored
-    //  fte - how to calculate for entire project? Average?
-    //  involvement - not stored
-    @Mapping(source="researcher", target="name", qualifiedBy=InvestogatorMap.Name.class)
-    @Mapping(source="researcher", target="type", qualifiedBy=InvestogatorMap.Type.class)
+    // TODO(Andrew): how to calculate fte for entire project? Average?
+    @Mapping(source="researcher", target="name", qualifiedBy=InvestigatorMap.Name.class)
+    @Mapping(source="unit.name", target="organisation")
     @BeanMapping(ignoreByDefault=true)
-    @InvestogatorMap
+    @InvestigatorMap
     DisplayClearanceDTO.Investigator
-    investigatorMap(Researcher researcher, @Context Project project);
+    investigatorMap(Contract contract, @Context Project project);
 
 
-    @InvestogatorMap.Name
+    @Mapping(source="name", target="name")
+    @Mapping(source="organisation", target="organisation")
+    @BeanMapping(ignoreByDefault=true)
+    @InvestigatorMap.External
+    List<DisplayClearanceDTO.Investigator>
+    externalInvestigatorMap(List<ExternalResearcher> researcher);
+
+
+    @InvestigatorMap.Name
     default String
     investigatorNameMap(Researcher r)
     {
@@ -135,16 +150,6 @@ public interface ClearanceMapper
             .add(r.getFirstName())
             .add(r.getLastName())
             .toString();
-    }
-
-
-    @InvestogatorMap.Type
-    default String
-    investigatorTypeMap(Researcher r, @Context Project p)
-    {
-        // TODO(Andrew):    Is this possible if the lead researcher is employed
-        //                  under multiple contracts?
-        return null;
     }
 
 
@@ -219,6 +224,7 @@ public interface ClearanceMapper
     ethicsMap(EthicsChecklist ethics);
 
 
+    /*
     // =============================================================================
     // Endorsements
     // =============================================================================
@@ -242,7 +248,7 @@ public interface ClearanceMapper
     @Mapping(source="ethics", target="ethics")
     @Mapping(source="conflictOfInterest", target="conflictOfInterest")
     @Mapping(source="unit.name", target="unit")
-    @Mapping(source="endorser", target="endorserName", qualifiedBy=InvestogatorMap.Name.class)
+    @Mapping(source="endorser", target="endorserName", qualifiedBy=InvestigatorMap.Name.class)
     @Mapping(source="endorsed", target="endorsed")
     @Mapping(source="endorsementDate", target="endorsementDate")
     @DirectorEndorsementMap
@@ -250,12 +256,13 @@ public interface ClearanceMapper
     directorEndorsementMap(DirectorEndorsement endorsement);
 
     @Mapping(source="college.name", target="college")
-    @Mapping(source="endorser", target="endorserName", qualifiedBy=InvestogatorMap.Name.class)
+    @Mapping(source="endorser", target="endorserName", qualifiedBy=InvestigatorMap.Name.class)
     @Mapping(source="endorsed", target="endorsed")
     @Mapping(source="date", target="endorsementDate")
     @CollegeEndorsementMap
     DisplayClearanceDTO.CollegeEndorsement
     collegeEndorsementMap(CollegeEndorsement endorsement);
+    */
 
 
 
@@ -271,7 +278,7 @@ public interface ClearanceMapper
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
-    public @interface InvestogatorMap {
+    public @interface InvestigatorMap {
         @Qualifier
         @Target(ElementType.METHOD)
         @Retention(RetentionPolicy.CLASS)
@@ -299,8 +306,8 @@ public interface ClearanceMapper
         @Qualifier
         @Target(ElementType.METHOD)
         @Retention(RetentionPolicy.CLASS)
-        public @interface Type {}
-        public Type type() default @Type();
+        public @interface External {}
+        public External external() default @External();
     }
 
     @Qualifier
@@ -337,4 +344,37 @@ public interface ClearanceMapper
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
     public @interface CollegeEndorsementMap {}
+
+
+
+
+    @Mapping(source="projectDetails.herdc", target="herdc")
+    @Mapping(source="projectDetails.fundingBody", target="fundingBody")
+    @Mapping(source="projectDetails.scheme", target="scheme")
+    @Mapping(source="projectDetails.contactName", target="contactName")
+    @Mapping(source="projectDetails.contactEmail", target="contactEmail")
+    @Mapping(source="ethics.human", target="ethicsChecklist.human")
+    @Mapping(source="ethics.humanRefNo", target="ethicsChecklist.humanRef")
+    @Mapping(source="ethics.animal", target="ethicsChecklist.animal")
+    @Mapping(source="ethics.animalRefNo", target="ethicsChecklist.animalRef")
+    @Mapping(source="ethics.controlledDrugs", target="ethicsChecklist.drugs")
+    @Mapping(source="ethics.clinicalTrial", target="ethicsChecklist.clinicalTrial")
+    @Mapping(source="costs.cashDVCR", target="dvcrCash")
+    @Mapping(source="externalInvestigators", target="externalResearchersList", qualifiedBy=ExternalInvestigatorListMap.class)
+    @BeanMapping(ignoreByDefault=true)
+    Project
+    map(UpdateClearanceDTO dto, @MappingTarget Project project);
+
+
+    @Mapping(source="name", target="name")
+    @Mapping(source="organisation", target="organisation")
+    @BeanMapping(ignoreByDefault=true)
+    @ExternalInvestigatorListMap
+    List<ExternalResearcher>
+    dtoToExternalListInvestigatorMap(List<UpdateClearanceDTO.Investigator> investigator);
+    
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface ExternalInvestigatorListMap {}
 }

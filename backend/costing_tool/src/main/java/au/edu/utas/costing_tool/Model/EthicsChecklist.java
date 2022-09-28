@@ -15,10 +15,10 @@ import lombok.Data;
 public class EthicsChecklist
 {
     private Boolean human;
-    private Integer humanRef;
+    private String humanRef;
 
     private Boolean animal;
-    private Integer animalRef;
+    private String animalRef;
 
     private Boolean drugs;
 

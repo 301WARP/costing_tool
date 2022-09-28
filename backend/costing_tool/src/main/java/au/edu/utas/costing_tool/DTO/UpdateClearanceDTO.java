@@ -1,10 +1,15 @@
 package au.edu.utas.costing_tool.DTO;
 
-//import java.util.List;
-import java.util.Map;
 
+import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+
 
 @Data
 @Builder
@@ -19,8 +24,13 @@ public class UpdateClearanceDTO
     // Project Costs
     ProjectCosts costs;
 
+    /*
     // External Payments
     ExternalPayments externalPayments;
+    */
+
+    // External Payments
+    List<Investigator> externalInvestigators;
 
     // Chief Investigator Endorsement
     //CiEndorsement ciEndorsement;
@@ -37,12 +47,7 @@ public class UpdateClearanceDTO
     @Builder
     public static class ProjectDetails
     {
-        String category;
-        String projectTitle;
-        String description;
         String herdc;
-        String startDate;
-        String endDate;
         // TODO(Andrew): New entity?
         String fundingBody;
         String scheme;
@@ -67,12 +72,15 @@ public class UpdateClearanceDTO
 
     // TODO(Andrew): Consider adding DVCR section to Project Details page?
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
     public static class ProjectCosts
     {
         Double cashDVCR;
     }
 
+    /*
     // TODO(Andrew): not currently tracked
     // TODO(Andrew): new entity?
     @Data
@@ -84,6 +92,19 @@ public class UpdateClearanceDTO
         // <party name, $ amount paid>
         Map<String, Double> parties;
     }
+    */
+    
+
+    @Data
+    @Builder
+    public static class Investigator
+    {
+        String name;
+
+        // Organisation of non-UTAS-based investigators
+        String organisation;
+    }
+
 
     /*
     // TODO(Andrew): requires authentication

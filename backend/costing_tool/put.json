@@ -1,0 +1,33 @@
+{
+	"projectDetails": {
+		"herdc": "test",
+		"fundingBody": "test",
+		"scheme": "test",
+		"contactName": "Test Name",
+		"contactEmail": "Test@email.com"
+	},
+
+	"ethics": {
+		"human": true,
+		"humanRefNo": "",
+		"animal": true,
+		"animalRefNo": "",
+		"controlledDrugs": true,
+		"clinicalTrial": true
+	},
+
+	"costs": {
+		"cashDVCR": 1000.03
+	},
+
+	"externalInvestigators": [
+		{
+			"name": "Dr. Example Researcher",
+			"organisation": "UNSW"
+		},
+		{
+			"name": "Mr. External Researcher",
+			"organisation": "Monash University"
+		}
+	]
+}
