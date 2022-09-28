@@ -15,16 +15,22 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="projects"
+          :items="projectListFixed"
           :search="search"
+          @click:row="change()"
         ></v-data-table>
-        <v-btn @click="say('test')" color="primary" elevation="4" outlined large
+        <v-btn
+          @click="router.push('/details')"
+          color="primary"
+          elevation="4"
+          outlined
+          large
           >Create Project</v-btn
         >
-        <v-btn @click="q" color="primary" elevation="4" outlined large
+        <v-btn color="primary" elevation="4" outlined large
           >Edit Projects</v-btn
         >
-        <v-btn @click="q" color="primary" elevation="4" outlined large
+        <v-btn @click="change()" color="primary" elevation="4" outlined large
           >Create Project</v-btn
         >
       </v-card>
@@ -32,6 +38,9 @@
   </div>
 </template>
 <script>
+const axios = require("axios").default;
+import router from "../router";
+
 export default {
   data() {
     return {
@@ -46,36 +55,38 @@ export default {
         { text: "Role", value: "role" },
         { text: "Contract", value: "contract" },
       ],
-      projects: [
-        {
-          name: "Tasmanian Abalone Fishery Assessment",
-          role: "CI",
-          contract: "Full Time",
-        },
-        {
-          name: "Assessment of ...",
-          role: "RA",
-          contract: "Full Time",
-        },
-        {
-          name: "Report of ...",
-          role: "CI",
-          contract: "Full Time",
-        },
-      ],
+      projectList: [],
+      projectListFixed: [],
     };
   },
   methods: {
-    say(message) {
-      alert(message);
+    say(e) {
+      alert(e);
+    },
+    load_projects_list() {
+      axios.get("http://10.36.241.204:8080/api/projects/").then((resp) => {
+        console.log(resp.data); //use resp.data[0].name for arrays
+        this.researcher_list = resp.data;
+        var obj;
+        for (var i = 0; i < this.researcher_list.length; i++) {
+          obj = {
+            name: this.researcher_list[i].name,
+            role: "CI",
+            contract: "Full Time",
+          };
+          this.projectListFixed.push(obj);
+        }
+        console.log(this.projectListFixed);
+      });
+    },
+    change() {
+      router.push("/details");
     },
   },
+  mounted() {
+    this.load_projects_list();
+  },
 };
-const axios = require("axios").default;
-
-axios.get("http://10.36.241.204:8080/api/projects").then((resp) => {
-  console.log(resp.data);
-});
 </script>
 <style>
 .v-btn {
