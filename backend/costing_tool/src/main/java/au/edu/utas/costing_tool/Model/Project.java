@@ -36,6 +36,7 @@ import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 // =============================================================================
@@ -59,6 +60,7 @@ import au.edu.utas.costing_tool.Util.Log;
 
 
 @Data
+//@NoArgsConstructor
 //@AllArgsConstructor
 @Entity
 @Table(name="project")

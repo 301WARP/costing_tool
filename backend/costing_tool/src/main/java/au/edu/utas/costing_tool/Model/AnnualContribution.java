@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-//import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Data
-//@NoArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="annual_contribution")
 @IdClass(value=AnnualContributionID.class)

@@ -21,10 +21,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name="college_endorsement")
 @IdClass(value=CollegeEndorsementID.class)

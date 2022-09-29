@@ -17,8 +17,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.NoArgsConstructor;
+
 
 @Entity
+@NoArgsConstructor
 @Table(name="annual_expense")
 @IdClass(value=AnnualExpenseID.class)
 public class AnnualExpense
@@ -56,8 +59,6 @@ public class AnnualExpense
     // =========================================================================
     // Constructors
     // =========================================================================
-
-    public AnnualExpense() {}
 
     public AnnualExpense(   Long expenseID,
                             Integer year,

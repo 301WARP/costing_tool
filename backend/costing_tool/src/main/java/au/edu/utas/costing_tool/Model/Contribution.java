@@ -262,32 +262,59 @@ public class Contribution
         if (ac == null)
             return null;
 
-        Double rate = this.getOnCostRate(); 
+        Double onCost = this.getOnCostRate(); 
         Double fte = ac.getFTE();
         Double hours = ac.getHours();
 
-        if (rate == null || fte == null || hours == null)
+        // TODO(Andrew): throw error?
+        if (onCost == null || fte == null || hours == null)
             return null;
 
         Contract contract = this.getContract();
 
+        // TODO(Andrew): throw error?
         if (contract == null)
             return null;
 
-        if (contract instanceof NonCasual || contract instanceof RHD)
-            return rate * fte / 100.0;
-        else if (contract instanceof Casual)
-            return rate * hours;
+        if (contract instanceof NonCasual) {
+            Double salary = ((NonCasual)contract).getStartingSalary();
+
+            if (salary == null)
+                return null;
+
+            return salary * onCost * fte / 100.0;
+        }
+        else if (contract instanceof RHD)  {
+            Double salary = ((RHD)contract).getAnnualSalary();
+
+            if (salary == null)
+                return null;
+
+            return salary * onCost * fte / 100.0;
+        }
+        else if (contract instanceof Casual) {
+            Double hourlyRate = ((Casual)contract).getHourlyRate();
+
+            if (hourlyRate == null)
+                return null;
+
+            return hourlyRate * onCost * hours;
+        }
         // Unkown contract
+        // TODO(Andrew): throw error?
         else
             return null;
     }
 
     public Double Price()
     {
+        if (this.getAnnualContributions() == null)
+            return 0.0;
+
         return this.getAnnualContributions()
             .stream()
             .mapToDouble(this::AnnualPrice)
+            //.map(ac -> this.AnnualPrice(ac))
             .reduce(0.0, (total, p) -> total + p);
     }
 

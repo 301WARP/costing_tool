@@ -34,10 +34,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 // =============================================================================
 
 import au.edu.utas.costing_tool.Enums.ExpenseType;
+import lombok.NoArgsConstructor;
 
 
 // TODO(Andrew): Catch discriminators that don't apply to subclasses here
 @Entity
+@NoArgsConstructor
 @Table(name="expense")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="expense_type")
@@ -95,8 +97,6 @@ public class Expense
     // =========================================================================
     // Constructors
     // =========================================================================
-
-    public Expense() {}
 
     public Expense( Project project,
                     ExpenseType type,

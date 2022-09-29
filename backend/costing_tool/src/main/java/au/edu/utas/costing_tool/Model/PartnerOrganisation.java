@@ -11,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 // =============================================================================
 // Project Imports
@@ -20,6 +23,9 @@ import au.edu.utas.costing_tool.Enums.ExpenseType;
 import au.edu.utas.costing_tool.Enums.Organisation;
 
 
+@Data
+@EqualsAndHashCode(callSuper=true)
+@NoArgsConstructor
 @Entity
 @DiscriminatorValue("PARTNER_ORGANISATION")
 public class PartnerOrganisation extends Expense
@@ -31,15 +37,13 @@ public class PartnerOrganisation extends Expense
     @Column(name="organisation")
     @Enumerated(value=EnumType.STRING)
     private Organisation organisation;
-    public Organisation getOrganisation() {return this.organisation;}
-    public void setOrganisation(Organisation organisation) {this.organisation = organisation;}
 
     
+    /*
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public PartnerOrganisation() {super();}
 
     public PartnerOrganisation( Project project,
                                 ExpenseType type,
@@ -51,4 +55,5 @@ public class PartnerOrganisation extends Expense
 
         this.setOrganisation(organisation);
     }
+    */
 }

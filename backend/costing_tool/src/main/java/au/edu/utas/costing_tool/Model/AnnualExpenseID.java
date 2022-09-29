@@ -6,9 +6,14 @@ package au.edu.utas.costing_tool.Model;
 // =============================================================================
 
 import java.io.Serializable;
-import java.util.Objects;
+//import java.util.Objects;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
+@Data
+@NoArgsConstructor
 public class AnnualExpenseID implements Serializable
 {
     // =========================================================================
@@ -16,19 +21,14 @@ public class AnnualExpenseID implements Serializable
     // =========================================================================
 
     protected Long expenseID;
-    public Long getExpenseID() {return this.expenseID;}
-    public void setExpenseID(Long id) {this.expenseID = id;}
 
     protected Integer year;
-    public Integer getYear() {return this.year;}
-    public void setYear(Integer year) {this.year = year;}
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
-    public AnnualExpenseID() {}
 
     public AnnualExpenseID(Long expenseID, Integer year)
     {
@@ -41,6 +41,7 @@ public class AnnualExpenseID implements Serializable
     // Methods
     // =========================================================================
 
+    /*
     @Override
     public boolean equals(Object o)
     {
@@ -60,4 +61,5 @@ public class AnnualExpenseID implements Serializable
     {
         return Objects.hash(this.getExpenseID(), this.getYear());
     }
+    */
 }

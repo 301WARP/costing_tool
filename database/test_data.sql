@@ -281,7 +281,7 @@ INSERT INTO `contribution`
 	'CI',											-- project role
     '50.00',										-- in kind percent
     '1000.00',										-- wage adjustment
-    NULL											-- on cost rate
+	'1'												-- on cost rate
 );
 /*
 INSERT INTO `contribution`
@@ -311,7 +311,7 @@ INSERT INTO `contribution`
 	'RHD Student',									-- project role
     '100.00',										-- in kind percent
     '500.00',										-- wage adjustment
-    NULL											-- on cost rate
+    '1'												-- on cost rate
 );
 
 
