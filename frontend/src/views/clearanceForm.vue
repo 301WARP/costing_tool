@@ -1,8 +1,8 @@
 <template>
     <v-app>
         <v-container>
-            <v-row class="pa-5">
-                <h2 class="ml-auto mr-auto">Research Funding Clearance Form</h2>
+            <v-row class="pa-15">
+                <h2 class="mx-auto">Research Funding Clearance Form</h2>
             </v-row>
 
             <v-row class="px-5 my-5" width="100%">
@@ -26,7 +26,7 @@
                                     :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field v-model="date" label="Proposed commencement date"
-                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled value="2022-09-06">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker v-model="date" no-title scrollable>
@@ -45,7 +45,7 @@
                                     :return-value.sync="date2" transition="scale-transition" offset-y>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field v-model="date2" label="Proposed completion date"
-                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled value="2023-03-17">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker v-model="date2" no-title scrollable>
@@ -63,7 +63,7 @@
 
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field label="Funding Body / Client" outlined="true"></v-text-field>
+                                <v-text-field label="Funding Body / Client" outlined="true" disabled></v-text-field>
                             </v-col>
                             <v-col cols="6">
                                 <v-text-field label="Scheme" outlined="true"></v-text-field>

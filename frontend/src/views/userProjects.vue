@@ -1,39 +1,31 @@
 <template>
   <div>
     <v-app>
-      <v-card>
-        <br /><br /><br /><br />
-        <h2>Projects</h2>
-        <v-card-title>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="projectListFixed"
-          :search="search"
-          @click:row="change()"
-        ></v-data-table>
-        <v-btn
-          @click="router.push('/details')"
-          color="primary"
-          elevation="4"
-          outlined
-          large
-          >Create Project</v-btn
-        >
-        <v-btn color="primary" elevation="4" outlined large
-          >Edit Projects</v-btn
-        >
-        <v-btn @click="change()" color="primary" elevation="4" outlined large
-          >Create Project</v-btn
-        >
-      </v-card>
+      <!-- <v-div> -->
+        <v-card>
+          <v-row class="pa-15 mt-1">
+            <h2 class="mx-auto">Projects</h2>
+          </v-row>
+          <v-card-title>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
+            </v-text-field>
+          </v-card-title>
+          <v-data-table :headers="headers" :items="projectListFixed" :search="search" @click:row="change()">
+          </v-data-table>
+          <v-row class="py-5">
+            <v-col cols="4" align="center">
+              <v-btn @click="router.push('/details')" color="primary" elevation="4" outlined large>Create Project
+              </v-btn>
+            </v-col>
+            <v-col cols="4" align="center">
+              <v-btn color="primary" elevation="4" outlined large>Edit Projects</v-btn>
+            </v-col>
+            <v-col cols="4" align="center">
+              <v-btn @click="change()" color="primary" elevation="4" outlined large>Create Project</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+      <!-- </v-div> -->
     </v-app>
   </div>
 </template>
@@ -89,8 +81,10 @@ export default {
 };
 </script>
 <style>
-.v-btn {
+/* .v-btn {
   margin-top: 50px;
-  margin-left: 250px;
-}
+  margin-left: auto;
+  margin-right: auto;
+  /* margin-left: 250px; */
+/* }  */
 </style>
