@@ -4,13 +4,13 @@
       <!-- <v-div> -->
         <v-card>
           <v-row class="pa-15 mt-1">
-            <h2 class="mx-auto">Projects</h2>
+            <h2 class="mx-auto">Projects {{this.$store.state.projectIndex}}</h2>
           </v-row>
           <v-card-title>
             <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
             </v-text-field>
           </v-card-title>
-          <v-data-table :headers="headers" :items="projectListFixed" :search="search" @click:row="change()">
+          <v-data-table :headers="headers" :items="projectListFixed" :search="search" @click:row="change">
           </v-data-table>
           <v-row class="py-5">
             <v-col cols="4" align="center">
@@ -49,6 +49,7 @@ export default {
       ],
       projectList: [],
       projectListFixed: [],
+      projectIndex: 1,
     };
   },
   methods: {
@@ -63,6 +64,7 @@ export default {
         for (var i = 0; i < this.researcher_list.length; i++) {
           obj = {
             name: this.researcher_list[i].name,
+            id: this.researcher_list[i].id,
             role: "CI",
             contract: "Full Time",
           };
@@ -71,7 +73,8 @@ export default {
         console.log(this.projectListFixed);
       });
     },
-    change() {
+    change(item) {
+      this.$store.commit("setProjectIndex", item.id);
       router.push("/details");
     },
   },
