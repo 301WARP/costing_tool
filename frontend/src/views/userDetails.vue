@@ -104,7 +104,7 @@
             <v-card outlined elevation="3" class="pt-3 mt-10">
               <v-row>
                 <v-col cols="8">
-                  <v-subheader>UTAS Cash Contributions: </v-subheader>
+                  <v-subheader>UTAS Cash Contributions</v-subheader>
                 </v-col>
                 <v-col cols="4">
                   <v-col class="d-flex" sm="8">
@@ -112,39 +112,71 @@
                   </v-col>
                 </v-col>
                 <v-col v-if="UTAS_Cash" cols="12">
-                  <v-text-field label="Amount" outlined class="mx-5"></v-text-field>
+                  <v-text-field label="Amount" outlined class="mx-5 mt-0"></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="8">
-                  <v-subheader>Partner Cash Contribution: </v-subheader>
+                  <v-subheader>Partner Cash Contribution</v-subheader>
                 </v-col>
                 <v-col cols="4">
                   <v-col class="d-flex" sm="8">
                     <v-switch v-model="Partner_Cash" inset></v-switch>
-                    <v-row v-if="Partner_Cash">
-                      <v-col cols="4">
-                        <v-text-field label="Amount" outlined></v-text-field>
-                      </v-col>
-                    </v-row>
                   </v-col>
+                </v-col>
+                <v-col v-if="Partner_Cash" cols="12">
+                  <v-text-field label="Amount" outlined class="mx-5 mt-0"></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="8">
-                  <v-subheader>Crowd Funding: </v-subheader>
+                  <v-subheader>Crowd Funding</v-subheader>
                 </v-col>
                 <v-col cols="4">
-                  <v-col class="d-flex" sm="8">
+                  <v-col class="d-flex mb-0" sm="8">
                     <v-switch v-model="Crowd_Funding" inset></v-switch>
-                    <v-row v-if="Crowd_Funding">
-                      <v-col cols="4">
-                        <v-text-field label="Provider" outlined></v-text-field>
-                      </v-col>
-                    </v-row>
                   </v-col>
+                </v-col>
+                <v-col v-if="Crowd_Funding" cols="12" class="mt-0">
+                  <v-text-field label="Provider" outlined class="mx-5 mt-0"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-card>
+
+            <v-card outlined elevation="3" class="pt-3 pr-5 mt-10">
+              <v-card-title>Types of Activity</v-card-title>
+              <v-row>
+                <v-col cols="6">
+                  <v-subheader>Applied Research </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field suffix="%"></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-subheader>Experimental Research </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field suffix="%"></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-subheader>Strategic Basic </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field suffix="%"></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-subheader>Pure Basic </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field suffix="%"></v-text-field>
                 </v-col>
               </v-row>
             </v-card>
@@ -193,31 +225,42 @@
               <v-divider class="ml-3"></v-divider>
 
               <v-row class="mt-5">
-                <v-col cols="4">
+                <v-col cols="3">
                   <v-subheader>Field of Research Codes: </v-subheader>
                 </v-col>
-                <v-col cols="8">
-                  <v-col class="d-flex" sm="12">
-                    <v-otp-input length="6" type="number"></v-otp-input>
-                    <v-text-field suffix="%"></v-text-field>
-                  </v-col>
-                  <v-btn class="mx-0" fab x-small>
+                <v-col cols="9">
+                  <template v-for="i in research_codes_count">
+                    <v-col class="d-flex" sm="12">
+                      <v-otp-input length="6" type="number"></v-otp-input>
+                      <v-text-field suffix="%" class="ml-2"></v-text-field>
+                    </v-col>
+                  </template>
+                  <v-btn class="mx-0" fab x-small @click="inc_research_codes()">
                     <v-icon dark> mdi-plus </v-icon>
+                  </v-btn>
+                  <v-btn class="mx-1" v-if="research_codes_count > 1" fab x-small @click="dec_research_codes()">
+                    <v-icon dark> mdi-minus </v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="1">
+                <v-col cols="3">
                   <v-subheader>Socio-Economic Objective Codes: </v-subheader>
                 </v-col>
-                <v-col cols="3">
-                  <v-col class="d-flex" sm="12">
-                    <v-otp-input length="6" type="number"></v-otp-input>
-                    <v-text-field suffix="%"></v-text-field>
-                  </v-col>
-                  <v-btn class="mx-0" fab x-small>
+                <v-col cols="9">
+                  <template v-for="i in economic_codes_count">
+                    <v-col class="d-flex" sm="12">
+                      <v-otp-input length="6" type="number"></v-otp-input>
+                      <v-text-field suffix="%" class="ml-2"></v-text-field>
+                    </v-col>
+                  </template>
+
+                  <v-btn class="mx-0 mb-3" fab x-small @click="inc_eco_codes()">
                     <v-icon dark> mdi-plus </v-icon>
+                  </v-btn>
+                  <v-btn class="mx-1 mb-3" v-if="economic_codes_count > 1" fab x-small @click="dec_eco_codes()">
+                    <v-icon dark> mdi-minus </v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -225,46 +268,6 @@
           </v-col>
         </v-row>
 
-
-
-
-
-
-
-
-        <h4>Types of Activity:</h4>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Applied Research </v-subheader>
-          </v-col>
-          <v-col cols="1">
-            <v-text-field suffix="%"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Experimental Research </v-subheader>
-          </v-col>
-          <v-col cols="1">
-            <v-text-field suffix="%"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Strategic Basic </v-subheader>
-          </v-col>
-          <v-col cols="1">
-            <v-text-field suffix="%"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Pure Basic </v-subheader>
-          </v-col>
-          <v-col cols="1">
-            <v-text-field suffix="%"></v-text-field>
-          </v-col>
-        </v-row>
       </v-container>
     </v-app>
   </div>
@@ -275,7 +278,7 @@ export default {
   data: () => ({
     category: ["Category1", "Category2"],
     amc_menzies: ["Yes", "No"],
-    year_end: ["Calender", "??"],
+    year_end: ["Calender", "Financial"],
     research_institute: ["??"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
@@ -288,6 +291,26 @@ export default {
     UTAS_Cash: false,
     Partner_Cash: false,
     Crowd_Funding: false,
+    research_codes_count: 1,
+    economic_codes_count: 1,
   }),
+  methods: {
+    inc_research_codes() {
+      this.research_codes_count++;
+    },
+    dec_research_codes() {
+      if (this.research_codes_count > 1) {
+        this.research_codes_count--;
+      }
+    },
+    inc_eco_codes() {
+      this.economic_codes_count++;
+    },
+    dec_eco_codes() {
+      if (this.economic_codes_count > 1) {
+        this.economic_codes_count--;
+      }
+    },
+  },
 };
 </script>
