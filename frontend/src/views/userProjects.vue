@@ -14,7 +14,7 @@
           </v-data-table>
           <v-row class="py-5">
             <v-col cols="4" align="center">
-              <v-btn @click="router.push('/details')" color="primary" elevation="4" outlined large>Create Project
+              <v-btn @click="router.push('/details')" color="primary" elevation="4" outlined large>Export Data
               </v-btn>
             </v-col>
             <v-col cols="4" align="center">
