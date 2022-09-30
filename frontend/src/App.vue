@@ -16,7 +16,7 @@
         Details
       </v-tab>
       <v-tab to="/researcher">
-        Researcher
+        Researchers
       </v-tab>
       <v-tab to="/costs">
         Costs
