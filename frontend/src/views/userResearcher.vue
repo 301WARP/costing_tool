@@ -7,6 +7,9 @@
       <v-switch v-model="casual" inset></v-switch>
       <v-subheader>RHD</v-subheader>
       <v-switch v-model="rhd" inset></v-switch> -->
+      <v-row class="pa-15">
+        <h2 class="mx-auto">Researchers List</h2>
+      </v-row>
 
       <v-row>
         <v-col cols="2">
@@ -14,11 +17,7 @@
         </v-col>
         <v-col cols="7">
           <v-col class="d-flex" sm="3">
-            <v-select
-              :items="title"
-              label="Select Title"
-              v-model="title_input"
-            ></v-select>
+            <v-select :items="title" label="Select Title" v-model="title_input"></v-select>
           </v-col>
         </v-col>
       </v-row>
@@ -52,12 +51,8 @@
         </v-col>
         <v-col cols="7">
           <v-col class="d-flex" sm="3">
-            <v-select
-              :items="contract"
-              label="Select Contract"
-              @change="checkContract($event)"
-              v-model="contract_input"
-            ></v-select>
+            <v-select :items="contract" label="Select Contract" @change="checkContract($event)"
+              v-model="contract_input"></v-select>
           </v-col>
         </v-col>
       </v-row>
@@ -69,11 +64,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="staff_type"
-                label="Select Staff Type"
-                v-model="staff_type_full"
-              ></v-select>
+              <v-select :items="staff_type" label="Select Staff Type" v-model="staff_type_full"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -83,11 +74,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_full"
-              ></v-select>
+              <v-select :items="classification" label="Select Classification" v-model="classification_full"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -97,11 +84,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="step"
-                label="Select Step"
-                v-model="step_full"
-              ></v-select>
+              <v-select :items="step" label="Select Step" v-model="step_full"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -127,11 +110,8 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="salary_cost_rate"
-                label="Select Salary on Cost Rate"
-                v-model="salary_rate_full"
-              ></v-select>
+              <v-select :items="salary_cost_rate" label="Select Salary on Cost Rate" v-model="salary_rate_full">
+              </v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -144,13 +124,8 @@
           </v-col>
         </v-row>
 
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
-        >
+        <v-data-table :headers="fte_header" :items="years" sort-by="year" class="elevation-1"
+          :style="{ width: '500px' }">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>FTE</v-toolbar-title>
@@ -158,13 +133,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
+                  <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                     New Item
                   </v-btn>
                 </template>
@@ -177,16 +146,10 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.year" label="Year"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fte" label="FTE%"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -205,17 +168,11 @@
               </v-dialog>
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
+                  <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
+                    <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -230,14 +187,7 @@
           </template>
         </v-data-table>
 
-        <v-btn
-          color="primary"
-          elevation="4"
-          outlined
-          x-large
-          @click="submit('NON_CASUAL')"
-          >Submit</v-btn
-        >
+        <v-btn color="primary" elevation="4" outlined x-large @click="submit('NON_CASUAL')">Submit</v-btn>
       </div>
 
       <div v-if="casual">
@@ -247,11 +197,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="staff_type"
-                label="Select Staff Type"
-                v-model="staff_type_casual"
-              ></v-select>
+              <v-select :items="staff_type" label="Select Staff Type" v-model="staff_type_casual"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -261,11 +207,8 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_casual"
-              ></v-select>
+              <v-select :items="classification" label="Select Classification" v-model="classification_casual">
+              </v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -275,11 +218,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="pay_code"
-                label="Select Pay Code"
-                v-model="pay_code_casual"
-              ></v-select>
+              <v-select :items="pay_code" label="Select Pay Code" v-model="pay_code_casual"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -305,11 +244,8 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="salary_cost_rate"
-                label="Select Salary on Cost Rate"
-                v-model="salary_rate_casual"
-              ></v-select>
+              <v-select :items="salary_cost_rate" label="Select Salary on Cost Rate" v-model="salary_rate_casual">
+              </v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -322,13 +258,8 @@
           </v-col>
         </v-row>
 
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
-        >
+        <v-data-table :headers="fte_header" :items="years" sort-by="year" class="elevation-1"
+          :style="{ width: '500px' }">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>FTE</v-toolbar-title>
@@ -336,13 +267,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
+                  <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                     New Item
                   </v-btn>
                 </template>
@@ -355,16 +280,10 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.year" label="Year"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fte" label="FTE%"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -383,17 +302,11 @@
               </v-dialog>
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
+                  <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
+                    <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -408,14 +321,7 @@
           </template>
         </v-data-table>
 
-        <v-btn
-          color="primary"
-          elevation="4"
-          outlined
-          x-large
-          @click="submit('CASUAL')"
-          >Submit</v-btn
-        >
+        <v-btn color="primary" elevation="4" outlined x-large @click="submit('CASUAL')">Submit</v-btn>
       </div>
 
       <div v-if="rhd">
@@ -425,11 +331,7 @@
           </v-col>
           <v-col cols="7">
             <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_rhd"
-              ></v-select>
+              <v-select :items="classification" label="Select Classification" v-model="classification_rhd"></v-select>
             </v-col>
           </v-col>
         </v-row>
@@ -450,13 +352,8 @@
           </v-col>
         </v-row>
 
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
-        >
+        <v-data-table :headers="fte_header" :items="years" sort-by="year" class="elevation-1"
+          :style="{ width: '500px' }">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>FTE</v-toolbar-title>
@@ -464,13 +361,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
+                  <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                     New Item
                   </v-btn>
                 </template>
@@ -483,16 +374,10 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.year" label="Year"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fte" label="FTE%"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -511,17 +396,11 @@
               </v-dialog>
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
+                  <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
+                    <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -536,27 +415,12 @@
           </template>
         </v-data-table>
 
-        <v-btn
-          color="primary"
-          elevation="4"
-          outlined
-          x-large
-          @click="submit('RHD', $event)"
-          >Submit</v-btn
-        >
+        <v-btn color="primary" elevation="4" outlined x-large @click="submit('RHD', $event)">Submit</v-btn>
       </div>
     </v-container>
     <template>
-      <v-data-table
-        :headers="headers"
-        :items="researcherFixed_list"
-        :search="search"
-        :single-expand="true"
-        :key="table_key"
-        item-key="loop1"
-        show-expand
-        @click:row="fill_data($event)"
-      >
+      <v-data-table :headers="headers" :items="researcherFixed_list" :search="search" :single-expand="true"
+        :key="table_key" item-key="loop1" show-expand @click:row="fill_data($event)">
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title>Staff</v-toolbar-title>
@@ -566,48 +430,32 @@
         <template v-slot:expanded-item="{ item }">
           <td></td>
           <td :style="{ padding: '10px' }">
-            <tr
-              v-for="(ite, index) in item.extra"
-              @click="say('Clicked on table: ' + index)"
-              :key="index"
-            >
+            <tr v-for="(ite, index) in item.extra" @click="say('Clicked on table: ' + index)" :key="index">
               {{
-                ite.classification
+              ite.classification
               }}
             </tr>
           </td>
           <td></td>
           <td></td>
           <td>
-            <tr
-              v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
-            >
+            <tr v-for="(ite, index) in item.extra" :key="index" @click="say('Clicked on table: ' + index)">
               {{
-                ite.income
+              ite.income
               }}
             </tr>
           </td>
           <td>
-            <tr
-              v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
-            >
+            <tr v-for="(ite, index) in item.extra" :key="index" @click="say('Clicked on table: ' + index)">
               {{
-                ite.inKind
+              ite.inKind
               }}
             </tr>
           </td>
           <td>
-            <tr
-              v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
-            >
+            <tr v-for="(ite, index) in item.extra" :key="index" @click="say('Clicked on table: ' + index)">
               {{
-                ite.actual
+              ite.actual
               }}
             </tr>
           </td>
@@ -878,27 +726,27 @@ export default {
       if (contract == "NON_CASUAL") {
         console.log(
           "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_full +
-            " " +
-            this.classification_full +
-            " " +
-            this.step_full +
-            " " +
-            this.start_salary_full +
-            " " +
-            this.wage_adj_full +
-            " " +
-            this.salary_rate_full +
-            " " +
-            this.in_kind_full
+          this.family_name +
+          " " +
+          this.given_name +
+          " " +
+          this.role_input +
+          " " +
+          this.contract_input +
+          " " +
+          this.staff_type_full +
+          " " +
+          this.classification_full +
+          " " +
+          this.step_full +
+          " " +
+          this.start_salary_full +
+          " " +
+          this.wage_adj_full +
+          " " +
+          this.salary_rate_full +
+          " " +
+          this.in_kind_full
         );
         console.log("--" + this.years);
         axios.put(
@@ -912,46 +760,46 @@ export default {
       } else if (contract == "CASUAL") {
         console.log(
           "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_casual +
-            " " +
-            this.classification_casual +
-            " " +
-            this.pay_code_casual +
-            " " +
-            this.start_salary_casual +
-            " " +
-            this.wage_adj_casual +
-            " " +
-            this.salary_rate_casual +
-            " " +
-            this.in_kind_casual
+          this.family_name +
+          " " +
+          this.given_name +
+          " " +
+          this.role_input +
+          " " +
+          this.contract_input +
+          " " +
+          this.staff_type_casual +
+          " " +
+          this.classification_casual +
+          " " +
+          this.pay_code_casual +
+          " " +
+          this.start_salary_casual +
+          " " +
+          this.wage_adj_casual +
+          " " +
+          this.salary_rate_casual +
+          " " +
+          this.in_kind_casual
         );
       } else if (contract == "RHD") {
         console.log(
           "UPDATING RESEARCHER WITH STAFF ID:" +
-            e.staffID +
-            " " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.classification_rhd +
-            " " +
-            this.annual_salary_rhd +
-            " " +
-            this.in_kind_rhd
+          e.staffID +
+          " " +
+          this.family_name +
+          " " +
+          this.given_name +
+          " " +
+          this.role_input +
+          " " +
+          this.contract_input +
+          " " +
+          this.classification_rhd +
+          " " +
+          this.annual_salary_rhd +
+          " " +
+          this.in_kind_rhd
         );
       }
     },
@@ -1004,7 +852,7 @@ export default {
   },
 
   mounted() {
-    if(this.$store.state.projectIndex == -1){
+    if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
     this.load_researcher_list();

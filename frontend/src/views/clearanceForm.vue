@@ -205,12 +205,36 @@
                     </v-row>
                 </v-card>
             </v-row>
+
+            <v-row class="px-5 my-5">
+                <v-card outlined elevation="5" width="100%" class="pa-0 mx-auto" max-width="970px">
+                    <v-card-title>Ethics / Biosafety / WHS / Clinical trials</v-card-title>
+                    <v-card-subtitle>You must ensure that no activity that requires ethics approval commences without
+                        that approval being granted by the relevant ethics committee.</v-card-subtitle>
+                    <v-row>
+                        <v-row>
+                            <v-col cols="12">
+                                <h4>Does your research involve:</h4>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <p>Human participants (medical or social science)</p>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-checkbox v-model="checkbox" label="Yes"></v-checkbox>
+                                <v-checkbox v-model="checkbox" label="No"></v-checkbox>
+                            </v-col>
+                        </v-row>
+                    </v-row>
+                </v-card>
+            </v-row>
+
         </v-container>
     </v-app>
 </template>
 <script>
 const axios = require("axios").default;
-import router from "../router";
 
 export default {
     mounted() {
