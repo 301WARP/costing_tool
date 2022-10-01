@@ -1004,6 +1004,9 @@ export default {
   },
 
   mounted() {
+    if(this.$store.state.projectIndex == -1){
+      this.$router.push("/");
+    }
     this.load_researcher_list();
   },
 };

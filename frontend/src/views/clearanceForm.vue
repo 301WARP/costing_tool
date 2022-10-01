@@ -26,7 +26,8 @@
                                     :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field v-model="date" label="Proposed commencement date"
-                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled value="2022-09-06">
+                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled
+                                            value="2022-09-06">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker v-model="date" no-title scrollable>
@@ -45,7 +46,8 @@
                                     :return-value.sync="date2" transition="scale-transition" offset-y>
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field v-model="date2" label="Proposed completion date"
-                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled value="2023-03-17">
+                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" disabled
+                                            value="2023-03-17">
                                         </v-text-field>
                                     </template>
                                     <v-date-picker v-model="date2" no-title scrollable>
@@ -206,3 +208,15 @@
         </v-container>
     </v-app>
 </template>
+<script>
+const axios = require("axios").default;
+import router from "../router";
+
+export default {
+    mounted() {
+        if (this.$store.state.projectIndex == -1) {
+            this.$router.push("/");
+        }
+    },
+};
+</script>

@@ -3,7 +3,7 @@
     <v-app>
       <v-container>
         <v-row class="pa-15">
-          <h2 class="mx-auto">Project Details {{this.$store.state.projectIndex}}</h2>
+          <h2 class="mx-auto">Project Details</h2>
         </v-row>
         <v-row>
           <v-col cols="6">
@@ -312,6 +312,10 @@ export default {
       }
     },
   },
-  props: ['projectIndex']
+  mounted() {
+    if(this.$store.state.projectIndex == -1){
+      this.$router.push("/");
+    }
+  }
 };
 </script>

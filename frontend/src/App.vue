@@ -9,7 +9,11 @@
           height="65"
           show-arrows>
       <v-tabs-slider color="#9DCFF0"></v-tabs-slider>
-      <v-tab to="/" dark>
+      <v-tab to="/" v-if="this.$store.state.projectIndex == -1">
+        Research Costing Tool
+      </v-tab>
+      <template v-if="this.$store.state.projectIndex != -1">
+      <v-tab to="/">
         Home
       </v-tab>
       <v-tab to="/details">
@@ -24,6 +28,7 @@
       <v-tab to="/clearance">
         Clearance Form
       </v-tab>
+    </template>
     </v-tabs>
     <RouterView></RouterView>
   </div>
