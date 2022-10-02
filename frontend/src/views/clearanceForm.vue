@@ -214,7 +214,7 @@
                     <v-row>
                         <v-row>
                             <v-col cols="12">
-                                <h4>Does your research involve:</h4>
+                                <h4><v-card-subtitle>Does your research involve:</v-card-subtitle></h4>
                             </v-col>
                         </v-row>
                         <v-row>
