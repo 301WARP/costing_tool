@@ -22,6 +22,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 
@@ -33,6 +35,8 @@ import au.edu.utas.costing_tool.Enums.Title;
 
 
 @Data
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="researcher")
 public class Researcher

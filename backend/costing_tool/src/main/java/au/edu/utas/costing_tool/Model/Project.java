@@ -35,8 +35,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 // =============================================================================
@@ -51,7 +51,6 @@ import au.edu.utas.costing_tool.Enums.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.ResearchEntity;
 import au.edu.utas.costing_tool.Enums.RhdInvolvement;
 import au.edu.utas.costing_tool.Enums.YearEndType;
-import au.edu.utas.costing_tool.Util.Log;
 
 
 // TODO(Andrew): Could convert codes to enums
@@ -60,8 +59,8 @@ import au.edu.utas.costing_tool.Util.Log;
 
 
 @Data
-//@NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="project")
 public class Project
@@ -278,8 +277,12 @@ public class Project
     private String externalResearchers;
     public List<ExternalResearcher> getExternalResearchers()
     {
+        if (this.externalResearchers == null
+            || this.externalResearchers.isEmpty())
+            return null;
+
         List<String> researcherStrings =
-            Arrays.asList(this.externalResearchers .split(";"));
+            Arrays.asList(this.externalResearchers.split(";"));
         
         return researcherStrings
             .stream()
@@ -293,6 +296,11 @@ public class Project
     }
     public void setExternalResearchers(List<ExternalResearcher> researchers)
     {
+        if (researchers == null || researchers.isEmpty()) {
+            this.externalResearchers = null;
+            return;
+        }
+
         this.externalResearchers =
             researchers
                 .stream()

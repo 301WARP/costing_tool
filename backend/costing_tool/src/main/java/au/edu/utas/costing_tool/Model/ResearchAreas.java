@@ -7,11 +7,13 @@ package au.edu.utas.costing_tool.Model;
 
 import javax.persistence.Embeddable;
 
+import lombok.Builder;
 import lombok.Data;
 
 
 // TODO(Andrew): Consider renaming to Activities in line with clearance form
 @Data
+@Builder
 @Embeddable
 public class ResearchAreas
 {

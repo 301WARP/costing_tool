@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Enums.ExpenseType;
 import au.edu.utas.costing_tool.Enums.Organisation;
 
 

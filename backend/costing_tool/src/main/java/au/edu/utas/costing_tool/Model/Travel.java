@@ -18,13 +18,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ExpenseType;
-
-
 @Data
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor

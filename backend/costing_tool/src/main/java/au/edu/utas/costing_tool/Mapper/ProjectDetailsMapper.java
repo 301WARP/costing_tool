@@ -16,10 +16,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import lombok.RequiredArgsConstructor;
-
 
 // =============================================================================
 // Project Imports
@@ -29,21 +25,12 @@ import au.edu.utas.costing_tool.DTO.ProjectDetailsDTO;
 
 import au.edu.utas.costing_tool.Model.FORCodes;
 import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
 import au.edu.utas.costing_tool.Model.SEOCodes;
-
-import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 
 
 @Mapper
-//@RequiredArgsConstructor
 public interface ProjectDetailsMapper
 {
-    /*
-    @Autowired
-    protected ResearcherRepository rRepos;
-    */
-
     @Mapping(target="id", source="id")
     @Mapping(target="name", source="name")
     @Mapping(target="description", source="description")

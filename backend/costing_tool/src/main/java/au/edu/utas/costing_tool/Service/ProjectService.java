@@ -32,21 +32,22 @@ public class ProjectService
     // ========================================================================
     // Properties
     // ========================================================================
+
     @Autowired
     private final ProjectRepository projectRepos;
 
     @Autowired
     private final ResearcherRepository researcherRepos;
 
-    public List<Project> listAllProjects()
-    {
-        return this.projectRepos.findAll();
-    }
-
 
     // ========================================================================
     // Methods
     // ========================================================================
+
+    public List<Project> listAllProjects()
+    {
+        return this.projectRepos.findAll();
+    }
 
     public Project findProject(Long id)
     {

@@ -5,19 +5,12 @@ package au.edu.utas.costing_tool.Model;
 // External imports
 // =============================================================================
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ContractType;
 
 
 @Data

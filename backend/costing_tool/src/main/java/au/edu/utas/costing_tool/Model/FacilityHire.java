@@ -21,7 +21,6 @@ import au.edu.utas.costing_tool.Enums.TimeUnit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import au.edu.utas.costing_tool.Enums.ExpenseType;
 
 
 @Data

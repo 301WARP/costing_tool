@@ -25,7 +25,6 @@ import org.hibernate.annotations.DiscriminatorOptions;
 
 import au.edu.utas.costing_tool.Enums.CasualClassification;
 import au.edu.utas.costing_tool.Enums.CasualStaffType;
-import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.PayCode;
 
 

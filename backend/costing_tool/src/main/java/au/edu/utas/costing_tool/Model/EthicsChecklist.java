@@ -7,10 +7,12 @@ package au.edu.utas.costing_tool.Model;
 
 import javax.persistence.Embeddable;
 
+import lombok.Builder;
 import lombok.Data;
 
 
 @Data
+@Builder
 @Embeddable
 public class EthicsChecklist
 {

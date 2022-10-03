@@ -7,11 +7,17 @@ package au.edu.utas.costing_tool.Model;
 
 import javax.persistence.Embeddable;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 // TODO(Andrew): Consider making this a separate table
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Embeddable
 public class FORCodes
 {

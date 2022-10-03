@@ -27,7 +27,6 @@ import au.edu.utas.costing_tool.Model.FORCodes;
 import au.edu.utas.costing_tool.Model.Project;
 import au.edu.utas.costing_tool.Model.Researcher;
 import au.edu.utas.costing_tool.Model.SEOCodes;
-import au.edu.utas.costing_tool.Util.Log;
 
 
 @Mapper
