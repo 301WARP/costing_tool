@@ -14,9 +14,9 @@ import lombok.experimental.SuperBuilder;
 
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @SuperBuilder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=true)
 @Entity
 public abstract class Staff extends Contract
 {

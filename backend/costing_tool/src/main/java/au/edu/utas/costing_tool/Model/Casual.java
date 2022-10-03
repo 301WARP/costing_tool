@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ import au.edu.utas.costing_tool.Enums.PayCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @Entity
 @DiscriminatorValue("CASUAL")

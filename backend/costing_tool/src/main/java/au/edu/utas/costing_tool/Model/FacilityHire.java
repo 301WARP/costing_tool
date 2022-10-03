@@ -18,13 +18,17 @@ import javax.persistence.Enumerated;
 
 import au.edu.utas.costing_tool.Enums.Facility;
 import au.edu.utas.costing_tool.Enums.TimeUnit;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @DiscriminatorValue("FACILITY_HIRE")

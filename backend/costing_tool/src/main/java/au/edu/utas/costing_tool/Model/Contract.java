@@ -28,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -40,6 +41,7 @@ import au.edu.utas.costing_tool.Enums.ContractType;
 
 
 @Data
+@AllArgsConstructor
 @SuperBuilder
 @Entity
 @Table(name="contract")

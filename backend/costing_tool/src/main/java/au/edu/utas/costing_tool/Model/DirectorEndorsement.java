@@ -20,6 +20,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -28,6 +30,8 @@ import lombok.ToString;
 // TODO(Andrew): Consider creating new table for DirectorEndorsement
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="director_endorsement")
 @IdClass(value=DirectorEndorsementID.class)
