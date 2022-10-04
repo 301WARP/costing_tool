@@ -11,6 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import org.hibernate.annotations.DiscriminatorOptions;
 
 
@@ -18,10 +23,14 @@ import org.hibernate.annotations.DiscriminatorOptions;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Enums.ContractType;
+//import au.edu.utas.costing_tool.Enums.ContractType;
 import au.edu.utas.costing_tool.Enums.RHDIncomeStream;
 
 
+@Data
+@EqualsAndHashCode(callSuper=true)
+@NoArgsConstructor
+@SuperBuilder
 @Entity
 @DiscriminatorValue("RHD")
 @DiscriminatorOptions(force=true)
@@ -34,22 +43,16 @@ public class RHD extends Contract
     @Column(name="classification_rhd")
     @Enumerated(value=EnumType.STRING)
     public RHDIncomeStream classification;
-    public RHDIncomeStream getClassification() {return this.classification;}
-    public void setClassification(RHDIncomeStream c) {this.classification = c;}
 
     @Column(name="salary")
     public Double annualSalary;
-    public Double getAnnualSalary() {return this.annualSalary;}
-    public void setAnnualSalary(Double salary) {this.annualSalary = salary;}
-
-    // TODO(Andrew): Contribution?
-    //public Dictionary<LocalDate, Double> FTE;
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
+    /*
     public RHD() {super();}
 
     public RHD(Researcher researcher)
@@ -66,16 +69,19 @@ public class RHD extends Contract
         this.setClassification(classification);
         this.setAnnualSalary(annualSalary);
     }
+    */
 
 
     // =========================================================================
     // Methods
     // =========================================================================
 
+    /*
     // TODO(Andrew): null checking and correct formula
     @Override
     public Double CostRate()
     {
         return this.getAnnualSalary();
     }
+    */
 }

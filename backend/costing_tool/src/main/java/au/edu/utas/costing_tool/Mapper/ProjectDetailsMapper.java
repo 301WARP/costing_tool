@@ -16,10 +16,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import lombok.RequiredArgsConstructor;
-
 
 // =============================================================================
 // Project Imports
@@ -29,26 +25,23 @@ import au.edu.utas.costing_tool.DTO.ProjectDetailsDTO;
 
 import au.edu.utas.costing_tool.Model.FORCodes;
 import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
 import au.edu.utas.costing_tool.Model.SEOCodes;
-
-import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 
 
 @Mapper
-@RequiredArgsConstructor
-public abstract class ProjectDetailsMapper
+public interface ProjectDetailsMapper
 {
-    @Autowired
-    protected ResearcherRepository rRepos;
-
     @Mapping(target="id", source="id")
     @Mapping(target="name", source="name")
     @Mapping(target="description", source="description")
+    /*
     @Mapping(target="leadResearcherId", source="leadResearcher.staffID")
     @Mapping(target="leadResearcherTitle", source="leadResearcher.title")
     @Mapping(target="leadResearcherFirstName", source="leadResearcher.firstName")
     @Mapping(target="leadResearcherLastName", source="leadResearcher.lastName")
+    */
+    @Mapping(target="leadResearcherName", source="leadResearcherName")
+    @Mapping(target="leadResearcherOrg", source="leadResearcherOrg")
     @Mapping(target="category", source="category")
     @Mapping(target="category1Subtype", source="category1Subtype")
     @Mapping(target="amcMenzies", source="amcMenzies")
@@ -73,7 +66,7 @@ public abstract class ProjectDetailsMapper
 
     
     @Named("forCodeEntityToDTOMap")
-    static
+    default
     Map<Integer, Double>
     forCodeEntityToDTOMap(FORCodes codes)
     {
@@ -93,7 +86,7 @@ public abstract class ProjectDetailsMapper
 
 
     @Named("seoCodeEntityToDTOMap")
-    static
+    default
     Map<Integer, Double>
     seoCodeEntityToDTOMap(SEOCodes codes)
     {
@@ -117,8 +110,12 @@ public abstract class ProjectDetailsMapper
     @BeanMapping(ignoreByDefault=true)
     @Mapping(source="name", target="name")
     @Mapping(source="description", target="description")
+    /*
     @Mapping(   source="leadResearcherId", target="leadResearcher",
                 qualifiedByName="leadResearcherMap")
+    */
+    @Mapping(source="leadResearcherName", target="leadResearcherName")
+    @Mapping(source="leadResearcherOrg", target="leadResearcherOrg")
     @Mapping(source="category", target="category")
     @Mapping(source="category1Subtype", target="category1Subtype")
     @Mapping(source="amcMenzies", target="amcMenzies")
@@ -145,7 +142,8 @@ public abstract class ProjectDetailsMapper
     map(ProjectDetailsDTO dto, @MappingTarget Project project);
 
     @Named("forCodeDTOToEntityMap")
-    protected static
+    //protected static
+    default
     FORCodes 
     forCodeDTOToEntityMap(Map<Integer, Double> codeMap)
     {
@@ -172,7 +170,8 @@ public abstract class ProjectDetailsMapper
     }
     
     @Named("seoCodeDTOToEntityMap")
-    protected static
+    //protected static
+    default
     SEOCodes 
     seoCodeDTOToEntityMap(Map<Integer, Double> codeMap)
     {
@@ -198,8 +197,10 @@ public abstract class ProjectDetailsMapper
         return codes;
     }
 
+    /*
     @Named("leadResearcherMap")
-    protected
+    //protected
+    default
     Researcher
     leadResearcherMap(Long staffId)
     {
@@ -210,4 +211,5 @@ public abstract class ProjectDetailsMapper
                     .findById(staffId)
                     .orElse(null);
     }
+    */
 }

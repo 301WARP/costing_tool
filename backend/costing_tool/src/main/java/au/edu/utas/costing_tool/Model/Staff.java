@@ -5,23 +5,18 @@ package au.edu.utas.costing_tool.Model;
 // External imports
 // =============================================================================
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Enums.ContractType;
+import lombok.experimental.SuperBuilder;
 
 
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
+@SuperBuilder
+@NoArgsConstructor
 @Entity
 public abstract class Staff extends Contract
 {
@@ -29,17 +24,20 @@ public abstract class Staff extends Contract
     // Properties
     // =========================================================================
 
+    /*
     @Column(name="wage_adjustment")
     protected Double wageAdjustment;
 
     @Column(name="on_cost_rate")
     protected Double salaryOnCostRate;
+    */
 
 
     // =========================================================================
     // Constructors
     // =========================================================================
 
+    /*
     public Staff(Researcher researcher, ContractType type)
     {
         super(researcher, type);
@@ -55,4 +53,5 @@ public abstract class Staff extends Contract
         this.setWageAdjustment(wageAdjustment);
         this.setSalaryOnCostRate(salaryOnCostRate);
     }
+    */
 }

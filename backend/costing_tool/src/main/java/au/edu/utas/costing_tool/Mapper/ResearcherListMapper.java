@@ -1,7 +1,6 @@
 package au.edu.utas.costing_tool.Mapper;
 
 
-
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -39,6 +38,9 @@ public interface ResearcherListMapper
     @Named("priceToActualCost")
     static Double priceToActualCost(Contribution contribution)
     {
+        if (contribution == null)
+            return 0.0;
+
         return contribution.Price();
     }
 }

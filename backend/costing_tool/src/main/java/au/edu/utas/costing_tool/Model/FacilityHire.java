@@ -18,9 +18,18 @@ import javax.persistence.Enumerated;
 
 import au.edu.utas.costing_tool.Enums.Facility;
 import au.edu.utas.costing_tool.Enums.TimeUnit;
-import au.edu.utas.costing_tool.Enums.ExpenseType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @DiscriminatorValue("FACILITY_HIRE")
 public class FacilityHire extends Expense
@@ -32,21 +41,16 @@ public class FacilityHire extends Expense
     @Column(name="facility")
     @Enumerated(value=EnumType.STRING)
     private Facility facility;
-    public Facility getFacility() {return this.facility;}
-    public void setFacility(Facility facility) {this.facility = facility;}
 
     @Column(name="time_unit")
     @Enumerated(value=EnumType.STRING)
     private TimeUnit timeUnit;
-    public TimeUnit getTimeUnit() {return this.timeUnit;}
-    public void setTimeUnit(TimeUnit timeUnit) {this.timeUnit = timeUnit;}
 
 
+    /*
     // =========================================================================
     // Constructors
     // =========================================================================
-
-    public FacilityHire() {super();}
 
     public FacilityHire(Project project,
                         ExpenseType type,
@@ -60,4 +64,5 @@ public class FacilityHire extends Expense
         this.setFacility(facility);
         this.setTimeUnit(timeUnit);
     }
+    */
 }

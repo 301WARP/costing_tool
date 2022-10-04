@@ -23,11 +23,13 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
 
 @Data
+@AllArgsConstructor
 @Entity
 @Table(name="contribution")
 @IdClass(value=ContributionID.class)
@@ -50,6 +52,12 @@ public class Contribution
 
     @Column(name="`in_kind_%`")
     private Double inKindPercent; 
+
+    @Column(name="`wage_adjustment`")
+    private Double wageAdjustment; 
+
+    @Column(name="`on_cost_rate`")
+    private Double onCostRate; 
 
     @ManyToOne
     @MapsId(value="contractID")
@@ -78,7 +86,7 @@ public class Contribution
     {
         this.project = project;
 
-        Long projectID = project != null ? project.getId() : null;
+        Long projectID = project == null ? null : project.getId();
 
         this.setProjectID(projectID);
         
@@ -94,7 +102,7 @@ public class Contribution
     @JsonManagedReference
     // TODO(Andrew): final?
     private List<AnnualContribution> annualContributions;
-    
+
     
     // ========================================================================= 
     // Constructors
@@ -235,12 +243,7 @@ public class Contribution
 
     public Double AnnualPrice(Integer year)
     {
-        Contract contract = this.getContract();
-
-        if (contract == null)
-            return null;
-
-        Double rate = contract.CostRate(); 
+        Double rate = this.getOnCostRate(); 
 
         if (rate == null)
             return null;
@@ -258,32 +261,62 @@ public class Contribution
 
     public Double AnnualPrice(AnnualContribution ac)
     {
-        Contract contract = this.getContract();
-
-        if (ac == null || contract == null)
+        if (ac == null)
             return null;
 
-        Double rate = contract.CostRate(); 
+        Double onCost = this.getOnCostRate(); 
         Double fte = ac.getFTE();
         Double hours = ac.getHours();
 
-        if (rate == null || fte == null || hours == null)
+        // TODO(Andrew): throw error?
+        if (onCost == null || fte == null || hours == null)
             return null;
 
-        if (contract instanceof NonCasual || contract instanceof RHD)
-            return rate * fte / 100.0;
-        else if (contract instanceof Casual)
-            return rate * hours;
+        Contract contract = this.getContract();
+
+        // TODO(Andrew): throw error?
+        if (contract == null)
+            return null;
+
+        if (contract instanceof NonCasual) {
+            Double salary = ((NonCasual)contract).getStartingSalary();
+
+            if (salary == null)
+                return null;
+
+            return salary * onCost * fte / 100.0;
+        }
+        else if (contract instanceof RHD)  {
+            Double salary = ((RHD)contract).getAnnualSalary();
+
+            if (salary == null)
+                return null;
+
+            return salary * onCost * fte / 100.0;
+        }
+        else if (contract instanceof Casual) {
+            Double hourlyRate = ((Casual)contract).getHourlyRate();
+
+            if (hourlyRate == null)
+                return null;
+
+            return hourlyRate * onCost * hours;
+        }
         // Unkown contract
+        // TODO(Andrew): throw error?
         else
             return null;
     }
 
     public Double Price()
     {
+        if (this.getAnnualContributions() == null)
+            return 0.0;
+
         return this.getAnnualContributions()
             .stream()
             .mapToDouble(this::AnnualPrice)
+            //.map(ac -> this.AnnualPrice(ac))
             .reduce(0.0, (total, p) -> total + p);
     }
 

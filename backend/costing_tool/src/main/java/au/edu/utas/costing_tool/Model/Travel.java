@@ -13,14 +13,18 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-// =============================================================================
-// Project Imports
-// =============================================================================
 
-import au.edu.utas.costing_tool.Enums.ExpenseType;
-
-
+@Data
+@EqualsAndHashCode(callSuper=true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @DiscriminatorValue("TRAVEL")
 public class Travel extends Expense
@@ -31,39 +35,24 @@ public class Travel extends Expense
 
     @Column(name="num_travellers")
     private Integer numTravellers;
-    public Integer getNumTravellers() {return this.numTravellers;}
-    public void setNumTravellers(Integer numTravellers) {this.numTravellers = numTravellers;}
 
     @Column(name="departure")
     private LocalDate departureDate;
-    public LocalDate getDepartureDate() {return this.departureDate;}
-    public void setDepartureDate(LocalDate departureDate) {this.departureDate = departureDate;}
 
     @Column(name="return")
     private LocalDate returnDate;
-    public LocalDate getReturnDate() {return this.returnDate;}
-    public void setReturnDate(LocalDate returnDate) {this.returnDate = returnDate;}
 
     @Column(name="fare")
     private Double fare;
-    public Double getFare() {return this.fare;}
-    public void setFare(Double fare) {this.fare = fare;}
 
     @Column(name="car_hire")
     private Double carHire;
-    public Double getCarHire() {return this.carHire;}
-    public void setCarHire(Double carHire) {this.carHire = carHire;}
 
     @Column(name="meals")
     private Double meals;
-    public Double getMeals() {return this.meals;}
-    public void setMeals(Double meals) {this.meals = meals;}
 
     @Column(name="accommodation")
     private Double accommodation;
-    public Double getAccommodation() {return this.accommodation;}
-    public void setAccommodation(Double accommodation)
-        {this.accommodation = accommodation;}
 
     // TODO(Andrew): CostPerUnit
     // Return daily costs as costPerUnit
@@ -80,11 +69,10 @@ public class Travel extends Expense
     public void setCostPerUnit(Double cost) {}
 
 
+    /*
     // =========================================================================
     // Constructors
     // =========================================================================
-
-    public Travel() {super();}
 
     public Travel(  Project project,
                     ExpenseType type,
@@ -108,6 +96,7 @@ public class Travel extends Expense
         this.setMeals(meals);
         this.setAccommodation(accommodation);
     }
+    */
 
     // =========================================================================
     // Methods

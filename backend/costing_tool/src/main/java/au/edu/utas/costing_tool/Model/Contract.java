@@ -24,12 +24,14 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 // ============================================================================= 
 // Project Imports
@@ -39,6 +41,8 @@ import au.edu.utas.costing_tool.Enums.ContractType;
 
 
 @Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name="contract")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -61,11 +65,17 @@ public abstract class Contract
     @Enumerated(value=EnumType.STRING)
     protected ContractType contractType;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="researcher_id", referencedColumnName="staff_id")
     @JsonBackReference
     @ToString.Exclude
     protected Researcher researcher;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="unit_id", referencedColumnName="id")
+    @JsonBackReference
+    @ToString.Exclude
+    protected Unit unit;
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
@@ -103,7 +113,7 @@ public abstract class Contract
     // Methods
     // ========================================================================= 
 
-    public abstract Double CostRate();
+    //public abstract Double CostRate();
 
     public boolean addContribution(Contribution contribution)
     {

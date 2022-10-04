@@ -7,17 +7,45 @@ USE warp;
 
 -- Researchers
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Dr', 'First', 'Last');
+VALUES ('DR', 'First', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Dr', 'Test', 'User');
+VALUES ('DR', 'Test', 'User');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Prof', 'Test', 'Professor');
+VALUES ('PROF', 'Test', 'Professor');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Mr', 'Another', 'Last');
+VALUES ('MR', 'Another', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Ms', 'Another', 'Last');
+VALUES ('MS', 'Another', 'Last');
 INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('Mr', 'First', 'Also');
+VALUES ('MR', 'First', 'Also');
+
+
+-- Units
+INSERT INTO `unit`
+(
+	`id`,
+	`name`,
+	`abbreviation`,
+	`head_id`
+) VALUES (
+	1,
+	'Institute for Marine and Antartic Studies',
+	'IMAS',
+	1
+);
+
+
+-- Colleges
+INSERT INTO `college`
+(
+	`id`,
+	`name`,
+	`executive_dean_id`
+) VALUES (
+	1,
+	'College of Sciences and Engineering',
+	1
+);
 
 
 -- Project
@@ -25,7 +53,9 @@ INSERT INTO `project`
 (
     `name`,
     `description`,
-    `lead_researcher_id`,
+    -- `lead_researcher_id`,
+    `lead_researcher_name`,
+    `lead_researcher_organisation`,
     `category`,
     `amc_menzies`,
     `amc_national_centre`,
@@ -33,6 +63,7 @@ INSERT INTO `project`
 	`end_date`,
     `year_end_type`,
     `utas_cash`,
+    `utas_dvcr_cash`,
     `partner_cash`,
     `entity`,
     `crowd_funding_provider`,
@@ -42,6 +73,13 @@ INSERT INTO `project`
 
 	-- Specific to Consultancy projects
 	`profit_margin`,
+
+	-- Details
+	`herdc`,
+	`funding_body`,
+	`scheme`,
+	`contact_name`,
+	`contact_email`,
 
 	-- Codes
 	-- Field of Research
@@ -59,33 +97,32 @@ INSERT INTO `project`
 	`pure_basic`,
 
 	-- Ethics
-    `human_medical`, `human_medical_ref`,
-    `human_social_science`, `human_social_science_ref`,
-    `animals`, `animals_ref`,
-    `gmo`, `gmo_ref`,
-    `radiation`, `radiation_ref`,
-    `carcinogen_teratogen`, `carcinogen_teratogen_ref`,
+    `human`, `human_ref`,
+    `animal`, `animal_ref`,
+    `drugs`,
+    `clinical_trial`,
 
 	-- Endorsements
 	-- CI Endoresement
     `ci_endorsement`, `ci_endorsement_date`,
     `risk_assessment`,
-    `risks_managed`,
     `utas_insurance`,
     `defence_strategic_goods`,
     `conflict_of_interest`,
     `foreign_principals`,
-	-- Diretor Endoresement
-	`organisational_unit_1`, `organisational_unit_1_split`,
-    `director_endorsement_1`, `director_endorsement_1_date`,
-	`organisational_unit_2`, `organisational_unit_2_split`,
-    `director_endorsement_2`, `director_endorsement_2_date`,
-	-- College Endoresement
-    `college_endorsement`, `college_endorsement_date`
+
+	-- External Researchers
+    `external_researchers`,
+
+	-- RHD Information
+    `rhd_involvement`,
+    `rhd_unit_id`
 ) VALUES (
     'Test Project',									-- project name
     'A project to test the system.',				-- project description
-    '1',											-- lead researcher id
+    -- '1',											-- lead researcher id
+    'Dr. First Last',								-- lead researcher name
+    'IMAS',											-- lead researcher organisation
     'ONE',											-- category
     'NONE',											-- AMC/Menzies
     'NONE',											-- AMC National Centre
@@ -93,12 +130,20 @@ INSERT INTO `project`
 	'2023-12-31',									-- end date
     'Calendar',										-- year-end type
     '25000.50',										-- UTAS cash
+    '0.00',											-- UTAS DVC-R cash
     '0.00',											-- partner organisation cash
     'IMAS',											-- entity
     'NONE',											-- crowd funding provider
 
     'NONE',											-- category 1 subtype
 	'50.00',										-- profit margin
+
+	-- Details
+	'herdc string',									-- herdc
+	'funding body name',							-- funding body name
+	'scheme string',								-- scheme
+	'Mr. Contact Name',								-- contact name
+	'Contact.Name@email.com',						-- contact email
 
 	-- Codes
 	-- Field of Research
@@ -116,27 +161,26 @@ INSERT INTO `project`
 	'0.00',											-- pure basic
 
 	-- Ethics
-	FALSE, NULL,								-- human medical
-	FALSE, NULL,								-- human social science
-	FALSE, NULL,								-- animals
-	FALSE, NULL,								-- GMO
-	FALSE, NULL,								-- radiation
-	FALSE, NULL,								-- carcinogen/teratogen
+	FALSE, NULL,									-- human
+	FALSE, NULL,									-- animals
+	FALSE,											-- drugs
+	FALSE,											-- clinical trial
 
 	-- Endorsements
 	-- CI Endoresement
-	TRUE, '2022-01-01',							-- CI endorsement
+	TRUE, '2022-01-01',								-- CI endorsement
 	TRUE,											-- risk assessment
-	TRUE,											-- managed risks
 	TRUE,											-- UTAS insurance
 	TRUE,											-- defence strategic goods
 	TRUE,											-- conflict of interest
-	TRUE,											-- foregin principles
-	-- Diretor Endoresement
-	'IMAS', '100.00', TRUE, '2022-01-12',			-- organisational unit 1
-	NULL, NULL, NULL, NULL,					-- organisational unit 2
-	-- College Endoresement
-	NULL, NULL
+	TRUE,											-- foregin principals
+
+	-- External Researchers
+    'Dr. First Last,ANU;Prof. Also Researcher,UNSW;Mrs. Anne Researcher,UQ',
+
+	-- RHD Information
+    'SCHOLARSHIP',
+    '1'
 );
 
 
@@ -153,9 +197,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'NON_CASUAL',									-- contract type
@@ -167,9 +209,7 @@ INSERT INTO `contract`
     '1',											-- step
     NULL,											-- pay code
     '100000.00',									-- salary
-    NULL,											-- hourly rate
-    '100.00',										-- wage adjustment
-    '1.00'											-- on cost rate
+    NULL											-- hourly rate
 );
 
 INSERT INTO `contract`
@@ -184,9 +224,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'CASUAL',										-- contract type
@@ -198,9 +236,7 @@ INSERT INTO `contract`
     NULL,											-- step
     '1',											-- pay code
     NULL,											-- salary
-    '50.00',										-- hourly rate
-    '1.00',											-- wage adjustment
-    '123.00'										-- on cost rate
+    '50.00'											-- hourly rate
 );
 
 INSERT INTO `contract`
@@ -215,9 +251,7 @@ INSERT INTO `contract`
     `step`,
     `pay_code`,
     `salary`,
-    `hourly_rate`,
-    `wage_adjustment`,
-    `on_cost_rate`
+    `hourly_rate`
 ) VALUES (
     '1',											-- researcher id
     'RHD',											-- contract type
@@ -229,9 +263,7 @@ INSERT INTO `contract`
     NULL,											-- step
     '1',											-- pay code
     '25000.00',										-- salary
-    NULL,											-- hourly rate
-    NULL,											-- wage adjustment
-    NULL											-- on cost rate
+    NULL											-- hourly rate
 );
 
 -- contribution of project to contract
@@ -240,12 +272,16 @@ INSERT INTO `contribution`
 	`contract_id`,
 	`project_id`,
 	`role`,
-    `in_kind_%`
+    `in_kind_%`,
+    `wage_adjustment`,
+    `on_cost_rate`
 ) VALUES (
 	'1',											-- contract id
 	'1',											-- project id
 	'CI',											-- project role
-    '50.00'											-- in kind percent
+    '50.00',										-- in kind percent
+    '1000.00',										-- wage adjustment
+	'1'												-- on cost rate
 );
 /*
 INSERT INTO `contribution`
@@ -266,18 +302,22 @@ INSERT INTO `contribution`
 	`contract_id`,
 	`project_id`,
 	`role`,
-    `in_kind_%`
+    `in_kind_%`,
+    `wage_adjustment`,
+    `on_cost_rate`
 ) VALUES (
 	'3',											-- contract id
 	'1',											-- project id
 	'RHD Student',									-- project role
-    '100.00'										-- in kind percent
+    '100.00',										-- in kind percent
+    '500.00',										-- wage adjustment
+    '1'												-- on cost rate
 );
 
 
 
 
--- contribution of project to contract
+-- annual contribution of project to contract
 INSERT INTO `annual_contribution`
 (
 	`contract_id`,
@@ -410,4 +450,49 @@ INSERT INTO `annual_expense`
 	'1',												-- expense id
 	'2022',												-- year
 	'30'												-- units
+);
+
+
+-- Director Endorsements
+INSERT INTO `director_endorsement`
+(
+	`project_id`,
+	`unit_id`,
+	`project_costs`,
+	`facilities`,
+	`blessing`,
+	`workload`,
+	`conflict_of_interest`,
+	`split`,
+	`endorser_id`,
+	`endorsement`,
+	`endorsement_date`
+) VALUES (
+	1,											-- project id
+	1,											-- unit id
+	TRUE,										-- project costs
+	TRUE,										-- faciltiies
+	TRUE,										-- blessing
+	TRUE,										-- workload
+	TRUE,										-- conflict of interest
+	20.00,										-- split
+	1,											-- endorser id
+	TRUE,										-- endorserment
+	'2022-01-01'								-- endorserment date
+);
+
+-- College Endorsements
+INSERT INTO `college_endorsement`
+(
+	`project_id`,
+	`college_id`,
+	`endorser_id`,
+	`endorsement`,
+	`endorsement_date`
+) VALUES (
+	1,											-- project id
+	1,											-- college id
+	1,											-- endorser id
+	TRUE,										-- endorserment
+	'2022-01-02'								-- endorserment date
 );

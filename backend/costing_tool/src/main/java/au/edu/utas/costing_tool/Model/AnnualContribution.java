@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,6 +27,8 @@ import lombok.ToString;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="annual_contribution")
 @IdClass(value=AnnualContributionID.class)
@@ -48,9 +52,14 @@ public class AnnualContribution
 
     public AnnualContributionID getId()
     {
-        return new AnnualContributionID(this.contractID,
-                                        this.projectID,
-                                        this.year);
+        if (   this.getContractID() == null
+            || this.getProjectID() == null
+            || this.getYear() == null)
+            return null;
+
+        return new AnnualContributionID(this.getContractID(),
+                                        this.getProjectID(),
+                                        this.getYear());
     }
 
 

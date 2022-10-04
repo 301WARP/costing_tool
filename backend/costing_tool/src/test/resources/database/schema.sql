@@ -6,11 +6,11 @@
  */
 
 -- Ensure costing tool database exists and we are using it
-CREATE database IF NOT EXISTS `warp`;
+CREATE schema IF NOT EXISTS `warp`;
 USE `warp`;
 
 -- Remove existing tables in the warp database clashing with our new tables 
-SET FOREIGN_KEY_CHECKS = 0;
+SET REFERENTIAL_INTEGRITY FALSE;
 DROP TABLE IF EXISTS `annual_expense`;
 DROP TABLE IF EXISTS `expense`;
 DROP TABLE IF EXISTS `project`;
@@ -22,50 +22,50 @@ DROP TABLE IF EXISTS `director_endorsement`;
 DROP TABLE IF EXISTS `college_endorsement`;
 DROP TABLE IF EXISTS `unit`;
 DROP TABLE IF EXISTS `college`;
-SET FOREIGN_KEY_CHECKS = 1;
+SET REFERENTIAL_INTEGRITY TRUE;
 
 
 -- Researchers
 CREATE TABLE `researcher`
 (
-	`staff_id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	`staff_id` INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
 	`title` ENUM('NONE', 'MR', 'MISS', 'MRS', 'MS', 'DR', 'PROF', 'TBA'),
 	`first_name` VARCHAR(50),
 	`last_name` VARCHAR(50),
 	PRIMARY KEY (`staff_id`)
-) Engine=InnoDB;
+);
 
 
 -- Contribution of project to contract hours
 CREATE TABLE `contribution`
 (
-	`contract_id` INTEGER(6) UNSIGNED NOT NULL,
-	`project_id` INTEGER(6) UNSIGNED NOT NULL,
+	`contract_id` INTEGER  NOT NULL,
+	`project_id` INTEGER  NOT NULL,
 	`role` VARCHAR(25),
-    `in_kind_%` DOUBLE(5,2)
+    `in_kind_%` DOUBLE
 		CHECK (`in_kind_%` BETWEEN 0 AND 100),
-    `wage_adjustment` DOUBLE(9,2),						-- per contract or project?
-    `on_cost_rate` DOUBLE(9,2),							-- per contract or project?
+    `wage_adjustment` DOUBLE,						-- per contract or project?
+    `on_cost_rate` DOUBLE,							-- per contract or project?
 	PRIMARY KEY (`contract_id`, `project_id`)
-) Engine=InnoDB;
+);
 
 
 -- Annual contribution of project to contract hours
 CREATE TABLE `annual_contribution`
 (
-	`contract_id` INTEGER(6) UNSIGNED NOT NULL,
-	`project_id` INTEGER(6) UNSIGNED NOT NULL,
-	`year` INTEGER(4) NOT NULL,
-    `units` DOUBLE(6, 2),
+	`contract_id` INTEGER  NOT NULL,
+	`project_id` INTEGER  NOT NULL,
+	`year` INTEGER NOT NULL,
+    `units` DOUBLE,
 	PRIMARY KEY (`contract_id`, `project_id`, `year`)
-) Engine=InnoDB;
+);
 
 
 --  Terms under which a researcher is employed
 CREATE TABLE `contract`
 (
-    `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `researcher_id` INTEGER(6) UNSIGNED NOT NULL,
+    `id` INTEGER  NOT NULL UNIQUE AUTO_INCREMENT,
+    `researcher_id` INTEGER  NOT NULL,
     `contract_type` ENUM('NON_CASUAL', 'CASUAL', 'RHD'),
     `staff_type_non_casual` ENUM(	'ACADEMIC', 'PROFESSIONAL',
 									'RESEARCH_ASSISTANT'),
@@ -76,19 +76,19 @@ CREATE TABLE `contract`
     `classification_rhd` ENUM('APA', 'TopUp'),									-- values?
     `pay_code` ENUM('1', '2', '3'),												-- values?
     `step` ENUM('1', '2', '3'),													-- values?
-    `salary` DOUBLE(9,2)
+    `salary` DOUBLE
 		CHECK (`salary` >= 0),
-    `hourly_rate` DOUBLE(9,2)
+    `hourly_rate` DOUBLE
 		CHECK (`hourly_rate` >= 0),
-	`unit_id` INTEGER(6) UNSIGNED,
+	`unit_id` INTEGER ,
     PRIMARY KEY (`id`)
-) Engine=InnoDB;
+);
 
 
 -- Project
 CREATE TABLE `project`
 (
-    `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+    `id` INTEGER  NOT NULL UNIQUE AUTO_INCREMENT,
     `name` VARCHAR(256),
     `description` VARCHAR(256),
     `lead_researcher_name` VARCHAR(256),
@@ -102,9 +102,9 @@ CREATE TABLE `project`
 	`end_date` DATE,
     `year_end_type` ENUM('CALENDAR', 'FINANCIAL')
 		DEFAULT 'CALENDAR',
-    `utas_cash` DOUBLE(9,2),
-    `utas_dvcr_cash` DOUBLE(9,2),
-    `partner_cash` DOUBLE(9,2),
+    `utas_cash` DOUBLE,
+    `utas_dvcr_cash` DOUBLE,
+    `partner_cash` DOUBLE,
     `entity` ENUM('NONE', 'IMAS')												-- values?
 		DEFAULT 'NONE',
     `crowd_funding_provider` ENUM('?', 'NONE'),									-- values?
@@ -113,35 +113,35 @@ CREATE TABLE `project`
 	`category_1_subtype` ENUM('NONE'),
 
 	-- Specific to Consultancy projects
-	`profit_margin` Double(5,2),
+	`profit_margin` DOUBLE,
 
 	-- Codes
 	-- Could be one table, but not sure how to enforce maximum of three
 	-- Field of Research
-    `for_code_1` INTEGER(6),
-    `for_%_1` DOUBLE(5,2)
+    `for_code_1` INTEGER,
+    `for_%_1` DOUBLE
 		CHECK (`for_%_1` BETWEEN 0 AND 100),
-    `for_code_2` INTEGER(6),
-    `for_%_2` DOUBLE(5,2)
+    `for_code_2` INTEGER,
+    `for_%_2` DOUBLE
 		CHECK (`for_%_2` BETWEEN 0 AND 100),
-    `for_code_3` INTEGER(6),
-    `for_%_3` DOUBLE(5,2)
+    `for_code_3` INTEGER,
+    `for_%_3` DOUBLE
 		CHECK (`for_%_3` BETWEEN 0 AND 100),
 	-- Socio-Economic Objective
-    `seo_code_1` INTEGER(6),
-    `seo_%_1` DOUBLE(5,2)
+    `seo_code_1` INTEGER,
+    `seo_%_1` DOUBLE
 		CHECK (`seo_%_1`  BETWEEN 0 and 100),
-    `seo_code_2` INTEGER(6),
-    `seo_%_2` DOUBLE(5,2)
+    `seo_code_2` INTEGER,
+    `seo_%_2` DOUBLE
 		CHECK (`seo_%_2`  BETWEEN 0 and 100),
-    `seo_code_3` INTEGER(6),
-    `seo_%_3` DOUBLE(5,2)
+    `seo_code_3` INTEGER,
+    `seo_%_3` DOUBLE
 		CHECK (`seo_%_3`  BETWEEN 0 and 100),
 	-- Types of Activity
-	`applied_research` DOUBLE(5,2),
-	`experimental_development` DOUBLE(5,2),
-	`strategic_basic` DOUBLE(5,2),
-	`pure_basic` DOUBLE(5,2),
+	`applied_research` DOUBLE,
+	`experimental_development` DOUBLE,
+	`strategic_basic` DOUBLE,
+	`pure_basic` DOUBLE,
 
 	-- Details
 	`herdc` VARCHAR(256),
@@ -173,30 +173,30 @@ CREATE TABLE `project`
 
 	-- RHD Information
     `rhd_involvement` ENUM('NONE', 'UNPAID', 'CASUAL', 'SCHOLARSHIP'),
-    `rhd_unit_id` INTEGER(6) UNSIGNED,
+    `rhd_unit_id` INTEGER ,
 
     PRIMARY KEY (`id`)
-) Engine=InnoDB;
+);
 
 -- Expenses
 CREATE TABLE `expense`
 (
-    `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `project_id` INTEGER(6) UNSIGNED NOT NULL,
+    `id` INTEGER  NOT NULL UNIQUE AUTO_INCREMENT,
+    `project_id` INTEGER  NOT NULL,
     `expense_type` ENUM('TRAVEL', 'FACILITY_HIRE', 'EQUIPMENT', 'CONSUMABLES',
 						'PARTNER_ORGANISATIONS', 'EXTERNAL_CONTRACTING',
 						'RHD_NON-STIPEND_COSTS', 'OTHER', 'NONE'),
-    `cost_per_unit` DOUBLE(9,2),
-    `in_kind_%` DOUBLE(9,2),
+    `cost_per_unit` DOUBLE,
+    `in_kind_%` DOUBLE,
 
 	-- Travel
-    `num_travellers` INTEGER(4),
+    `num_travellers` INTEGER,
     `departure` DATE,
     `return` DATE,
-    `fare` DOUBLE(9,2),
-    `car_hire` DOUBLE(9,2),
-    `meals` DOUBLE(9,2),
-    `accommodation` DOUBLE(9,2),
+    `fare` DOUBLE,
+    `car_hire` DOUBLE,
+    `meals` DOUBLE,
+    `accommodation` DOUBLE,
 
 	-- Facility  Hire
     `facility` ENUM('NONE', 'LABS_R_US'),
@@ -206,63 +206,63 @@ CREATE TABLE `expense`
     `organisation` ENUM('UMELB', '?', 'NONE'),
     PRIMARY KEY (`id`)
 
-) Engine=InnoDB;
+);
 
 -- Annual Expenses
 CREATE TABLE `annual_expense`
 (
-	`expense_id` INTEGER(6) UNSIGNED NOT NULL,
-	`year` INTEGER(4) NOT NULL,
-	`units` DOUBLE(9,2),
+	`expense_id` INTEGER  NOT NULL,
+	`year` INTEGER NOT NULL,
+	`units` DOUBLE,
     PRIMARY KEY (`expense_id`, `year`)
-) Engine=InnoDB;
+);
 
 -- Director Endorsement
 CREATE TABLE `director_endorsement`
 (
-	`project_id` INTEGER(6) UNSIGNED NOT NULL,
-	`unit_id` INTEGER(6) UNSIGNED NOT NULL,
+	`project_id` INTEGER  NOT NULL,
+	`unit_id` INTEGER  NOT NULL,
 	`project_costs` BOOLEAN,
 	`facilities` BOOLEAN,
 	`blessing` BOOLEAN,
 	`workload` BOOLEAN,
 	`conflict_of_interest` BOOLEAN,
-	`split` DOUBLE(9,2),
-	`endorser_id` INTEGER(6) UNSIGNED,
+	`split` DOUBLE,
+	`endorser_id` INTEGER ,
 	`endorsement` BOOLEAN,
 	`endorsement_date` DATE,
     PRIMARY KEY (`project_id`, `unit_id`)
-) Engine=InnoDB;
+);
 
 -- Unit
 CREATE TABLE `unit`
 (
-	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`id` INTEGER  NOT NULL,
 	`name` VARCHAR(256),
 	`abbreviation` VARCHAR(256),
-	`head_id` INTEGER(6) UNSIGNED NOT NULL,
+	`head_id` INTEGER  NOT NULL,
     PRIMARY KEY (`id`)
-) Engine=InnoDB;
+);
 
 -- College Endorsement
 CREATE TABLE `college_endorsement`
 (
-	`project_id` INTEGER(6) UNSIGNED NOT NULL,
-	`college_id` INTEGER(6) UNSIGNED NOT NULL,
-	`endorser_id` INTEGER(6) UNSIGNED,
+	`project_id` INTEGER  NOT NULL,
+	`college_id` INTEGER  NOT NULL,
+	`endorser_id` INTEGER ,
 	`endorsement` BOOLEAN,
 	`endorsement_date` DATE,
     PRIMARY KEY (`project_id`, `college_id`)
-) Engine=InnoDB;
+);
 
 -- College
 CREATE TABLE `college`
 (
-	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`id` INTEGER  NOT NULL,
 	`name` VARCHAR(256),
-	`executive_dean_id` INTEGER(6) UNSIGNED,
+	`executive_dean_id` INTEGER ,
     PRIMARY KEY (`id`)
-) Engine=InnoDB;
+);
 
 -- Specify foreign keys
 ALTER TABLE `contract` ADD FOREIGN KEY (`researcher_id`) REFERENCES `researcher` (`staff_id`);
@@ -281,9 +281,3 @@ ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`project_id`) REFERENCES `pro
 ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`college_id`) REFERENCES `college` (`id`);
 ALTER TABLE `college_endorsement` ADD FOREIGN KEY (`endorser_id`) REFERENCES `researcher` (`staff_id`);
 ALTER TABLE `college` ADD FOREIGN KEY (`executive_dean_id`) REFERENCES `researcher` (`staff_id`);
-
--- -----------------------------------------------------------------------------
--- Test Data
--- -----------------------------------------------------------------------------
-
-source ./test_data.sql;

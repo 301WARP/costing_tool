@@ -1,8 +1,6 @@
 package au.edu.utas.costing_tool.Model;
 
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AnnualExpenseID implements Serializable
+public class ExternalResearcher
 {
-    protected Long expenseID;
-    protected Integer year;
+    private String name;
+    private String organisation;
 }

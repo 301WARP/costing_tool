@@ -1,6 +1,8 @@
 package au.edu.utas.costing_tool.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 // =============================================================================
 // External Imports
 // =============================================================================
@@ -10,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -27,10 +32,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-
+import lombok.ToString;
 
 // =============================================================================
 // Project Imports
@@ -42,6 +49,7 @@ import au.edu.utas.costing_tool.Enums.Category1Subtype;
 import au.edu.utas.costing_tool.Enums.CrowdFunding;
 import au.edu.utas.costing_tool.Enums.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.ResearchEntity;
+import au.edu.utas.costing_tool.Enums.RhdInvolvement;
 import au.edu.utas.costing_tool.Enums.YearEndType;
 
 
@@ -52,6 +60,7 @@ import au.edu.utas.costing_tool.Enums.YearEndType;
 
 @Data
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name="project")
 public class Project
@@ -71,11 +80,33 @@ public class Project
     @Column(name="description")
     private String description;
 
+    @Column(name="herdc")
+    private String herdc;
+
+    @Column(name="funding_body")
+    private String fundingBody;
+
+    @Column(name="scheme")
+    private String scheme;
+
+    @Column(name="contact_name")
+    private String contactName;
+
+    @Column(name="contact_email")
+    private String contactEmail;
+
+    /*
     @OneToOne(cascade={ CascadeType.MERGE,
                         CascadeType.REFRESH,
                         CascadeType.PERSIST})
     @JoinColumn(name="lead_researcher_id", referencedColumnName="staff_id")
     private Researcher leadResearcher;
+    */
+    @Column(name="lead_researcher_name")
+    private String leadResearcherName;
+
+    @Column(name="lead_researcher_organisation")
+    private String leadResearcherOrg;
 
     @Column(name="category")
     @Enumerated(value=EnumType.STRING)
@@ -153,27 +184,21 @@ public class Project
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name="humanMedical", column=@Column(name="human_medical")),
-        @AttributeOverride(name="humanMedicalRef", column=@Column(name="human_medical_ref")),
-        @AttributeOverride(name="humanSocialScience", column=@Column(name="human_social_science")),
-        @AttributeOverride(name="humanSocialScienceRef", column=@Column(name="human_social_science_ref")),
-        @AttributeOverride(name="animals", column=@Column(name="animals")),
-        @AttributeOverride(name="animalsRef", column=@Column(name="animals_ref")),
-        @AttributeOverride(name="gmo", column=@Column(name="gmo")),
-        @AttributeOverride(name="gmoRef", column=@Column(name="gmo_ref")),
-        @AttributeOverride(name="radiation", column=@Column(name="radiation")),
-        @AttributeOverride(name="radiationRef", column=@Column(name="radiation_ref")),
-        @AttributeOverride(name="carcinogenTeratogen", column=@Column(name="carcinogen_teratogen")),
-        @AttributeOverride(name="carcinogenTeratogenRef", column=@Column(name="carcinogen_teratogen_ref")),
+        @AttributeOverride(name="human", column=@Column(name="human")),
+        @AttributeOverride(name="humanRef", column=@Column(name="human_ref")),
+        @AttributeOverride(name="animal", column=@Column(name="animal")),
+        @AttributeOverride(name="animalRef", column=@Column(name="animal_ref")),
+        @AttributeOverride(name="drugs", column=@Column(name="drugs")),
+        @AttributeOverride(name="clinicalTrial", column=@Column(name="clinical_trial")),
     })
     EthicsChecklist ethicsChecklist;
 
+    /*
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name="ciEndorsement", column=@Column(name="ci_endorsement")),
         @AttributeOverride(name="ciEndorsementDate", column=@Column(name="ci_endorsement_date")),
         @AttributeOverride(name="riskAssessment", column=@Column(name="risk_assessment")),
-        @AttributeOverride(name="risksManaged", column=@Column(name="risks_managed")),
         @AttributeOverride(name="utasInsurance", column=@Column(name="utas_insurance")),
         @AttributeOverride(name="defenceStrategicGoods", column=@Column(name="defence_strategic_goods")),
         @AttributeOverride(name="conflictOfInterest", column=@Column(name="conflict_of_interest")),
@@ -181,26 +206,18 @@ public class Project
     })
     private CIEndorsement ciEndorsement;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name="org1", column=@Column(name="organisational_unit_1")),
-        @AttributeOverride(name="org1Split", column=@Column(name="organisational_unit_1_split")),
-        @AttributeOverride(name="directorEndorsement1", column=@Column(name="director_endorsement_1")),
-        @AttributeOverride(name="directorEndorsement1Date", column=@Column(name="director_endorsement_1_date")),
-        @AttributeOverride(name="org2", column=@Column(name="organisational_unit_2")),
-        @AttributeOverride(name="org2Split", column=@Column(name="organisational_unit_2_split")),
-        @AttributeOverride(name="directorEndorsement2", column=@Column(name="director_endorsement_2")),
-        @AttributeOverride(name="directorEndorsement2Date", column=@Column(name="director_endorsement_2_date")),
-    })
-    private DirectorEndorsement directorEndorsement;
+    @OneToMany( cascade=CascadeType.ALL,
+                fetch=FetchType.LAZY,
+                mappedBy="project")
+    @JsonManagedReference
+    private List<DirectorEndorsement> directorEndorsements;
 
-    // FIXME(Andrew): only displays endorsement
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name="endorsement", column=@Column(name="college_endorsement")),
-        @AttributeOverride(name="date", column=@Column(name="college_endorsement_date"))
-    })
-    private CollegeEndorsement collegeEndorsement;
+    @OneToMany( cascade=CascadeType.ALL,
+                fetch=FetchType.LAZY,
+                mappedBy="project")
+    @JsonManagedReference
+    private List<CollegeEndorsement> collegeEndorsements;
+    */
 
     @OneToMany( cascade=CascadeType.ALL,
                 fetch=FetchType.LAZY,
@@ -213,6 +230,105 @@ public class Project
                 mappedBy="project")
     @JsonManagedReference
     private List<Expense> expenses;
+
+    /*
+    @Column(name="external_researchers")
+    private String externalResearchers;
+    public List<String> getExternalResearchers()
+    {
+        return new ArrayList<String>(
+            Arrays.asList(
+                this.externalResearchers
+                    .split(",")
+                )
+        );
+    }
+    public void setExternalResearchers(List<String> researchers)
+    {
+        this.externalResearchers =
+            researchers
+                .stream()
+                .collect(Collectors.joining(","));
+    }
+
+
+    @Column(name="external_organisations")
+    private String externalOrgs;
+    public List<String> getExternalOrgs()
+    {
+        return new ArrayList<String>(
+            Arrays.asList(
+                this.externalOrgs
+                    .split(",")
+                )
+        );
+    }
+    public void setExternalOrgs(List<String> organisations)
+    {
+        this.externalResearchers =
+            organisations
+                .stream()
+                .collect(Collectors.joining(","));
+    }
+    */
+    
+
+    @Column(name="external_researchers")
+    private String externalResearchers;
+    public List<ExternalResearcher> getExternalResearchers()
+    {
+        if (this.externalResearchers == null
+            || this.externalResearchers.isEmpty())
+            return null;
+
+        List<String> researcherStrings =
+            Arrays.asList(this.externalResearchers.split(";"));
+        
+        return researcherStrings
+            .stream()
+            .map(s -> s.split(","))
+            .map(s -> ExternalResearcher
+                .builder()
+                .name(s.length > 0 ? s[0] : null)
+                .organisation(s.length > 1 ? s[1] : null)
+                .build())
+            .collect(Collectors.toList());
+    }
+    public void setExternalResearchers(List<ExternalResearcher> researchers)
+    {
+        if (researchers == null || researchers.isEmpty()) {
+            this.externalResearchers = null;
+            return;
+        }
+
+        this.externalResearchers =
+            researchers
+                .stream()
+                .map(r -> new StringJoiner(",")
+                    .add(r.getName())
+                    .add(r.getOrganisation())
+                    .toString()
+                )
+                .collect(Collectors.joining(";"));
+    }
+
+    @Transient
+    private List<ExternalResearcher> externalResearchersList;
+
+    @Column(name="rhd_involvement")
+    @Enumerated(value=EnumType.STRING)
+    private RhdInvolvement rhdInvolvement;
+
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="rhd_unit_id", referencedColumnName="id")
+    @JsonBackReference
+    @ToString.Exclude
+    protected Unit rhdUnit;
+    
+
+    @Column(name="utas_dvcr_cash")
+    private Double dvcrCash;
 
 
     // =========================================================================
