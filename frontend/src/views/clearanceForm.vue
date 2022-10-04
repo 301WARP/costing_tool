@@ -65,7 +65,7 @@
 
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field label="Funding Body / Client" outlined="true" disabled></v-text-field>
+                                <v-text-field label="Funding Body / Client" outlined disabled></v-text-field>
                             </v-col>
                             <v-col cols="6">
                                 <v-text-field label="Scheme" outlined="true"></v-text-field>

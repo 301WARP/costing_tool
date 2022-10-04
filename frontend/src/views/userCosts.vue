@@ -5,12 +5,31 @@
                 <h2 class="mx-auto">Direct Non-Labour Costs</h2>
             </v-row>
 
+            <!-- Add Cost fields -->
+            <v-row v-if="addingCost">
+                <v-card width="100%" class="mb-15" elevation="3">
+                    <v-row class="px-5 pt-5">
+                        <v-col cols="6">
+                            <v-select :items="costDropdownList" label="New Cost Type" v-model="newCostType"></v-select>
+                        </v-col>
+                        <v-col align="right" cols="6" class="pb-8">
+                            <v-btn @click="cancel()" color="primary" elevation="4" outlined large class="mr-3">
+                                Cancel</v-btn>
+                            <v-btn @click="addCost()" color="primary" elevation="4" outlined large>
+                                Add Cost</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-row>
+
+            <!-- Travel Cost -->
             <v-row v-if="currentCostType == 1">
                 <v-card width="100%" class="mb-15" elevation="3">
                     <v-card-title>Travel</v-card-title>
                     <v-row class="px-5">
                         <v-col cols="12">
-                            <v-text-field label="Description" :value="currentDescription"></v-text-field>
+                            <v-text-field label="Description" :value="currentDescription" v-model="currentDescription">
+                            </v-text-field>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -52,22 +71,26 @@
                         <v-col align="right" cols="12" class="pb-8">
                             <v-btn @click="cancel()" color="primary" elevation="4" outlined large class="mr-3">
                                 Cancel</v-btn>
-                            <v-btn @click="saveTravel()" color="primary" elevation="4" outlined large>
+                            <v-btn @click="saveCost()" color="primary" elevation="4" outlined large>
                                 Save</v-btn>
                         </v-col>
                     </v-row>
                 </v-card>
             </v-row>
 
+            <!-- Simple (Single Value) Costs -->
             <v-row v-for="i in singleCostTypes" :id="i.id" v-if="currentCostType == i.no">
                 <v-card width="100%" class="mb-15" elevation="3">
                     <v-card-title>{{i.name}}</v-card-title>
                     <v-row class="px-5">
                         <v-col cols="8">
-                            <v-text-field label="Description" :value="currentDescription"></v-text-field>
+                            <v-text-field label="Description" :value="currentDescription" v-model="currentDescription">
+                            </v-text-field>
                         </v-col>
                         <v-col cols="4">
-                            <v-text-field label="Cost" prefix="$" :value="currentActualCost"></v-text-field>
+                            <v-text-field label="Cost" prefix="$" :value="currentActualCost"
+                                v-model="currentActualCost">
+                            </v-text-field>
                         </v-col>
                     </v-row>
                     <v-divider class="my-7"></v-divider>
@@ -87,7 +110,7 @@
                         <v-col align="right" cols="12" class="pb-8">
                             <v-btn @click="cancel()" color="primary" elevation="4" outlined large class="mr-3">
                                 Cancel</v-btn>
-                            <v-btn @click="saveTravel()" color="primary" elevation="4" outlined large>
+                            <v-btn @click="saveCost()" color="primary" elevation="4" outlined large>
                                 Save</v-btn>
                         </v-col>
                     </v-row>
@@ -107,7 +130,7 @@
 
             <v-row class="px-5">
                 <v-col align="right" cols="12" class="pt-5">
-                    <v-btn @click="addCost()" color="primary" elevation="4" outlined large class="mr-3">
+                    <v-btn @click="addingCost = true" color="primary" elevation="4" outlined large class="mr-3">
                         Add Cost</v-btn>
                 </v-col>
             </v-row>
@@ -126,6 +149,9 @@ export default {
             currentCostType: 0,
             currentDescription: "",
             currentActualCost: 0,
+            currentCostIndex: -1,
+            addingCost: false,
+            newCostType: "",
             headers: [
                 {
                     text: "Type",
@@ -139,10 +165,10 @@ export default {
             ],
             // Temporary hard-coded cost list
             costList: [
-                { no: 1, type: "Travel", description: "CI & RA Travel to Melbourne for conference", in_kind: "-", actual_cost: "$" + "3,250.00" },
-                { no: 2, type: "Facility Hire", description: "Menzies - Zeiss LSM510", in_kind: "-", actual_cost: "$" + "6,099.66" },
-                { no: 3, type: "Consumables", description: "10L of 10% HCL", in_kind: "-", actual_cost: "$" + "79.99" },
-                { no: 4, type: "Equipment Purchases", description: "Geological Picks", in_kind: "-", actual_cost: "$" + "335.50" },
+                { index: 0, no: 1, type: "Travel", description: "CI & RA Travel to Melbourne for conference", in_kind: "-", actual_cost: "3250.00" },
+                { index: 1, no: 2, type: "Facility Hire", description: "Menzies - Zeiss LSM510", in_kind: "-", actual_cost: "6099.66" },
+                { index: 2, no: 3, type: "Consumables", description: "6L of 10% HCL", in_kind: "-", actual_cost: "79.99" },
+                { index: 3, no: 4, type: "Equipment Purchases", description: "Geological Picks", in_kind: "-", actual_cost: "335.50" },
             ],
             costListTemp: [],
             costListFixed: [],
@@ -185,7 +211,10 @@ export default {
                 { type: "Partner2", no: 16 },
                 { type: "Partner3", no: 17 },
                 { type: "Partner4", no: 18 },
-            ]
+            ],
+            costDropdownList: [
+                "Travel", "Facilities/Laboratory hire", "Consumables", "Equipment purchases", "External contractor", "Other costs", "Audit fees", "RHD non-stipend costs", "AMC facility costs", "TIA facility costs", "IMAS facility costs", "Menzies facility costs", "Animal facility costs", "CSL Facility Costs", "Partner Organisation 1", "Partner Organisation 2", "Partner Organisation 3", "Partner Organisation 4"
+            ],
         };
     },
     methods: {
@@ -215,14 +244,42 @@ export default {
             this.currentCostType = item.no;
             this.currentDescription = item.description;
             this.currentActualCost = item.actual_cost;
+            this.currentCostIndex = item.index;
         },
         cancel() {
             // hide all cost editing field
             this.currentCostType = 0;
+            this.currentCostIndex = -1;
+            this.addingCost = false;
         },
-        saveTravel() {
-            // save travel cost fields to selectedCostIndex
-            // hide travel cost card
+        saveCost() {
+            if (this.currentCostIndex != -1) {
+                // single value costs
+                if (this.currentCostType >= 2 && this.currentCostType <= 6 || this.currentCostType == 8 || this.currentCostType >= 15 && this.currentCostType <= 18) {
+                    this.saveSingleCost();
+                }
+                if (this.currentCostType == 1) {
+                    // save travel cost
+                }
+            }
+        },
+        saveSingleCost() {
+            // save description fields to cost array
+            this.costList[this.currentCostIndex].description = this.currentDescription;
+
+            // TODO: save actual cost (do calculations based on years?)
+            this.costList[this.currentCostIndex].actual_cost = this.currentActualCost;
+
+            // hide fields
+            this.currentCostIndex = -1;
+            this.currentCostType = 0;
+        },
+        addCost() {
+            alert(this.costDropdownList.find(this.newCostType));
+            var newCost = {
+                index: this.costList.length, no: this.costDropdownList.find(this.newCostType), type: newCostType, description: "", in_kind: "-", actual_cost: "0.00"
+            };
+            this.costList.push(newCost);
         },
     },
     mounted() {
