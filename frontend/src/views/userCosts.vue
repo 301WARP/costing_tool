@@ -275,11 +275,15 @@ export default {
             this.currentCostType = 0;
         },
         addCost() {
-            alert(this.costDropdownList.find(this.newCostType));
+            const type = (element) => element == this.newCostType;
+            const newTypeNo = this.costDropdownList.findIndex(type) + 1;
             var newCost = {
-                index: this.costList.length, no: this.costDropdownList.find(this.newCostType), type: newCostType, description: "", in_kind: "-", actual_cost: "0.00"
+                index: this.costList.length, no: newTypeNo, type: this.newCostType, description: "", in_kind: "-", actual_cost: ""
             };
             this.costList.push(newCost);
+            this.addingCost = false;
+
+            this.change(newCost);
         },
     },
     mounted() {
