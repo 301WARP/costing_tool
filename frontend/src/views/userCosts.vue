@@ -134,69 +134,70 @@
 
       <!-- Simple (Single Value) Costs -->
       <v-row v-for="i in singleCostTypes" :id="i.id" :key="i.index">
-        <!-- v-if="currentCostType == i.no" WAS IN ABOVE ROW, UNSURE WHAT IT DOES-->
-        <v-card width="100%" class="mb-15" elevation="3">
-          <v-card-title>{{ i.name }}</v-card-title>
-          <v-row class="px-5">
-            <v-col cols="8">
-              <v-text-field
-                label="Description"
-                :value="currentDescription"
-                v-model="currentDescription"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                label="Cost"
-                prefix="$"
-                :value="currentActualCost"
-                v-model="currentActualCost"
-              >
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-divider class="my-7"></v-divider>
-          <v-row>
-            <v-row class="mx-0 mb-0 pb-2 mb-0 pb-0">
-              <v-col cols="12" class="ma-0 pb-0">
-                <v-card-title class="mb-0 pb-0">Quantity</v-card-title>
+        <template v-if="currentCostType == i.no">
+          <v-card width="100%" class="mb-15" elevation="3">
+            <v-card-title>{{ i.name }}</v-card-title>
+            <v-row class="px-5">
+              <v-col cols="8">
+                <v-text-field
+                  label="Description"
+                  :value="currentDescription"
+                  v-model="currentDescription"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  label="Cost"
+                  prefix="$"
+                  :value="currentActualCost"
+                  v-model="currentActualCost"
+                >
+                </v-text-field>
               </v-col>
             </v-row>
-            <v-row class="px-6 mt-0">
-              <v-col
-                class="px-2 mx-2"
-                v-for="year in projectYears"
-                :key="year.index"
-              >
-                <v-text-field :label="year.text"></v-text-field>
+            <v-divider class="my-7"></v-divider>
+            <v-row>
+              <v-row class="mx-0 mb-0 pb-2 mb-0 pb-0">
+                <v-col cols="12" class="ma-0 pb-0">
+                  <v-card-title class="mb-0 pb-0">Quantity</v-card-title>
+                </v-col>
+              </v-row>
+              <v-row class="px-6 mt-0">
+                <v-col
+                  class="px-2 mx-2"
+                  v-for="year in projectYears"
+                  :key="year.index"
+                >
+                  <v-text-field :label="year.text"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-row>
+            <v-row class="px-5">
+              <v-col align="right" cols="12" class="pb-8">
+                <v-btn
+                  @click="cancel()"
+                  color="primary"
+                  elevation="4"
+                  outlined
+                  large
+                  class="mr-3"
+                >
+                  Cancel</v-btn
+                >
+                <v-btn
+                  @click="saveCost()"
+                  color="primary"
+                  elevation="4"
+                  outlined
+                  large
+                >
+                  Save</v-btn
+                >
               </v-col>
             </v-row>
-          </v-row>
-          <v-row class="px-5">
-            <v-col align="right" cols="12" class="pb-8">
-              <v-btn
-                @click="cancel()"
-                color="primary"
-                elevation="4"
-                outlined
-                large
-                class="mr-3"
-              >
-                Cancel</v-btn
-              >
-              <v-btn
-                @click="saveCost()"
-                color="primary"
-                elevation="4"
-                outlined
-                large
-              >
-                Save</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card>
+          </v-card>
+        </template>
       </v-row>
 
       <v-row>

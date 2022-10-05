@@ -283,10 +283,14 @@
                   <v-subheader>Field of Research Codes: </v-subheader>
                 </v-col>
                 <v-col cols="9">
-                  <template>
+                  <template v-for="i in research_codes_count">
                     <!--v-for="i in research_codes_count" WENT IN ABOVE TEMPLATE??-->
-                    <v-col class="d-flex" sm="12">
-                      <v-otp-input length="6" type="number"></v-otp-input>
+                    <v-col class="d-flex" sm="12" v-bind:key="i">
+                      <v-otp-input
+                        length="6"
+                        type="number"
+                        id="'researchCodeInput' + i"
+                      ></v-otp-input>
                       <v-text-field suffix="%" class="ml-2"></v-text-field>
                     </v-col>
                   </template>
@@ -310,10 +314,18 @@
                   <v-subheader>Socio-Economic Objective Codes: </v-subheader>
                 </v-col>
                 <v-col cols="9">
-                  <template>
+                  <template v-for="i in economic_codes_count">
                     <!--v-for="i in economic_codes_count" WENT IN ABOVE TEMPLATE??-->
-                    <v-col class="d-flex" sm="12">
-                      <v-otp-input length="6" type="number"></v-otp-input>
+                    <v-col
+                      class="d-flex"
+                      sm="12"
+                      v-bind:key="'economicCodeInput' + i"
+                    >
+                      <v-otp-input
+                        length="6"
+                        type="number"
+                        :id="'ecoCodeInput' + i"
+                      ></v-otp-input>
                       <v-text-field suffix="%" class="ml-2"></v-text-field>
                     </v-col>
                   </template>
