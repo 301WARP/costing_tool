@@ -319,11 +319,12 @@
                   <v-subheader>Socio-Economic Objective Codes: </v-subheader>
                 </v-col>
                 <v-col cols="9">
-                  <template v-for="i in economic_codes_count">
+                  <template>
                     <!--v-for="i in economic_codes_count" WENT IN ABOVE TEMPLATE??-->
                     <v-col
                       class="d-flex"
                       sm="12"
+                      v-for="i in economic_codes_count"
                       v-bind:key="'economicCodeInput' + i"
                     >
                       <v-otp-input
