@@ -283,9 +283,14 @@
                   <v-subheader>Field of Research Codes: </v-subheader>
                 </v-col>
                 <v-col cols="9">
-                  <template v-for="i in research_codes_count">
+                  <template>
                     <!--v-for="i in research_codes_count" WENT IN ABOVE TEMPLATE??-->
-                    <v-col class="d-flex" sm="12" v-bind:key="i">
+                    <v-col
+                      class="d-flex"
+                      sm="12"
+                      v-for="i in research_codes_count"
+                      v-bind:key="i"
+                    >
                       <v-otp-input
                         length="6"
                         type="number"
