@@ -5,13 +5,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    projectIndex: -1
+    projectIndex: -1,
   },
   getters: {},
   mutations: {
     setProjectIndex(state, index) {
-      state.projectIndex = index
-    }
+      state.projectIndex = index;
+    },
   },
   actions: {},
   modules: {},
