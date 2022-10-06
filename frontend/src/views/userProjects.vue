@@ -22,6 +22,20 @@
         <v-row class="pa-15 mt-1">
           <h2 class="mx-auto">Projects</h2>
         </v-row>
+        <v-row>
+          <v-col cols="12" class="px-6">
+            <v-alert
+              color="red"
+              elevation="9"
+              prominent
+              text
+              type="error"
+              :value="editPushed"
+            >
+              {{ errorMessage }}
+            </v-alert>
+          </v-col>
+        </v-row>
         <v-card-title>
           <v-text-field
             v-model="search"
@@ -42,7 +56,7 @@
         <v-row class="py-5">
           <v-col cols="4" align="center">
             <v-btn
-              @click="router.push('/details')"
+              @click="sendError('You must be an administrator to do this.')"
               color="primary"
               elevation="4"
               outlined
@@ -52,9 +66,19 @@
             </v-btn>
           </v-col>
           <v-col cols="4" align="center">
-            <v-btn color="primary" elevation="4" outlined large
-              >Edit Projects</v-btn
+            <v-btn
+              color="primary"
+              elevation="4"
+              outlined
+              large
+              @click="
+                sendError(
+                  'You must be an administrator to edit the list or remove projects.'
+                )
+              "
             >
+              Edit Projects
+            </v-btn>
           </v-col>
           <v-col cols="4" align="center">
             <v-btn
@@ -64,8 +88,8 @@
               outlined
               large
             >
-              Create Project</v-btn
-            >
+              Create Project
+            </v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -81,6 +105,8 @@ export default {
   data() {
     return {
       search: "",
+      editPushed: false,
+      errorMessage: "",
       headers: [
         {
           text: "Name",
@@ -139,6 +165,13 @@ export default {
         this.$store.commit("setProjectIndex", item.id);
       }
       router.push("/details");
+    },
+    sendError(m) {
+      this.errorMessage = m;
+      this.editPushed = true;
+      setTimeout(() => {
+        this.editPushed = false;
+      }, 5000);
     },
   },
   mounted() {
