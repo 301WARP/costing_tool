@@ -3,6 +3,22 @@
     <v-app>
       <!-- <v-div> -->
       <v-card>
+        <v-card class="d-flex justify-center mb-6">
+          <v-alert
+            color="red"
+            elevation="24"
+            type="error"
+            width="800"
+            class="d-flex justify-center mb-6"
+            v-if="connectError != 0"
+            >{{
+              "ERROR CODE: " +
+              connectErrorCode +
+              " | ERROR MSG: " +
+              connectErrorMsg
+            }}</v-alert
+          >
+        </v-card>
         <v-row class="pa-15 mt-1">
           <h2 class="mx-auto">Projects</h2>
         </v-row>
@@ -104,28 +120,43 @@ export default {
       projectList: [],
       projectListFixed: [],
       projectIndex: 1,
+      connectError: 0,
+      connectErrorMsg: "",
+      connectErrorCode: 0,
     };
   },
   methods: {
     say(e) {
       alert(e);
     },
-    load_projects_list() {
-      axios.get("http://10.36.241.204:8080/api/projects/").then((resp) => {
-        console.log(resp.data); //use resp.data[0].name for arrays
-        this.researcher_list = resp.data;
-        var obj;
-        for (var i = 0; i < this.researcher_list.length; i++) {
-          obj = {
-            name: this.researcher_list[i].name,
-            id: this.researcher_list[i].id,
-            role: "CI",
-            contract: "Full Time",
-          };
-          this.projectListFixed.push(obj);
-        }
-        console.log(this.projectListFixed);
-      });
+    async load_projects_list() {
+      var errorData;
+      await axios
+        .get("http://10.36.241.204:8080/api/projects/")
+        .then((resp) => {
+          this.connectError = 0;
+          this.researcher_list = resp.data;
+          var obj;
+          for (var i = 0; i < this.researcher_list.length; i++) {
+            obj = {
+              name: this.researcher_list[i].name,
+              id: this.researcher_list[i].id,
+              role: "CI",
+              contract: "Full Time",
+            };
+            this.projectListFixed.push(obj);
+          }
+          console.log(this.projectListFixed);
+        })
+        .catch(function (error) {
+          console.log(error.toJSON());
+          errorData = error.toJSON();
+        });
+      if (errorData.status != 200) {
+        this.connectErrorCode = errorData.status;
+        this.connectError = 1;
+        this.connectErrorMsg = errorData.message;
+      }
     },
     change(item) {
       if (item == 0) {
@@ -146,7 +177,6 @@ export default {
   mounted() {
     this.load_projects_list();
     this.$store.commit("setProjectIndex", -1);
-    router.push("/");
   },
 };
 </script>
