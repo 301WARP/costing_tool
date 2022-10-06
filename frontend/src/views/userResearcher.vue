@@ -733,6 +733,8 @@ export default {
     in_kind_rhd: "",
 
     contractID: "",
+
+    researchers: [],
   }),
 
   computed: {
@@ -856,39 +858,61 @@ export default {
         console.log(resp.data); //use resp.data[0].name for arrays
         this.researcher_list = resp.data;
         var obj;
+        var done = [];
+
         for (var i = 0; i < this.researcher_list.length; i++) {
-          obj = {
-            title: this.researcher_list[i].title,
-            name:
-              this.researcher_list[i].firstName +
-              " " +
-              this.researcher_list[i].lastName +
-              " (2)",
-            firstName: this.researcher_list[i].firstName,
-            lastName: this.researcher_list[i].lastName,
-            staffID: this.researcher_list[i].staffID,
-            role: this.researcher_list[i].role,
-            contract: this.researcher_list[i].contract,
-            contractID: this.researcher_list[i].contractID,
-            cash_income: "$" + 0,
-            inKindPercent: this.researcher_list[i].inKindPercent,
-            actualCost: "$" + this.researcher_list[i].actualCost,
-            extra: [
-              {
-                classification: "Top up",
-                income: "$111",
-                inKind: "$1111",
-                actual: "$11111",
-              },
-              {
-                classification: "Test2",
-                income: "$222",
-                inKind: "$2222",
-                actual: "$22222",
-              },
-            ],
-          };
-          this.researcherFixed_list.push(obj);
+          if (!done.includes(this.researcher_list[i].staffID)) {
+            var count = 0;
+            var extra2 = [];
+            var obj2;
+            var first = true;
+
+            for (
+              var staffNum = 0;
+              staffNum < this.researcher_list.length;
+              staffNum++
+            ) {
+              if (
+                this.researcher_list[staffNum].staffID ==
+                this.researcher_list[i].staffID
+              ) {
+                count++;
+                if (!first) {
+                  obj2 = {
+                    classification: this.researcher_list[staffNum].contract,
+                    income: "$111",
+                    inKind: this.researcher_list[staffNum].inKindPercent,
+                    actual: "$" + this.researcher_list[staffNum].actualCost,
+                  };
+                  extra2.push(obj2);
+                }
+                first = false;
+              }
+            }
+
+            obj = {
+              title: this.researcher_list[i].title,
+              name:
+                this.researcher_list[i].firstName +
+                " " +
+                this.researcher_list[i].lastName +
+                " (" +
+                (count - 1) +
+                ")",
+              firstName: this.researcher_list[i].firstName,
+              lastName: this.researcher_list[i].lastName,
+              staffID: this.researcher_list[i].staffID,
+              role: this.researcher_list[i].role,
+              contract: this.researcher_list[i].contract,
+              contractID: this.researcher_list[i].contractID,
+              cash_income: "$" + 0,
+              inKindPercent: this.researcher_list[i].inKindPercent,
+              actualCost: "$" + this.researcher_list[i].actualCost,
+              extra: extra2,
+            };
+            this.researcherFixed_list.push(obj);
+            done.push(this.researcher_list[i].staffID);
+          }
         }
       });
     },

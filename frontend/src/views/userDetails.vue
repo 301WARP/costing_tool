@@ -13,7 +13,7 @@
                   <v-subheader>Project Name: </v-subheader>
                 </v-col>
                 <v-col cols="8">
-                  <v-text-field></v-text-field>
+                  <v-text-field v-model="name"></v-text-field>
                 </v-col>
               </v-row>
 
@@ -22,7 +22,7 @@
                   <v-subheader>Lead Researcher: </v-subheader>
                 </v-col>
                 <v-col cols="8">
-                  <v-text-field></v-text-field>
+                  <v-text-field v-model="leadResearcherName"></v-text-field>
                 </v-col>
               </v-row>
 
@@ -33,8 +33,9 @@
                 <v-col cols="8" class="pa-0">
                   <v-col class="d-flex">
                     <v-select
-                      :items="category"
+                      :items="category1"
                       label="Select Category"
+                      v-model="category"
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -46,7 +47,11 @@
                 </v-col>
                 <v-col cols="8" class="pa-0">
                   <v-col class="d-flex">
-                    <v-select :items="amc_menzies" label="Select"></v-select>
+                    <v-select
+                      :items="amc_menzies"
+                      label="Select"
+                      v-model="amcMenzies"
+                    ></v-select>
                   </v-col>
                 </v-col>
               </v-row>
@@ -132,7 +137,11 @@
                 </v-col>
                 <v-col cols="8" class="pa-0">
                   <v-col class="d-flex">
-                    <v-select :items="year_end" label="Select"></v-select>
+                    <v-select
+                      :items="year_end"
+                      label="Select"
+                      v-model="yearEnd"
+                    ></v-select>
                   </v-col>
                 </v-col>
               </v-row>
@@ -153,6 +162,7 @@
                     label="Amount"
                     outlined
                     class="mx-5 mt-0"
+                    v-model="utasCashContribution"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -171,6 +181,7 @@
                     label="Amount"
                     outlined
                     class="mx-5 mt-0"
+                    v-model="partnerCashContribution"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -189,6 +200,7 @@
                     label="Provider"
                     outlined
                     class="mx-5 mt-0"
+                    v-model="crowdFundingProvider"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -201,7 +213,10 @@
                   <v-subheader>Applied Research </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field suffix="%"></v-text-field>
+                  <v-text-field
+                    suffix="%"
+                    v-model="appliedResearch"
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
@@ -209,7 +224,10 @@
                   <v-subheader>Experimental Research </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field suffix="%"></v-text-field>
+                  <v-text-field
+                    suffix="%"
+                    v-model="experimentalDevelopment"
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
@@ -217,7 +235,10 @@
                   <v-subheader>Strategic Basic </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field suffix="%"></v-text-field>
+                  <v-text-field
+                    suffix="%"
+                    v-model="strategicBasic"
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
@@ -225,7 +246,7 @@
                   <v-subheader>Pure Basic </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field suffix="%"></v-text-field>
+                  <v-text-field suffix="%" v-model="pureBasic"></v-text-field>
                 </v-col>
               </v-row>
             </v-card>
@@ -270,6 +291,7 @@
                       <v-select
                         :items="research_institute"
                         label="Select Research Institute: "
+                        v-model="entity"
                       ></v-select>
                     </v-col>
                   </v-col>
@@ -295,8 +317,13 @@
                         length="6"
                         type="number"
                         id="'researchCodeInput' + i"
+                        v-model="Object.keys(forCodes)[i - 1]"
                       ></v-otp-input>
-                      <v-text-field suffix="%" class="ml-2"></v-text-field>
+                      <v-text-field
+                        suffix="%"
+                        class="ml-2"
+                        v-model="forCodes[Object.keys(forCodes)[i - 1]]"
+                      ></v-text-field>
                     </v-col>
                   </template>
                   <v-btn class="mx-0" fab x-small @click="inc_research_codes()">
@@ -331,8 +358,13 @@
                         length="6"
                         type="number"
                         :id="'ecoCodeInput' + i"
+                        v-model="Object.keys(seoCodes)[i - 1]"
                       ></v-otp-input>
-                      <v-text-field suffix="%" class="ml-2"></v-text-field>
+                      <v-text-field
+                        suffix="%"
+                        class="ml-2"
+                        v-model="seoCodes[Object.keys(seoCodes)[i - 1]]"
+                      ></v-text-field>
                     </v-col>
                   </template>
 
@@ -359,12 +391,14 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+
 export default {
   data: () => ({
-    category: ["Category1", "Category2"],
-    amc_menzies: ["Yes", "No"],
-    year_end: ["Calender", "Financial"],
-    research_institute: ["??"],
+    category1: ["ONE", "TWO"],
+    amc_menzies: ["NONE", "YES", "NO"],
+    year_end: ["CALENDAR", "FINANCIAL"],
+    research_institute: ["IMAS"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -378,8 +412,34 @@ export default {
     Crowd_Funding: false,
     research_codes_count: 1,
     economic_codes_count: 1,
+    name: "",
+    decription: "",
+    leadResearcherName: "",
+    leadResearcherOrg: "",
+    category: "",
+    category1Subtype: "",
+    amcMenzies: "",
+    amcNationalCentre: "",
+    profitMargin: 0,
+    startDate: Date,
+    endDate: Date,
+    yearEnd: "",
+    utasCashContribution: 0,
+    partnerCashContribution: 0,
+    crowdFundingProvider: "",
+    entity: "",
+    forCodes: 0,
+    seoCodes: 0,
+    appliedResearch: 0,
+    experimentalDevelopment: 0,
+    strategicBasic: 0,
+    pureBasic: 0,
+    test: ["123456", "122222"],
   }),
   methods: {
+    say(e) {
+      alert(e);
+    },
     inc_research_codes() {
       this.research_codes_count++;
     },
@@ -396,10 +456,77 @@ export default {
         this.economic_codes_count--;
       }
     },
+    load_projects_list() {
+      if (this.$store.state.projectIndex == -1) {
+        return;
+      }
+      var errorData = { status: 200 };
+      axios
+        .get(
+          "http://10.36.241.204:8080/api/projects/" +
+            this.$store.state.projectIndex
+        )
+        .then((resp) => {
+          this.connectError = 0;
+          this.name = resp.data.name;
+          this.decription = resp.data.description;
+          this.leadResearcherName = resp.data.leadResearcherName;
+          this.leadResearcherOrg = resp.data.leadResearcherOrg;
+          this.category = resp.data.category;
+          this.category1Subtype = resp.data.category1Subtype;
+          this.amcMenzies = resp.data.amcMenzies;
+          this.amcNationalCentre = resp.data.amcNationalCentre;
+          this.profitMargin = resp.data.profitMargin;
+          this.startDate = resp.data.startDate;
+          this.date = resp.data.startDate;
+          this.endDate = resp.data.endDate;
+          this.date2 = resp.data.endDate;
+          this.yearEnd = resp.data.yearEnd;
+          this.utasCashContribution = resp.data.utasCashContribution;
+          if (this.utasCashContribution > 0) {
+            this.UTAS_Cash = true;
+          }
+          this.partnerCashContribution = resp.data.partnerCashContribution;
+          if (this.partnerCashContribution > 0) {
+            this.UTAS_Cash = true;
+          }
+          this.crowdFundingProvider = resp.data.crowdFundingProvider;
+          if (this.crowdFundingProvider > 0) {
+            this.UTAS_Cash = true;
+          }
+          this.entity = resp.data.entity;
+          this.forCodes = resp.data.forCodes;
+          // if (Object.keys(this.forCodes).length > 1) {
+
+          // }
+          this.research_codes_count = Object.keys(this.forCodes).length;
+          this.seoCodes = resp.data.seoCodes;
+          console.log(this.seoCodes[100000]);
+          this.economic_codes_count = Object.keys(this.seoCodes).length;
+          this.appliedResearch = resp.data.appliedResearch;
+          this.experimentalDevelopment = resp.data.experimentalDevelopment;
+          this.strategicBasic = resp.data.strategicBasic;
+          0;
+          this.pureBasic = resp.data.pureBasic;
+        })
+        .catch(function (error) {
+          console.log(error.toJSON());
+          errorData = error.toJSON();
+        });
+      if (errorData.status != 200) {
+        this.connectErrorStatus = errorData.status;
+        this.connectError = 1;
+        this.connectErrorMsg = errorData.message;
+        this.connectErrorCode = errorData.code;
+      }
+    },
   },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
+    }
+    if (this.$store.state.projectIndex != 0) {
+      this.load_projects_list();
     }
   },
 };

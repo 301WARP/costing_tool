@@ -3,13 +3,11 @@
     <v-app>
       <!-- <v-div> -->
       <v-card>
-        <v-card class="d-flex justify-center mb-6">
+        <v-row class="d-flex justify-center mb-6">
           <v-alert
             color="red"
-            elevation="24"
             type="error"
             max-width="1200"
-            class="d-flex justify-center mb-6"
             v-if="connectError != 0"
             >{{
               "ERROR STATUS: " +
@@ -20,7 +18,7 @@
               connectErrorCode
             }}</v-alert
           >
-        </v-card>
+        </v-row>
         <v-row class="pa-15 mt-1">
           <h2 class="mx-auto">Projects</h2>
         </v-row>
@@ -31,7 +29,7 @@
               elevation="9"
               prominent
               text
-              type="error"
+              type="warning"
               :value="editPushed"
             >
               {{ errorMessage }}
@@ -52,7 +50,7 @@
           :headers="headers"
           :items="projectListFixed"
           :search="search"
-          @click:row="change"
+          @click:row="change($event)"
         >
         </v-data-table>
         <v-row class="py-5">
@@ -73,11 +71,7 @@
               elevation="4"
               outlined
               large
-              @click="
-                sendError(
-                  'You must be an administrator to edit the list or remove projects.'
-                )
-              "
+              @click="change(1)"
             >
               Edit Projects
             </v-btn>
@@ -144,8 +138,8 @@ export default {
             obj = {
               name: this.researcher_list[i].name,
               id: this.researcher_list[i].id,
-              role: "CI",
-              contract: "Full Time",
+              role: this.researcher_list[i].role,
+              contract: this.researcher_list[i].contractType,
             };
             this.projectListFixed.push(obj);
           }
