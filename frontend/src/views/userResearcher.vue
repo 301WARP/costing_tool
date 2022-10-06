@@ -12,57 +12,83 @@
       </v-row>
 
       <v-row>
-        <v-col cols="2">
-          <v-subheader>Title: </v-subheader>
-        </v-col>
-        <v-col cols="7">
-          <v-col class="d-flex" sm="3">
-            <v-select
-              :items="title"
-              label="Select Title"
-              v-model="title_input"
-            ></v-select>
-          </v-col>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Family Name: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="family_name"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Given Names: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="given_name"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Role: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="role_input"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Contract: </v-subheader>
-        </v-col>
-        <v-col cols="7">
-          <v-col class="d-flex" sm="3">
-            <v-select
-              :items="contract"
-              label="Select Contract"
-              @change="checkContract($event)"
-              v-model="contract_input"
-            ></v-select>
-          </v-col>
-        </v-col>
+        <v-card
+          elevation="5"
+          outlined
+          width="100%"
+          class="mb-10 pt-7 pr-10 pb-5"
+        >
+          <v-row>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Title: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="pa-0">
+                    <v-select
+                      :items="title"
+                      label="Select Title"
+                      v-model="title_input"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Family Name: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-text-field v-model="family_name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Given Names: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-text-field v-model="given_name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-row>
+                <v-col cols="3">
+                  <v-subheader>Role: </v-subheader>
+                </v-col>
+                <v-col cols="9" class="pa-0">
+                  <v-text-field v-model="role_input"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="6">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Contract: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-row>
+                    <v-col class="d-flex">
+                      <v-select
+                        :items="contract"
+                        label="Select Contract"
+                        @change="checkContract($event)"
+                        v-model="contract_input"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row></v-row>
+        </v-card>
       </v-row>
 
       <div v-if="full_time">
