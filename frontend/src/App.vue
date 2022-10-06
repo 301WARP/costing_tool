@@ -5,7 +5,6 @@
     <!-- <h2>Title or Heading Here</h2> -->
     <div>
       <v-tabs
-        v-model="tab"
         align-with-title
         grow
         background-color="#1865BD"
