@@ -8,14 +8,16 @@
             color="red"
             elevation="24"
             type="error"
-            width="800"
+            max-width="1200"
             class="d-flex justify-center mb-6"
             v-if="connectError != 0"
             >{{
-              "ERROR CODE: " +
-              connectErrorCode +
+              "ERROR STATUS: " +
+              connectErrorStatus +
               " | ERROR MSG: " +
-              connectErrorMsg
+              connectErrorMsg +
+              " | ERROR CODE: " +
+              connectErrorCode
             }}</v-alert
           >
         </v-card>
@@ -122,6 +124,7 @@ export default {
       projectIndex: 1,
       connectError: 0,
       connectErrorMsg: "",
+      connectErrorStatus: 0,
       connectErrorCode: 0,
     };
   },
@@ -130,7 +133,7 @@ export default {
       alert(e);
     },
     async load_projects_list() {
-      var errorData;
+      var errorData = { status: 200 };
       await axios
         .get("http://10.36.241.204:8080/api/projects/")
         .then((resp) => {
@@ -153,9 +156,10 @@ export default {
           errorData = error.toJSON();
         });
       if (errorData.status != 200) {
-        this.connectErrorCode = errorData.status;
+        this.connectErrorStatus = errorData.status;
         this.connectError = 1;
         this.connectErrorMsg = errorData.message;
+        this.connectErrorCode = errorData.code;
       }
     },
     change(item) {
