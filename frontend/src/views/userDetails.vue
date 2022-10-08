@@ -163,6 +163,7 @@
                     outlined
                     class="mx-5 mt-0"
                     v-model="utasCashContribution"
+                    prefix="$"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -182,6 +183,7 @@
                     outlined
                     class="mx-5 mt-0"
                     v-model="partnerCashContribution"
+                    prefix="$"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -300,13 +302,14 @@
 
               <v-divider class="ml-3"></v-divider>
 
-              <v-row class="mt-5">
-                <v-col cols="3">
-                  <v-subheader>Field of Research Codes: </v-subheader>
+              <v-row class="mt-5 pl-3">
+                <v-col cols="12" class="pb-0">
+                  <v-subheader class="mt-0 pt-0">
+                    Field of Research Codes:
+                  </v-subheader>
                 </v-col>
-                <v-col cols="9">
+                <v-col cols="12" class="pt-0">
                   <template>
-                    <!--v-for="i in research_codes_count" WENT IN ABOVE TEMPLATE??-->
                     <v-col
                       class="d-flex"
                       sm="12"
@@ -326,26 +329,35 @@
                       ></v-text-field>
                     </v-col>
                   </template>
-                  <v-btn class="mx-0" fab x-small @click="inc_research_codes()">
-                    <v-icon dark> mdi-plus </v-icon>
-                  </v-btn>
-                  <v-btn
-                    class="mx-1"
-                    v-if="research_codes_count > 1"
-                    fab
-                    x-small
-                    @click="dec_research_codes()"
-                  >
-                    <v-icon dark> mdi-minus </v-icon>
-                  </v-btn>
+                  <v-col align="right" class="pt-0 mt-0">
+                    <v-btn
+                      class="mx-0"
+                      fab
+                      x-small
+                      @click="inc_research_codes()"
+                    >
+                      <v-icon dark> mdi-plus </v-icon>
+                    </v-btn>
+                    <v-btn
+                      class="mx-1"
+                      v-if="research_codes_count > 1"
+                      fab
+                      x-small
+                      @click="dec_research_codes()"
+                    >
+                      <v-icon dark> mdi-minus </v-icon>
+                    </v-btn>
+                  </v-col>
                 </v-col>
               </v-row>
 
-              <v-row>
-                <v-col cols="3">
-                  <v-subheader>Socio-Economic Objective Codes: </v-subheader>
+              <v-row class="pl-3">
+                <v-col cols="12" class="pb-0">
+                  <v-subheader class="mt-0 pt-0">
+                    Socio-Economic Objective Codes:
+                  </v-subheader>
                 </v-col>
-                <v-col cols="9">
+                <v-col cols="12" class="pt-0">
                   <template>
                     <!--v-for="i in economic_codes_count" WENT IN ABOVE TEMPLATE??-->
                     <v-col
@@ -368,18 +380,25 @@
                     </v-col>
                   </template>
 
-                  <v-btn class="mx-0 mb-3" fab x-small @click="inc_eco_codes()">
-                    <v-icon dark> mdi-plus </v-icon>
-                  </v-btn>
-                  <v-btn
-                    class="mx-1 mb-3"
-                    v-if="economic_codes_count > 1"
-                    fab
-                    x-small
-                    @click="dec_eco_codes()"
-                  >
-                    <v-icon dark> mdi-minus </v-icon>
-                  </v-btn>
+                  <v-col align="right" class="pt-0 mt-0">
+                    <v-btn
+                      class="mx-0 mb-3"
+                      fab
+                      x-small
+                      @click="inc_eco_codes()"
+                    >
+                      <v-icon dark> mdi-plus </v-icon>
+                    </v-btn>
+                    <v-btn
+                      class="mx-1 mb-3"
+                      v-if="economic_codes_count > 1"
+                      fab
+                      x-small
+                      @click="dec_eco_codes()"
+                    >
+                      <v-icon dark> mdi-minus </v-icon>
+                    </v-btn>
+                  </v-col>
                 </v-col>
               </v-row>
             </v-card>
