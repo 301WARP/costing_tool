@@ -7,544 +7,734 @@
       <v-switch v-model="casual" inset></v-switch>
       <v-subheader>RHD</v-subheader>
       <v-switch v-model="rhd" inset></v-switch> -->
-
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Title: </v-subheader>
-        </v-col>
-        <v-col cols="7">
-          <v-col class="d-flex" sm="3">
-            <v-select
-              :items="title"
-              label="Select Title"
-              v-model="title_input"
-            ></v-select>
-          </v-col>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Family Name: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="family_name"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Given Names: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="given_name"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Role: </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field v-model="role_input"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">
-          <v-subheader>Contract: </v-subheader>
-        </v-col>
-        <v-col cols="7">
-          <v-col class="d-flex" sm="3">
-            <v-select
-              :items="contract"
-              label="Select Contract"
-              @change="checkContract($event)"
-              v-model="contract_input"
-            ></v-select>
-          </v-col>
-        </v-col>
+      <v-row class="pa-15">
+        <h2 class="mx-auto">Direct Labour Costs</h2>
       </v-row>
 
-      <div v-if="full_time">
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Staff Type: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="staff_type"
-                label="Select Staff Type"
-                v-model="staff_type_full"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Classification: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_full"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Step: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="step"
-                label="Select Step"
-                v-model="step_full"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Starting Salary: </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="start_salary_full"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Wage Adjustment: </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="wage_adj_full"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Salary on Cost Rate: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="salary_cost_rate"
-                label="Select Salary on Cost Rate"
-                v-model="salary_rate_full"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>In Kind Contribution (%): </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="in_kind_full"></v-text-field>
-          </v-col>
-        </v-row>
-
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
+      <v-row>
+        <v-card
+          elevation="5"
+          outlined
+          width="100%"
+          class="mb-10 pt-7 pr-10 pb-5"
         >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>FTE</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on, attrs }">
+          <v-row>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Title: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="pa-0">
+                    <v-select
+                      :items="title"
+                      label="Select Title"
+                      v-model="title_input"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Family Name: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-text-field v-model="family_name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Given Names: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-text-field v-model="given_name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-row>
+                <v-col cols="3">
+                  <v-subheader>Role: </v-subheader>
+                </v-col>
+                <v-col cols="9" class="pa-0">
+                  <v-text-field v-model="role_input"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="6">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Contract: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-row>
+                    <v-col class="d-flex">
+                      <v-select
+                        :items="contract"
+                        label="Select Contract"
+                        @change="checkContract($event)"
+                        v-model="contract_input"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row></v-row>
+        </v-card>
+      </v-row>
+
+      <v-row v-if="full_time">
+        <v-card
+          elevation="5"
+          outlined
+          width="100%"
+          class="mb-10 pt-3 pr-10 pb-5"
+        >
+          <v-card-title class="ml-2">
+            UTAS non-casual staff
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-bind="attrs" v-on="on" class="ml-2">
+                  mdi-information
+                </v-icon>
+              </template>
+              <span>
+                Academic Staff, Honorary Researchers, Technical, Administration
+                Staff and Research Assistants
+              </span>
+            </v-tooltip>
+          </v-card-title>
+          <v-row class="pl-3">
+            <v-col cols="4">
+              <v-row>
+                <!-- <v-col cols="4">
+                  <v-subheader>Staff Type: </v-subheader>
+                </v-col> -->
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="staff_type"
+                      label="Select Staff Type"
+                      v-model="staff_type_full"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <!-- <v-col cols="4">
+                  <v-subheader>Classification: </v-subheader>
+                </v-col> -->
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="classification"
+                      label="Select Classification"
+                      v-model="classification_full"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <!-- <v-col cols="4">
+                  <v-subheader>Step: </v-subheader>
+                </v-col> -->
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="step"
+                      label="Select Step"
+                      v-model="step_full"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="4" class="pl-8">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Starting Salary: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field v-model="start_salary_full" prefix="$">
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Wage Adjustment: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="wage_adj_full"
+                    class="pl-3"
+                    prefix="$"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="5">
+                  <v-subheader>Salary on Cost Rate: </v-subheader>
+                </v-col>
+                <v-col cols="7">
+                  <v-col class="d-flex mx-0 px-0">
+                    <v-select
+                      :items="salary_cost_rate"
+                      v-model="salary_rate_full"
+                    >
+                    </v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>In Kind Contribution: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field v-model="in_kind_full" suffix="%" class="pl-5">
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="8">
+              <v-row class="mt-5 mb-5">
+                <v-data-table
+                  :headers="fte_header"
+                  :items="years"
+                  sort-by="year"
+                  class="elevation-3 mx-auto my-auto"
+                  :style="{ width: '500px' }"
+                >
+                  <template v-slot:top>
+                    <v-toolbar flat>
+                      <v-toolbar-title>FTE</v-toolbar-title>
+                      <v-divider class="mx-4" inset vertical></v-divider>
+                      <v-spacer></v-spacer>
+                      <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            color="primary"
+                            dark
+                            class="mb-2"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            New Item
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="text-h5">{{ formTitle }}</span>
+                          </v-card-title>
+
+                          <v-card-text>
+                            <v-container>
+                              <v-row>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.year"
+                                    label="Year"
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.fte"
+                                    label="FTE%"
+                                  ></v-text-field>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">
+                              Cancel
+                            </v-btn>
+                            <v-btn color="blue darken-1" text @click="save">
+                              Save
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                          <v-card-title class="text-h5"
+                            >Are you sure you want to delete this
+                            item?</v-card-title
+                          >
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="closeDelete"
+                              >Cancel</v-btn
+                            >
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="deleteItemConfirm"
+                              >OK</v-btn
+                            >
+                            <v-spacer></v-spacer>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-toolbar>
+                  </template>
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">
+                      mdi-pencil
+                    </v-icon>
+                    <v-icon small @click="deleteItem(item)">
+                      mdi-delete
+                    </v-icon>
+                  </template>
+                </v-data-table>
+              </v-row>
+              <v-row>
+                <v-col align="right">
                   <v-btn
                     color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    New Item
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="full_time = false"
+                    class="mr-5"
+                    >Close
                   </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
-                      Cancel
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
-          </template>
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template>
-        </v-data-table>
-
-        <v-btn
-          color="primary"
-          elevation="4"
-          outlined
-          x-large
-          @click="submit('NON_CASUAL')"
-          >Submit</v-btn
-        >
-      </div>
-
-      <div v-if="casual">
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Staff Type: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="staff_type"
-                label="Select Staff Type"
-                v-model="staff_type_casual"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Classification: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_casual"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Pay Code: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="pay_code"
-                label="Select Pay Code"
-                v-model="pay_code_casual"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Starting Salary: </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="start_salary_casual"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Wage Adjustment: </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="wage_adj_casual"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Salary on Cost Rate: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="salary_cost_rate"
-                label="Select Salary on Cost Rate"
-                v-model="salary_rate_casual"
-              ></v-select>
-            </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>In Kind Contribution (%): </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="in_kind_casual"></v-text-field>
-          </v-col>
-        </v-row>
-
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>FTE</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    New Item
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="submit('NON_CASUAL')"
+                    >Submit
                   </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
-                      Cancel
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
-          </template>
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template>
-        </v-data-table>
-
-        <v-btn
-          color="primary"
-          elevation="4"
-          outlined
-          x-large
-          @click="submit('CASUAL')"
-          >Submit</v-btn
-        >
-      </div>
-
-      <div v-if="rhd">
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Classification: </v-subheader>
-          </v-col>
-          <v-col cols="7">
-            <v-col class="d-flex" sm="3">
-              <v-select
-                :items="classification"
-                label="Select Classification"
-                v-model="classification_rhd"
-              ></v-select>
+                </v-col>
+              </v-row>
             </v-col>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>Annual Salary: </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="annual_salary_rhd"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2">
-            <v-subheader>In Kind Contribution (%): </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="in_kind_rhd"></v-text-field>
-          </v-col>
-        </v-row>
+          </v-row>
+        </v-card>
+      </v-row>
 
-        <v-data-table
-          :headers="fte_header"
-          :items="years"
-          sort-by="year"
-          class="elevation-1"
-          :style="{ width: '500px' }"
+      <v-row v-if="casual">
+        <v-card
+          elevation="5"
+          outlined
+          width="100%"
+          class="mb-10 pt-3 pr-10 pb-5"
         >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>FTE</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on, attrs }">
+          <v-card-title class="ml-2">
+            Casual Staff
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-bind="attrs" v-on="on" class="ml-2">
+                  mdi-information
+                </v-icon>
+              </template>
+              <span>UTAS staff paid an hourly rate</span>
+            </v-tooltip>
+          </v-card-title>
+          <v-row class="pl-3">
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="staff_type"
+                      label="Select Staff Type"
+                      v-model="staff_type_casual"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="classification"
+                      label="Select Classification"
+                      v-model="classification_casual"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="4">
+              <v-row>
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="pay_code"
+                      label="Select Pay Code"
+                      v-model="pay_code_casual"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="4" class="pl-8">
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Starting Salary: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field v-model="start_salary_casual" prefix="$">
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Wage Adjustment: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="wage_adj_casual"
+                    class="pl-3"
+                    prefix="$"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="5">
+                  <v-subheader>Salary on Cost Rate: </v-subheader>
+                </v-col>
+                <v-col cols="7">
+                  <v-col class="d-flex mx-0 px-0">
+                    <v-select
+                      :items="salary_cost_rate"
+                      label="Select Salary on Cost Rate"
+                      v-model="salary_rate_casual"
+                    >
+                    </v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>In Kind Contribution: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="in_kind_casual"
+                    suffix="%"
+                    class="pl-5"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="8">
+              <v-row class="mt-5 mb-5">
+                <v-data-table
+                  :headers="fte_header"
+                  :items="years"
+                  sort-by="year"
+                  class="elevation-3 mx-auto my-auto"
+                  :style="{ width: '500px' }"
+                >
+                  <template v-slot:top>
+                    <v-toolbar flat>
+                      <v-toolbar-title>FTE</v-toolbar-title>
+                      <v-divider class="mx-4" inset vertical></v-divider>
+                      <v-spacer></v-spacer>
+                      <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            color="primary"
+                            dark
+                            class="mb-2"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            New Item
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="text-h5">{{ formTitle }}</span>
+                          </v-card-title>
+
+                          <v-card-text>
+                            <v-container>
+                              <v-row>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.year"
+                                    label="Year"
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.fte"
+                                    label="FTE%"
+                                  ></v-text-field>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">
+                              Cancel
+                            </v-btn>
+                            <v-btn color="blue darken-1" text @click="save">
+                              Save
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                          <v-card-title class="text-h5">
+                            Are you sure you want to delete this item?
+                          </v-card-title>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="closeDelete"
+                            >
+                              Cancel
+                            </v-btn>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="deleteItemConfirm"
+                            >
+                              OK
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-toolbar>
+                  </template>
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">
+                      mdi-pencil
+                    </v-icon>
+                    <v-icon small @click="deleteItem(item)">
+                      mdi-delete
+                    </v-icon>
+                  </template>
+                </v-data-table>
+              </v-row>
+              <v-row>
+                <v-col align="right">
                   <v-btn
                     color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    New Item
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="casual = false"
+                    class="mr-5"
+                    >Close
                   </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
+                  <v-btn
+                    color="primary"
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="submit('CASUAL')"
+                    >Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-row>
 
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.year"
-                            label="Year"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.fte"
-                            label="FTE%"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
-                      Cancel
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
-          </template>
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template>
-        </v-data-table>
-
-        <v-btn
-          color="primary"
-          elevation="4"
+      <v-row v-if="rhd">
+        <v-card
+          elevation="5"
           outlined
-          x-large
-          @click="submit('RHD', $event)"
-          >Submit</v-btn
+          width="100%"
+          class="mb-10 pt-3 pr-10 pb-5"
         >
-      </div>
+          <v-card-title class="ml-2">
+            Research Higher Degree (RHD) Stipends
+          </v-card-title>
+
+          <v-row>
+            <v-col cols="4" class="pl-8">
+              <v-row>
+                <v-col cols="12">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="classification"
+                      label="Select Classification"
+                      v-model="classification_rhd"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>Annual Salary: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field v-model="annual_salary_rhd" prefix="$">
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-subheader>In Kind Contribution: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field v-model="in_kind_rhd" suffix="%" class="pl-5">
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="8">
+              <v-row class="mt-5 mb-5">
+                <v-data-table
+                  :headers="fte_header"
+                  :items="years"
+                  sort-by="year"
+                  class="elevation-3 mx-auto my-auto"
+                  :style="{ width: '500px' }"
+                >
+                  <template v-slot:top>
+                    <v-toolbar flat>
+                      <v-toolbar-title>FTE</v-toolbar-title>
+                      <v-divider class="mx-4" inset vertical></v-divider>
+                      <v-spacer></v-spacer>
+                      <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            color="primary"
+                            dark
+                            class="mb-2"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            New Item
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="text-h5">{{ formTitle }}</span>
+                          </v-card-title>
+
+                          <v-card-text>
+                            <v-container>
+                              <v-row>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.year"
+                                    label="Year"
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4">
+                                  <v-text-field
+                                    v-model="editedItem.fte"
+                                    label="FTE%"
+                                  ></v-text-field>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">
+                              Cancel
+                            </v-btn>
+                            <v-btn color="blue darken-1" text @click="save">
+                              Save
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                          <v-card-title class="text-h5">
+                            Are you sure you want to delete this item?
+                          </v-card-title>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="closeDelete"
+                            >
+                              Cancel
+                            </v-btn>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="deleteItemConfirm"
+                            >
+                              OK
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-toolbar>
+                  </template>
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">
+                      mdi-pencil
+                    </v-icon>
+                    <v-icon small @click="deleteItem(item)">
+                      mdi-delete
+                    </v-icon>
+                  </template>
+                </v-data-table>
+              </v-row>
+              <v-row>
+                <v-col align="right">
+                  <v-btn
+                    color="primary"
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="rhd = false"
+                    class="mr-5"
+                    >Close
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    elevation="4"
+                    outlined
+                    x-large
+                    @click="submit('RHD', $event)"
+                    >Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-row>
     </v-container>
     <template>
       <v-data-table
@@ -701,6 +891,8 @@ export default {
     in_kind_rhd: "",
 
     contractID: "",
+
+    researchers: [],
   }),
 
   computed: {
@@ -824,39 +1016,61 @@ export default {
         console.log(resp.data); //use resp.data[0].name for arrays
         this.researcher_list = resp.data;
         var obj;
+        var done = [];
+
         for (var i = 0; i < this.researcher_list.length; i++) {
-          obj = {
-            title: this.researcher_list[i].title,
-            name:
-              this.researcher_list[i].firstName +
-              " " +
-              this.researcher_list[i].lastName +
-              " (2)",
-            firstName: this.researcher_list[i].firstName,
-            lastName: this.researcher_list[i].lastName,
-            staffID: this.researcher_list[i].staffID,
-            role: this.researcher_list[i].role,
-            contract: this.researcher_list[i].contract,
-            contractID: this.researcher_list[i].contractID,
-            cash_income: "$" + 0,
-            inKindPercent: this.researcher_list[i].inKindPercent,
-            actualCost: "$" + this.researcher_list[i].actualCost,
-            extra: [
-              {
-                classification: "Top up",
-                income: "$111",
-                inKind: "$1111",
-                actual: "$11111",
-              },
-              {
-                classification: "Test2",
-                income: "$222",
-                inKind: "$2222",
-                actual: "$22222",
-              },
-            ],
-          };
-          this.researcherFixed_list.push(obj);
+          if (!done.includes(this.researcher_list[i].staffID)) {
+            var count = 0;
+            var extra2 = [];
+            var obj2;
+            var first = true;
+
+            for (
+              var staffNum = 0;
+              staffNum < this.researcher_list.length;
+              staffNum++
+            ) {
+              if (
+                this.researcher_list[staffNum].staffID ==
+                this.researcher_list[i].staffID
+              ) {
+                count++;
+                if (!first) {
+                  obj2 = {
+                    classification: this.researcher_list[staffNum].contract,
+                    income: "$111",
+                    inKind: this.researcher_list[staffNum].inKindPercent,
+                    actual: "$" + this.researcher_list[staffNum].actualCost,
+                  };
+                  extra2.push(obj2);
+                }
+                first = false;
+              }
+            }
+
+            obj = {
+              title: this.researcher_list[i].title,
+              name:
+                this.researcher_list[i].firstName +
+                " " +
+                this.researcher_list[i].lastName +
+                " (" +
+                (count - 1) +
+                ")",
+              firstName: this.researcher_list[i].firstName,
+              lastName: this.researcher_list[i].lastName,
+              staffID: this.researcher_list[i].staffID,
+              role: this.researcher_list[i].role,
+              contract: this.researcher_list[i].contract,
+              contractID: this.researcher_list[i].contractID,
+              cash_income: "$" + 0,
+              inKindPercent: this.researcher_list[i].inKindPercent,
+              actualCost: "$" + this.researcher_list[i].actualCost,
+              extra: extra2,
+            };
+            this.researcherFixed_list.push(obj);
+            done.push(this.researcher_list[i].staffID);
+          }
         }
       });
     },
@@ -1004,6 +1218,9 @@ export default {
   },
 
   mounted() {
+    if (this.$store.state.projectIndex == -1) {
+      this.$router.push("/");
+    }
     this.load_researcher_list();
   },
 };
