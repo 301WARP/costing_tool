@@ -373,17 +373,17 @@
 </template>
 <script>
 // const axios = require("axios").default;
-import html2pdf from "html2pdf.js";
+//import html2pdf from "html2pdf.js";
 
 export default {
   methods: {
-    exportPDF() {
-      html2pdf(document.getElementById("element-to-convert"), {
-        margin: 5,
-        filename: "Research-Funding-Clearance-Form.pdf",
-        html2canvas: { scale: 5 },
-      });
-    },
+    //   exportPDF() {
+    //     html2pdf(document.getElementById("element-to-convert"), {
+    //       margin: 5,
+    //       filename: "Research-Funding-Clearance-Form.pdf",
+    //       html2canvas: { scale: 5 },
+    //     });
+    //   },
   },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
