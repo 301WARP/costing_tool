@@ -766,8 +766,16 @@
               }}
             </tr>
           </td>
-          <td></td>
-          <td></td>
+          <td
+            v-for="(ite, index) in item.extra"
+            :key="index"
+            @click="say('Clicked on table: ' + index)"
+          ></td>
+          <td
+            v-for="(ite, index) in item.extra"
+            :key="index"
+            @click="say('Clicked on table: ' + index)"
+          ></td>
           <td>
             <tr
               v-for="(ite, index) in item.extra"
@@ -968,7 +976,7 @@ export default {
             this.wage_adj_full = resp.data.wageAdjustment;
             this.salary_rate_full = resp.data.salaryOnCostRate;
             this.in_kind_full = e.inKindPercent;
-            //this.annualContributions = resp.data.annualContributions;
+            this.annualContributions = resp.data.annualContributions;
             console.log(resp.data.annualContributions);
             for (fte_years in resp.data.annualContributions) {
               obj = {
@@ -1114,13 +1122,17 @@ export default {
             " " +
             this.in_kind_full
         );
-        console.log("--" + this.years);
+        var annual = {};
+        for (var index in this.years) {
+          console.log(this.years[index].fte);
+          annual[this.years[index].year] = this.years[index].fte;
+        }
         axios.put(
           "http://10.36.241.204:8080/api/researchers/1/" + this.contractID,
           {
             role: this.role_input,
             inKindPercent: this.in_kind_full,
-            annualContributions: this.years,
+            annualContributions: annual,
           }
         );
       } else if (contract == "CASUAL") {
