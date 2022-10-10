@@ -20,6 +20,7 @@ import java.util.Map;
 @Builder
 public class RHDDetailsDTO extends ContributionDetailsDTO
 {
+    String role;
     String classification;
 
     Double wageExpense;

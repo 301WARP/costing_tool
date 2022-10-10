@@ -21,5 +21,7 @@ public class UpdateResearcherDTO
 {
     String role;
     Double inKindPercent;
+    Double wageAdjustment;
+    Double onCostRate;
     Map<Integer, Double> annualContributions;
 }

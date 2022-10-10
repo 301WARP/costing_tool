@@ -96,6 +96,8 @@ public class ContributionService
 
         old.setInKindPercent(nw.getInKindPercent());
         old.setRole(nw.getRole());
+        old.setWageAdjustment(nw.getWageAdjustment());
+        old.setOnCostRate(nw.getOnCostRate());
 
         // Update annual contributions
         this.remove(old, nw);

@@ -62,6 +62,7 @@ public interface ResearcherDetailsMapper
     }
 
 
+    @Mapping(target="role", source="contribution.role")
     @Mapping(target="staffType", source="contract.staffType")
     @Mapping(target="classification", source="contract.classification")
     @Mapping(   target="step", source="contract.step",
@@ -77,6 +78,7 @@ public interface ResearcherDetailsMapper
                                     NonCasual contract);
 
 
+    @Mapping(target="role", source="contribution.role")
     @Mapping(target="staffType", source="contract.staffType")
     @Mapping(target="classification", source="contract.classification")
     @Mapping(   target="payCode", source="contract.payCode",
@@ -92,6 +94,7 @@ public interface ResearcherDetailsMapper
                                 Casual contract);
     
 
+    @Mapping(target="role", source="contribution.role")
     @Mapping(target="classification", source="contract.classification")
     @Mapping(target="wageExpense", source="contract.annualSalary")
     @Mapping(   target="annualContributions",

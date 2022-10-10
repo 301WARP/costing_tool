@@ -21,6 +21,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NonCasualDetailsDTO extends ContributionDetailsDTO
 {
+    String role;
+
     String staffType;
     String classification;
     // TODO(Andrew): Could be a string?
