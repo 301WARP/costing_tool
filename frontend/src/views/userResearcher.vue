@@ -758,8 +758,8 @@
           <td :style="{ padding: '10px' }">
             <tr
               v-for="(ite, index) in item.extra"
-              @click="say('Clicked on table: ' + index)"
-              :key="index"
+              @click="fill_data(ite)"
+              :key="'A' + index"
             >
               {{
                 ite.classification
@@ -768,19 +768,19 @@
           </td>
           <td
             v-for="(ite, index) in item.extra"
-            :key="index"
-            @click="say('Clicked on table: ' + index)"
+            :key="'B' + index"
+            @click="fill_data(ite)"
           ></td>
           <td
             v-for="(ite, index) in item.extra"
             :key="index"
-            @click="say('Clicked on table: ' + index)"
+            @click="fill_data(ite)"
           ></td>
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'C' + index"
+              @click="fill_data(ite)"
             >
               {{
                 ite.income
@@ -790,8 +790,8 @@
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'D' + index"
+              @click="fill_data(ite)"
             >
               {{
                 ite.inKind
@@ -801,8 +801,8 @@
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'E' + index"
+              @click="fill_data(ite)"
             >
               {{
                 ite.actual
@@ -861,12 +861,12 @@ export default {
     table_key: 0,
     researcher_list: [],
     researcherFixed_list: [],
-    title: ["Dr", "Mr", "Mrs", "Ms"],
+    title: ["DR", "MR", "MRS", "MS"],
     contract: ["RHD", "NON_CASUAL", "CASUAL"],
     staff_type: ["ACADEMIC", "PROFESSIONAL"],
     classification: ["A", "RA1", "APA"],
     step: [1, 2, 3, 4, 5],
-    salary_cost_rate: [1.0, 123.0],
+    salary_cost_rate: [116.98, 120.98, 128.44],
     pay_code: [1, 2, 3, 4, 5],
     casual: false,
     rhd: false,
@@ -1006,7 +1006,7 @@ export default {
             this.checkContract("RHD");
             this.classification_rhd = resp.data.classification;
             this.annual_salary_rhd = resp.data.wageExpense;
-            this.in_kind_rhd = e.inKindPercent;
+            this.in_kind_rhd = e.inKind;
             this.annualContributions = resp.data.annualContributions;
             for (fte_years in resp.data.annualContributions) {
               obj = {
@@ -1018,7 +1018,6 @@ export default {
           }
         });
     },
-
     load_researcher_list() {
       axios.get("http://10.36.241.204:8080/api/researchers/1").then((resp) => {
         console.log(resp.data); //use resp.data[0].name for arrays
@@ -1045,6 +1044,13 @@ export default {
                 count++;
                 if (!first) {
                   obj2 = {
+                    title: this.researcher_list[staffNum].title,
+                    contractID: this.researcher_list[staffNum].contractID,
+                    staffID: this.researcher_list[staffNum].staffID,
+                    lastName: this.researcher_list[staffNum].lastName,
+                    firstName: this.researcher_list[staffNum].firstName,
+                    role: this.researcher_list[staffNum].role,
+                    contract: this.researcher_list[staffNum].contract,
                     classification: this.researcher_list[staffNum].contract,
                     income: "$111",
                     inKind: this.researcher_list[staffNum].inKindPercent,
@@ -1055,7 +1061,9 @@ export default {
                 first = false;
               }
             }
-
+            var inKindDollar =
+              (this.researcher_list[i].inKindPercent / 100) *
+              this.researcher_list[i].actualCost;
             obj = {
               title: this.researcher_list[i].title,
               name:
@@ -1063,7 +1071,7 @@ export default {
                 " " +
                 this.researcher_list[i].lastName +
                 " (" +
-                (count - 1) +
+                count +
                 ")",
               firstName: this.researcher_list[i].firstName,
               lastName: this.researcher_list[i].lastName,
@@ -1071,8 +1079,9 @@ export default {
               role: this.researcher_list[i].role,
               contract: this.researcher_list[i].contract,
               contractID: this.researcher_list[i].contractID,
-              cash_income: "$" + 0,
-              inKindPercent: this.researcher_list[i].inKindPercent,
+              cash_income:
+                "$" + (this.researcher_list[i].actualCost - inKindDollar),
+              inKindPercent: this.researcher_list[i].inKindPercent + "%",
               actualCost: "$" + this.researcher_list[i].actualCost,
               extra: extra2,
             };
@@ -1083,102 +1092,40 @@ export default {
       });
     },
 
-    // lastName: this.family_name,
-    // firstName: this.given_name,
-    // contract: this.contract_input,
-    // staffType: this.staff_type_full,
-    // classification: this.classification_full,
-    // step: this.step_full,
-    // startingSalary: this.start_salary_full,
-    // wageAdjustment: this.wage_adj_full,
-    // salaryonCostRate: this.salary_rate_full,
-
-    submit(contract, e) {
-      if (this.contractID == "") {
-        console.log("EMPTY");
-      }
+    submit(contract) {
       if (contract == "NON_CASUAL") {
-        console.log(
-          "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_full +
-            " " +
-            this.classification_full +
-            " " +
-            this.step_full +
-            " " +
-            this.start_salary_full +
-            " " +
-            this.wage_adj_full +
-            " " +
-            this.salary_rate_full +
-            " " +
-            this.in_kind_full
-        );
-        var annual = {};
+        console.log("NON");
+        var annual_non = {};
         for (var index in this.years) {
           console.log(this.years[index].fte);
-          annual[this.years[index].year] = this.years[index].fte;
+          annual_non[this.years[index].year] = this.years[index].fte;
         }
-        //fdfd
         axios.put(
           "http://10.36.241.204:8080/api/researchers/1/" + this.contractID,
           {
             role: this.role_input,
             inKindPercent: this.in_kind_full,
-            annualContributions: annual,
+            annualContributions: annual_non,
+            onCostRate: this.salary_rate_full,
+            wageAdjustment: 2,
           }
         );
       } else if (contract == "CASUAL") {
-        console.log(
-          "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_casual +
-            " " +
-            this.classification_casual +
-            " " +
-            this.pay_code_casual +
-            " " +
-            this.start_salary_casual +
-            " " +
-            this.wage_adj_casual +
-            " " +
-            this.salary_rate_casual +
-            " " +
-            this.in_kind_casual
-        );
+        //
       } else if (contract == "RHD") {
-        console.log(
-          "UPDATING RESEARCHER WITH STAFF ID:" +
-            e.staffID +
-            " " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.classification_rhd +
-            " " +
-            this.annual_salary_rhd +
-            " " +
-            this.in_kind_rhd
+        console.log("HIT R");
+        var annual_rhd = {};
+        for (var index3 in this.years) {
+          console.log(this.years[index3].fte);
+          annual_rhd[this.years[index3].year] = this.years[index3].fte;
+        }
+        axios.put(
+          "http://10.36.241.204:8080/api/researchers/1/" + this.contractID,
+          {
+            role: this.role_input,
+            inKindPercent: this.in_kind_rhd,
+            annualContributions: annual_rhd,
+          }
         );
       }
     },
