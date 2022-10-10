@@ -10,6 +10,37 @@
         <h2 class="mx-auto">Research Funding Clearance Form</h2>
       </v-row>
 
+      <v-row class="px-5 my-5">
+        <v-card
+          outlined
+          elevation="5"
+          width="100%"
+          class="pa-0 mx-auto"
+          max-width="970px"
+          style="border: 1px solid darkblue"
+        >
+          <v-card-title>Project Details</v-card-title>
+          <v-card-actions>
+            <v-col cols="12" class="my-0 py-0">
+              <v-text-field
+                label="Project title"
+                class="my-0 py-0"
+              ></v-text-field>
+            </v-col>
+          </v-card-actions>
+          <v-card-actions>
+            <v-col cols="12" class="my-0 py-0">
+              <v-textarea
+                outlined
+                width="100%"
+                height="100px"
+                label="Brief project description"
+              ></v-textarea>
+            </v-col>
+          </v-card-actions>
+        </v-card>
+      </v-row>
+
       <v-row class="px-5 my-5" width="100%">
         <v-card
           outlined
@@ -17,6 +48,7 @@
           width="100%"
           max-width="970px"
           class="mx-auto"
+          style="border: 1px solid darkblue"
         >
           <v-card-title class="mx-auto"
             >HERDC research requirements</v-card-title
@@ -29,113 +61,117 @@
             >? Please explain how:</v-card-text
           >
           <v-card-actions class="px-3">
-            <v-textarea outlined width="100%"></v-textarea>
+            <v-col cols="12">
+              <v-textarea outlined width="100%"></v-textarea>
+            </v-col>
           </v-card-actions>
         </v-card>
       </v-row>
 
-      <v-row class="px-5 my-5">
-        <v-card outlined elevation="5" max-width="970px" class="mx-auto">
-          <v-row class="px-5 pt-5 ma-5">
-            <v-row width="100%">
-              <v-col cols="6">
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :return-value.sync="date"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="date"
-                      label="Proposed commencement date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      disabled
-                      value="2022-09-06"
-                    >
-                    </v-text-field>
-                  </template>
-                  <v-date-picker v-model="date" no-title scrollable>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu = false">
-                      Cancel
-                    </v-btn>
-                    <v-btn text color="primary" @click="$refs.menu.save(date)">
-                      OK
-                    </v-btn>
-                  </v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="6">
-                <v-menu
-                  ref="menu2"
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  :return-value.sync="date2"
-                  transition="scale-transition"
-                  offset-y
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="date2"
-                      label="Proposed completion date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      disabled
-                      value="2023-03-17"
-                    >
-                    </v-text-field>
-                  </template>
-                  <v-date-picker v-model="date2" no-title scrollable>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu2 = false">
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.menu2.save(date2)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="6">
-                <v-text-field
-                  label="Funding Body / Client"
-                  outlined
-                  disabled
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field label="Scheme" outlined="true"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row class="ma-5 pt-0">
-            <v-card-text class="mt-0 py-0">
-              For contract research and consultancies only, provide a contact
-              name and email address:
-            </v-card-text>
-
-            <v-col cols="6">
-              <v-text-field label="Contact Name"></v-text-field>
+      <v-row class="px-5 my-0 py-0">
+        <v-card
+          outlined
+          elevation="5"
+          max-width="970px"
+          class="mx-auto py-0"
+          width="100%"
+          style="border: 1px solid darkblue"
+        >
+          <v-row>
+            <v-col cols="12">
+              <v-card-actions class="py-0 my-0">
+                <v-col cols="6">
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="date"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date"
+                        label="Proposed commencement date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        disabled
+                        value="2022-09-06"
+                      >
+                      </v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu = false">
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(date)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col cols="6">
+                  <v-menu
+                    ref="menu2"
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :return-value.sync="date2"
+                    transition="scale-transition"
+                    offset-y
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date2"
+                        label="Proposed completion date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        disabled
+                        value="2023-03-17"
+                      >
+                      </v-text-field>
+                    </template>
+                    <v-date-picker v-model="date2" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu2 = false">
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu2.save(date2)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+              </v-card-actions>
             </v-col>
-            <v-col cols="6">
-              <v-text-field label="Email Address" type="email"></v-text-field>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-card-actions class="py-0 my-0">
+                <v-col cols="6">
+                  <v-text-field
+                    label="Funding Body / Client"
+                    outlined
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field label="Scheme" outlined></v-text-field>
+                </v-col>
+              </v-card-actions>
             </v-col>
           </v-row>
         </v-card>
@@ -148,6 +184,7 @@
           width="100%"
           class="pa-0 mx-auto"
           max-width="970px"
+          style="border: 1px solid darkblue"
         >
           <v-card-title>Lead Investigator - UTAS or external</v-card-title>
           <v-card-actions>
@@ -248,19 +285,20 @@
           width="100%"
           class="pa-0 mx-auto"
           max-width="970px"
+          style="border: 1px solid darkblue"
         >
           <v-card-title>Research Codes</v-card-title>
-          <v-row class="ma-5">
+          <v-row>
             <v-col cols="4" style="border-right: 1px solid grey" class="">
               <v-row>
-                <v-col cols="9">
-                  <v-row>
-                    <p>Field of Research*</p>
-                  </v-row>
-                </v-col>
-                <v-col cols="3">
-                  <p>%</p>
-                </v-col>
+                <v-card-actions>
+                  <v-col cols="10">
+                    <v-card-subtitle>Field of Research*</v-card-subtitle>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-card-subtitle>%</v-card-subtitle>
+                  </v-col>
+                </v-card-actions>
               </v-row>
             </v-col>
 
@@ -300,6 +338,7 @@
           width="100%"
           class="pa-0 mx-auto"
           max-width="970px"
+          style="border: 1px solid darkblue"
         >
           <v-card-title
             >Ethics / Biosafety / WHS / Clinical trials</v-card-title
