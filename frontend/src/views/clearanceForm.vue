@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-container>
+    <v-row style="position: absolute; top: 50px; right: 50px">
+      <v-row style="text-align: right">
+        <v-btn @click="exportPDF()" style="float: right">Export</v-btn>
+      </v-row>
+    </v-row>
+    <v-container id="element-to-convert">
       <v-row class="pa-15">
         <h2 class="mx-auto">Research Funding Clearance Form</h2>
       </v-row>
@@ -328,10 +333,19 @@
   </v-app>
 </template>
 <script>
-// eslint-disable-next-line no-unused-vars
-const axios = require("axios").default;
+// const axios = require("axios").default;
+import html2pdf from "html2pdf.js";
 
 export default {
+  methods: {
+    exportPDF() {
+      html2pdf(document.getElementById("element-to-convert"), {
+        margin: 5,
+        filename: "Research-Funding-Clearance-Form.pdf",
+        html2canvas: { scale: 5 },
+      });
+    },
+  },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
