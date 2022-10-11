@@ -41,6 +41,33 @@
                 </v-col>
               </v-row>
 
+              <v-row v-if="category == 'ONE'">
+                <v-col cols="4">
+                  <v-subheader>Category 1 Type: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="category_1_Subtype"
+                      label="Select Category"
+                      v-model="category1Subtype"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="category == 'CONSULTANCY'">
+                <v-col cols="4">
+                  <v-subheader>Profit Margin: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    suffix="%"
+                    v-model="profitMargin"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
               <v-row>
                 <v-col cols="4">
                   <v-subheader>AMC/Menzies: </v-subheader>
@@ -51,6 +78,21 @@
                       :items="amc_menzies"
                       label="Select"
                       v-model="amcMenzies"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="amcMenzies == 'AMC'">
+                <v-col cols="4">
+                  <v-subheader>AMC National Centre: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="amc_national_centre"
+                      label="Select"
+                      v-model="amcNationalCentre"
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -425,11 +467,13 @@ const axios = require("axios").default;
 
 export default {
   data: () => ({
-    category1: ["ONE", "TWO"],
+    category1: ["ONE", "TWO", "THREE", "FOUR", "CONSULTANCY"],
     amc_menzies: ["NONE", "AMC", "MENZIES"],
     year_end: ["CALENDAR", "FINANCIAL"],
     research_institute: ["IMAS"],
     crowd_funding_provider: ["NONE"],
+    category_1_Subtype: ["ARC", "NHMRC/DECRA/DORA/DIA", "Other"],
+    amc_national_centre: ["NCMEH (OP:071001)", "NCPS (OP:071528)"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -530,9 +574,13 @@ export default {
           this.leadResearcherName = resp.data.leadResearcherName;
           this.leadResearcherOrg = resp.data.leadResearcherOrg;
           this.category = resp.data.category;
-          this.category1Subtype = resp.data.category1Subtype;
+          if (resp.data.category1Subtype != "NONE") {
+            this.category1Subtype = resp.data.category1Subtype;
+          }
           this.amcMenzies = resp.data.amcMenzies;
-          this.amcNationalCentre = resp.data.amcNationalCentre;
+          if (resp.data.amcNationalCentre != "NONE") {
+            this.amcNationalCentre = resp.data.amcNationalCentre;
+          }
           this.profitMargin = resp.data.profitMargin;
           this.startDate = resp.data.startDate;
           this.date = resp.data.startDate;
