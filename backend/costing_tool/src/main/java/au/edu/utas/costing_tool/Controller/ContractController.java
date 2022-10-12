@@ -50,5 +50,28 @@ public class ContractController
 
         return ResponseEntity.ok(this.contractMapper.map(contracts));
     }
+
+    /*
+    @CrossOrigin(origins="*")
+    @GetMapping(path="/contracts/details/{contractID}")
+    public 
+    ResponseEntity<List<ContractDTO>>
+    fetchContractDetails(@PathVariable Long contractID)
+    {
+        if (contractID == null)
+            return ResponseEntity.badRequest().build();
+        
+        if (!this.researcherService.existsById(contractID))
+            return ResponseEntity.notFound().build();
+        
+        List<Contract> contracts =
+            this.contractService.findContractsFor(contractID);
+        
+        if (contracts.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(this.contractMapper.map(contracts));
+    }
+    */
 }
 
