@@ -477,8 +477,8 @@ export default {
     year_end: ["CALENDAR", "FINANCIAL"],
     research_institute: ["IMAS"],
     crowd_funding_provider: ["NONE"],
-    category_1_Subtype: ["ARC", "NHMRC/DECRA/DORA/DIA", "Other"],
-    amc_national_centre: ["NCMEH (OP:071001)", "NCPS (OP:071528)"],
+    category_1_Subtype: ["NONE", "ARC", "NHMRC/DECRA/DORA/DIA", "Other"],
+    amc_national_centre: ["NONE", "NCMEH (OP:071001)", "NCPS (OP:071528)"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -579,13 +579,9 @@ export default {
           this.leadResearcherName = resp.data.leadResearcherName;
           this.leadResearcherOrg = resp.data.leadResearcherOrg;
           this.category = resp.data.category;
-          if (resp.data.category1Subtype != "NONE") {
-            this.category1Subtype = resp.data.category1Subtype;
-          }
+          this.category1Subtype = resp.data.category1Subtype;
           this.amcMenzies = resp.data.amcMenzies;
-          if (resp.data.amcNationalCentre != "NONE") {
-            this.amcNationalCentre = resp.data.amcNationalCentre;
-          }
+          this.amcNationalCentre = resp.data.amcNationalCentre;
           this.profitMargin = resp.data.profitMargin;
           this.startDate = resp.data.startDate;
           this.date = resp.data.startDate;
