@@ -44,6 +44,7 @@ public interface ContractMapper
     @Mapping(source="id", target="id")
     @Mapping(source="contractType", target="type")
     @Mapping(source="staffType", target="staffType")
+    @Mapping(source="classification", target="classification")
     @Mapping(source="payCode", target="payCode", qualifiedByName="enumToInteger")
     @Mapping(source="hourlyRate", target="hourlyRate")
     @BeanMapping(ignoreByDefault=true)

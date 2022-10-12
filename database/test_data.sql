@@ -326,7 +326,7 @@ INSERT INTO `contract`
     'APA',											-- RHD classification
     NULL,											-- step
     NULL,											-- pay code
-    '150000.00',									-- salary
+    '40000.00',										-- salary
     NULL											-- hourly rate
 );
 
@@ -347,12 +347,12 @@ INSERT INTO `contract`
 ) VALUES (
 	'6',											-- contract id
     '5',											-- researcher id
-    'RHD',											-- contract type
+    'CASUAL',										-- contract type
     NULL,											-- non-casual staff type
-    NULL,											-- casual staff type
+    'PROFESSIONAL',												-- casual staff type
     NULL,											-- non-casual classification
-    NULL,											-- casual classification
-    'APA',											-- RHD classification
+    'RA1',											-- casual classification
+    NULL,											-- RHD classification
     NULL,											-- step
     NULL,											-- pay code
     '150000.00',									-- salary
