@@ -447,20 +447,19 @@
                 </v-col>
               </v-row>
             </v-card>
-            <v-row>
-              <v-col cols="12" align="right">
-                <v-btn
-                  color="primary"
-                  elevation="4"
-                  outlined
-                  x-large
-                  @click="update_details()"
-                  class="mt-5"
-                  >Submit
-                </v-btn>
-              </v-col>
-            </v-row>
           </v-col>
+          <v-row class="mx-15 my-10">
+            <v-btn
+              color="primary"
+              elevation="4"
+              outlined
+              x-large
+              @click="update_details()"
+              class="my-5"
+              width="100%"
+              >Submit
+            </v-btn>
+          </v-row>
         </v-row>
       </v-container>
     </v-app>
