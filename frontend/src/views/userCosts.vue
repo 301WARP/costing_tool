@@ -452,6 +452,9 @@ export default {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
+    if (this.$store.state.projectIndex == 0) {
+      this.costList = [];
+    }
     this.load_project_cost();
     window.scrollTo(0, 0);
   },
