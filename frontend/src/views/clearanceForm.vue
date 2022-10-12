@@ -289,7 +289,7 @@
         >
           <v-card-title>Research Codes</v-card-title>
           <v-row>
-            <v-col cols="4" style="border-right: 1px solid grey" class="">
+            <v-col cols="4" class="">
               <v-row>
                 <v-card-actions>
                   <v-col cols="10">
@@ -389,6 +389,7 @@ export default {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
+    window.scrollTo(0, 0);
   },
 };
 </script>

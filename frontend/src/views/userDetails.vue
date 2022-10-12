@@ -447,14 +447,19 @@
                 </v-col>
               </v-row>
             </v-card>
-            <v-btn
-              color="primary"
-              elevation="4"
-              outlined
-              x-large
-              @click="update_details()"
-              >Submit
-            </v-btn>
+            <v-row>
+              <v-col cols="12" align="right">
+                <v-btn
+                  color="primary"
+                  elevation="4"
+                  outlined
+                  x-large
+                  @click="update_details()"
+                  class="mt-5"
+                  >Submit
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>
@@ -664,6 +669,8 @@ export default {
           pureBasic: this.pureBasic,
         }
       );
+      window.scrollTo(0, 0);
+      this.$router.push("/researcher");
     },
   },
   mounted() {
@@ -674,6 +681,7 @@ export default {
       this.projectIndexUpdate = this.$store.state.projectIndex;
       this.load_projects_list();
     }
+    window.scrollTo(0, 0);
   },
 };
 </script>

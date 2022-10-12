@@ -175,6 +175,7 @@ export default {
   mounted() {
     this.load_projects_list();
     this.$store.commit("setProjectIndex", -1);
+    window.scrollTo(0, 0);
   },
 };
 </script>
