@@ -886,22 +886,20 @@
         </template>
       </v-data-table>
     </template>
-    <v-col cols="4">
-      <v-row>
-        <v-col cols="4">
-          <v-subheader>Total: </v-subheader>
-        </v-col>
-        <v-col cols="8">
-          <v-text-field
-            filled
-            disabled
-            v-model="totalCashIncome"
-          ></v-text-field>
-          <v-text-field filled disabled v-model="totalInKind"></v-text-field>
-          <v-text-field filled disabled v-model="totalActual"></v-text-field>
-        </v-col>
-      </v-row>
-    </v-col>
+    <v-row class="px-3">
+      <v-col cols="4">
+        <v-subheader style="align-text: right">Total: </v-subheader>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field filled disabled v-model="totalCashIncome"></v-text-field>
+      </v-col>
+      <v-col cols="2">
+        <v-text-field filled disabled v-model="totalInKind"></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field filled disabled v-model="totalActual"></v-text-field>
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
