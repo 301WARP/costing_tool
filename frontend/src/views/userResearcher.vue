@@ -48,6 +48,8 @@
                     v-model="family_name"
                     :items="researchers_name_list"
                     @change="load_firstName(family_name)"
+                    :disabled="newProject == false"
+                    :filled="newProject == false"
                   ></v-autocomplete>
                 </v-col>
               </v-row>
@@ -67,6 +69,8 @@
                     v-model="given_name"
                     :items="researchers_first_name_list"
                     @change="load_contract(family_name, given_name)"
+                    :disabled="newProject == false"
+                    :filled="newProject == false"
                   ></v-autocomplete>
                 </v-col>
               </v-row>
@@ -92,12 +96,12 @@
                   <v-row>
                     <v-col class="d-flex">
                       <v-select
-                        :items="contract"
+                        :items="userContracts"
                         label="Select Contract"
                         @change="checkContract($event)"
                         v-model="contract_input"
-                        filled
-                        disabled
+                        :disabled="newProject == false"
+                        :filled="newProject == false"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -1000,6 +1004,10 @@ export default {
     researchers_name_list: [],
     researcher_data: [],
     researchers_first_name_list: [],
+
+    newProject: true,
+
+    userContracts: [],
   }),
 
   computed: {
@@ -1050,6 +1058,8 @@ export default {
     fill_data(e) {
       //set basic details that apply to every contract
       this.initialize();
+
+      this.newProject = false;
 
       this.researchers_first_name_list.push(e.firstName);
       this.title_input = e.title;
@@ -1247,6 +1257,7 @@ export default {
         });
     },
     load_firstName(lastName) {
+      this.userContracts = [];
       this.researchers_first_name_list = [];
       for (var i = 0; i < this.researcher_data.length; i++) {
         if (this.researcher_data[i].lastName == lastName) {
@@ -1257,6 +1268,7 @@ export default {
       }
     },
     load_contract(lastName, firstName) {
+      this.userContracts = [];
       console.log(this.researcher_data);
       for (var i = 0; i < this.researcher_data.length; i++) {
         if (
@@ -1265,14 +1277,21 @@ export default {
         ) {
           this.title_input = this.researcher_data[i].title;
           axios
-            .get("http://10.36.241.204:8080/api/contracts/1")
+            .get(
+              "http://10.36.241.204:8080/api/contracts/" +
+                this.researcher_data[i].staffID
+            )
             .then((resp) => {
-              console.log(resp);
+              //console.log(resp.data[0].type);
+              for (var i = 0; i < resp.data.length; i++) {
+                this.userContracts.push(resp.data[i].type);
+              }
             });
         }
       }
     },
     closeInfo() {
+      this.newProject = true;
       this.full_time = false;
       this.casual = false;
       this.rhd = false;
