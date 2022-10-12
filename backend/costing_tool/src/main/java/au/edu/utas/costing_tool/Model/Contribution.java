@@ -292,7 +292,7 @@ public class Contribution
             if (salary == null)
                 return null;
 
-            return salary * onCost * fte / 100.0;
+            return salary * fte / 100.0;
         }
         else if (contract instanceof Casual) {
             Double hourlyRate = ((Casual)contract).getHourlyRate();

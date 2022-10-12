@@ -1,3 +1,4 @@
+/*
 package au.edu.utas.costing_tool.Model;
 
 
@@ -37,3 +38,4 @@ public class PartnerOrganisation extends Expense
     @Enumerated(value=EnumType.STRING)
     private Organisation organisation;
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package au.edu.utas.costing_tool.DTO;
 
 
@@ -40,3 +41,4 @@ public class PartnerOrganisationDTO
     // <year, units>
     Map<Integer, Double> annualUnits;
 }
+*/
