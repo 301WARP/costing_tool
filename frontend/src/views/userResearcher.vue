@@ -1406,6 +1406,7 @@ export default {
       this.projectIndexUpdate = this.$store.state.projectIndex;
       this.load_researcher_list();
     }
+    window.scrollTo(0, 0);
   },
 };
 </script>

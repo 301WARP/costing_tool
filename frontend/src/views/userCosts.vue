@@ -453,6 +453,7 @@ export default {
       this.$router.push("/");
     }
     this.load_project_cost();
+    window.scrollTo(0, 0);
   },
 };
 </script>
