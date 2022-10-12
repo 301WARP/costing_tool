@@ -1259,6 +1259,9 @@ export default {
     load_firstName(lastName) {
       this.userContracts = [];
       this.researchers_first_name_list = [];
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
       for (var i = 0; i < this.researcher_data.length; i++) {
         if (this.researcher_data[i].lastName == lastName) {
           this.researchers_first_name_list.push(
@@ -1269,6 +1272,9 @@ export default {
     },
     load_contract(lastName, firstName) {
       this.userContracts = [];
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
       console.log(this.researcher_data);
       for (var i = 0; i < this.researcher_data.length; i++) {
         if (
