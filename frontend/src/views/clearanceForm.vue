@@ -25,6 +25,7 @@
               <v-text-field
                 label="Project title"
                 class="my-0 py-0"
+                value="Test Project"
               ></v-text-field>
             </v-col>
           </v-card-actions>
@@ -374,8 +375,14 @@
 <script>
 //const axios = require("axios").default;
 import html2pdf from "html2pdf.js";
+// const axios = require("axios").default;
 
 export default {
+  data() {
+    return {
+      title: "Test Project",
+    };
+  },
   methods: {
     exportPDF() {
       html2pdf(document.getElementById("element-to-convert"), {
@@ -385,6 +392,28 @@ export default {
       });
     },
   },
+  // load_clearance_form() {
+  //   axios
+  //     .get(
+  //       "http://10.36.241.204:8080/api/clearance/" +
+  //         this.$store.state.projectIndex
+  //     )
+  //     .then((resp) => {
+  //       console.log(resp.data); //use resp.data[0].name for arrays
+  //       this.costListTemp = resp.data;
+  //       var obj;
+  //       for (var i = 0; i < this.costListTemp.length; i++) {
+  //         obj = {
+  //           id: this.costListTemp[i].id,
+  //           type: this.costListTemp[i].type,
+  //           description: this.costListTemp[i].description,
+  //           in_kind: this.costListTemp[i].inKindPercent,
+  //           actual_cost: this.costListTemp[i].actualCost,
+  //         };
+  //         this.costListFixed.push(obj);
+  //       }
+  //     });
+  // },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
