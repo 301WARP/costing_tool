@@ -346,17 +346,75 @@ INSERT INTO `contract`
     `hourly_rate`
 ) VALUES (
 	'6',											-- contract id
-    '5',											-- researcher id
+    '6',											-- researcher id
     'CASUAL',										-- contract type
     NULL,											-- non-casual staff type
-    'PROFESSIONAL',												-- casual staff type
+    'PROFESSIONAL',									-- casual staff type
     NULL,											-- non-casual classification
     'RA1',											-- casual classification
     NULL,											-- RHD classification
     NULL,											-- step
     NULL,											-- pay code
-    '150000.00',									-- salary
-    NULL											-- hourly rate
+    NULL,											-- salary
+	'70.0'											-- hourly rate
+);
+
+INSERT INTO `contract`
+(
+	`id`,
+    `researcher_id`,
+    `contract_type`,
+    `staff_type_non_casual`,
+    `staff_type_casual`,
+    `classification_non_casual`,
+    `classification_casual`,
+    `classification_rhd`,
+    `step`,
+    `pay_code`,
+    `salary`,
+    `hourly_rate`
+) VALUES (
+	'7',											-- contract id
+    '2',											-- researcher id
+    'NON_CASUAL',									-- contract type
+    'ACADEMIC',										-- non-casual staff type
+    NULL,											-- casual staff type
+    'B',											-- non-casual classification
+    NULL,											-- casual classification
+    NULL,											-- RHD classification
+    NULL,											-- step
+    NULL,											-- pay code
+    '90000.0',										-- salary
+	NULL											-- hourly rate
+);
+
+INSERT INTO `contract`
+(
+	`id`,
+    `researcher_id`,
+    `contract_type`,
+    `staff_type_non_casual`,
+    `staff_type_casual`,
+    `classification_non_casual`,
+    `classification_casual`,
+    `classification_rhd`,
+    `step`,
+    `pay_code`,
+    `salary`,
+    `hourly_rate`
+) VALUES (
+	'8',											-- contract id
+    '4',											-- researcher id
+    'NON_CASUAL',									-- contract type
+    'ACADEMIC',										-- non-casual staff type
+    NULL,											-- casual staff type
+    'B',											-- non-casual classification
+    NULL,											-- casual classification
+    NULL,											-- RHD classification
+    NULL,											-- step
+    NULL,											-- pay code
+    '90000.0',										-- salary
+	NULL											-- hourly rate
 );
 
 
