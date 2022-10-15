@@ -28,6 +28,8 @@ public interface UpdateContributionMapper
 {
     @Mapping(target="role", source="role")
     @Mapping(target="inKindPercent", source="inKindPercent")
+    @Mapping(target="wageAdjustment", source="wageAdjustment")
+    @Mapping(target="onCostRate", source="onCostRate")
     @Mapping(   target="annualContributions", source="annualContributions",
                 qualifiedByName="mapAnnualContributions")
     @Mapping(target="contract", ignore=true)

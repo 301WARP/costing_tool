@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.SubclassMapping;
 
 import au.edu.utas.costing_tool.DTO.ContractDTO;
@@ -33,13 +34,38 @@ public interface ContractMapper
 
     @Mapping(source="id", target="id")
     @Mapping(source="contractType", target="type")
+    @Mapping(source="staffType", target="staffType")
+    @Mapping(source="classification", target="classification")
+    @Mapping(source="step", target="step", qualifiedByName="enumToInteger")
+    @Mapping(source="startingSalary", target="salary")
+    @BeanMapping(ignoreByDefault=true)
     public ContractDTO nonCasualMap(NonCasual contract);
 
     @Mapping(source="id", target="id")
     @Mapping(source="contractType", target="type")
+    @Mapping(source="staffType", target="staffType")
+    @Mapping(source="classification", target="classification")
+    @Mapping(source="payCode", target="payCode", qualifiedByName="enumToInteger")
+    @Mapping(source="hourlyRate", target="hourlyRate")
+    @BeanMapping(ignoreByDefault=true)
     public ContractDTO casualMap(Casual contract);
 
     @Mapping(source="id", target="id")
     @Mapping(source="contractType", target="type")
+    @Mapping(source="classification", target="classification")
+    @Mapping(source="annualSalary", target="salary")
+    @BeanMapping(ignoreByDefault=true)
     public ContractDTO rhdMap(RHD contract);
+
+    @Named("enumToString")
+    static String enumToString(Enum<?> e)
+    {
+        return e.toString();
+    }
+
+    @Named("enumToInteger")
+    static Integer enumToInteger(Enum<?> e)
+    {
+        return e.ordinal();
+    }
 }

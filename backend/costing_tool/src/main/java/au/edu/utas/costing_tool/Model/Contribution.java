@@ -315,8 +315,8 @@ public class Contribution
 
         return this.getAnnualContributions()
             .stream()
-            .mapToDouble(this::AnnualPrice)
-            //.map(ac -> this.AnnualPrice(ac))
+            .map(this::AnnualPrice)
+            .filter(p -> p != null)
             .reduce(0.0, (total, p) -> total + p);
     }
 

@@ -21,6 +21,8 @@ import java.util.Map;
 @Builder
 public class CasualDetailsDTO extends ContributionDetailsDTO
 {
+    String role;
+
     String staffType;
     String classification;
     Integer payCode;

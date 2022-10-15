@@ -96,6 +96,8 @@ public class ContributionService
 
         old.setInKindPercent(nw.getInKindPercent());
         old.setRole(nw.getRole());
+        old.setWageAdjustment(nw.getWageAdjustment());
+        old.setOnCostRate(nw.getOnCostRate());
 
         // Update annual contributions
         this.remove(old, nw);
@@ -179,10 +181,19 @@ public class ContributionService
         String lName = dto.getLastName();
         Title title;
 
-        try {
-            title = Title.valueOf(dto.getTitle());
-        } catch (IllegalArgumentException e) {
-            return null;
+        String maybeTitle = dto.getTitle();
+
+        if (maybeTitle == null) {
+            title = null;
+        }
+        else {
+            try {
+                title = Title.valueOf(dto.getTitle());
+            } catch (NullPointerException e) {
+                title = null;
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         }
 
         boolean titleAbsent = title == null || title == Title.NONE;
