@@ -20,14 +20,14 @@
         </v-col>
         <v-col cols="12">
           <table class="border-all">
-            <tr id="b">
+            <tr>
               <table>
                 <tr id="b">
                   <th class="bg-blue" id="b">Project Details</th>
                 </tr>
               </table>
             </tr>
-            <tr id="b">
+            <tr>
               <table>
                 <tr id="b">
                   <td id="b">Grant - Cat 1</td>
@@ -42,7 +42,7 @@
             </tr>
           </table>
           <table class="border-middle">
-            <tr id="b">
+            <tr>
               <table>
                 <tr id="b">
                   <th id="b">Project Title:</th>
@@ -52,13 +52,34 @@
             </tr>
           </table>
           <table class="border-middle">
-            <tr id="b">
+            <tr>
               <table>
                 <tr id="b">
                   <th id="b">Brief Project Description:</th>
                 </tr>
                 <tr id="b">
                   <td id="b">{{ this.projectDetails.description }}</td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table class="border-middle">
+            <tr>
+              <table>
+                <tr id="b">
+                  <td id="b">
+                    <b>HERDC research requirements</b>
+                    - Does the project meet the
+                    <a
+                      href="https://www.utas.edu.au/research-admin/research-funding/finding-and-applying-for-funding/definition-of-research"
+                      >five core criteria</a
+                    >? Please explain how:
+                  </td>
+                </tr>
+                <tr id="b">
+                  <td id="b">
+                    {{ this.projectDetails.herdc }}
+                  </td>
                 </tr>
               </table>
             </tr>
@@ -86,7 +107,8 @@
               <v-text-field
                 label="Project title"
                 class="my-0 py-0"
-                value="Test Project"
+                :value="this.projectDetails.projectTitle"
+                disabled
               ></v-text-field>
             </v-col>
           </v-card-actions>
@@ -97,6 +119,8 @@
                 width="100%"
                 height="100px"
                 label="Brief project description"
+                :value="this.projectDetails.description"
+                disabled
               ></v-textarea>
             </v-col>
           </v-card-actions>
@@ -124,7 +148,11 @@
           >
           <v-card-actions class="px-3">
             <v-col cols="12">
-              <v-textarea outlined width="100%"></v-textarea>
+              <v-textarea
+                outlined
+                width="100%"
+                v-model="projectDetails.herdc"
+              ></v-textarea>
             </v-col>
           </v-card-actions>
         </v-card>
@@ -536,7 +564,12 @@ th {
 #b {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;
+  font-size: small;
+  /* padding: 8px; */
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 th.bg-blue {
   background: RGB(191, 253, 252);
