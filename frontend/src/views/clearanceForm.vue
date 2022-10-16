@@ -5,6 +5,59 @@
         <v-btn @click="exportPDF()" style="float: right">Export</v-btn>
       </v-row>
     </v-row>
+    <v-row>
+      <v-container>
+        <v-col
+          cols="12"
+          style="
+            background: RGB(45, 136, 154);
+            border: 3px solid black;
+            color: white;
+            text-align: center;
+          "
+        >
+          <h2>Research Funding Clearance Form</h2>
+        </v-col>
+        <v-col cols="12">
+          <table style="border: 3px solid black">
+            <tr>
+              <th class="bg-blue">Project Details</th>
+            </tr>
+            <tr>
+              <table>
+                <tr>
+                  <td>Grant - Cat 1</td>
+                  <td>Grant - Cat 2</td>
+                  <td>Grant - Cat 3</td>
+                  <td>Grant - Cat 4 (CRC/P)</td>
+                  <td>Contract Research</td>
+                  <td>Consultancy</td>
+                  <td>Tender</td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table style="border: 3px solid black">
+            <tr>
+              <th class="bg-blue">Project Details</th>
+            </tr>
+            <tr>
+              <table>
+                <tr>
+                  <td>Grant - Cat 1</td>
+                  <td>Grant - Cat 2</td>
+                  <td>Grant - Cat 3</td>
+                  <td>Grant - Cat 4 (CRC/P)</td>
+                  <td>Contract Research</td>
+                  <td>Consultancy</td>
+                  <td>Tender</td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+        </v-col>
+      </v-container>
+    </v-row>
     <v-container id="element-to-convert">
       <v-row class="pa-15">
         <h2 class="mx-auto">Research Funding Clearance Form</h2>
@@ -422,3 +475,19 @@ export default {
   },
 };
 </script>
+<style>
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+th.bg-blue {
+  background: RGB(191, 253, 252);
+}
+table {
+  border-collapse: collapse;
+  /* border: 2px solid #000000; */
+  width: 100%;
+}
+</style>
