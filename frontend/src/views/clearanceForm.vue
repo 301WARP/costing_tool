@@ -6,7 +6,7 @@
       </v-row>
     </v-row>
     <v-row>
-      <v-container>
+      <v-container id="element-to-convert">
         <v-col
           cols="12"
           style="
@@ -19,38 +19,46 @@
           <h2>Research Funding Clearance Form</h2>
         </v-col>
         <v-col cols="12">
-          <table style="border: 3px solid black">
-            <tr>
-              <th class="bg-blue">Project Details</th>
-            </tr>
-            <tr>
+          <table class="border-all">
+            <tr id="b">
               <table>
-                <tr>
-                  <td>Grant - Cat 1</td>
-                  <td>Grant - Cat 2</td>
-                  <td>Grant - Cat 3</td>
-                  <td>Grant - Cat 4 (CRC/P)</td>
-                  <td>Contract Research</td>
-                  <td>Consultancy</td>
-                  <td>Tender</td>
+                <tr id="b">
+                  <th class="bg-blue" id="b">Project Details</th>
+                </tr>
+              </table>
+            </tr>
+            <tr id="b">
+              <table>
+                <tr id="b">
+                  <td id="b">Grant - Cat 1</td>
+                  <td id="b">Grant - Cat 2</td>
+                  <td id="b">Grant - Cat 3</td>
+                  <td id="b">Grant - Cat 4 (CRC/P)</td>
+                  <td id="b">Contract Research</td>
+                  <td id="b">Consultancy</td>
+                  <td id="b">Tender</td>
                 </tr>
               </table>
             </tr>
           </table>
-          <table style="border: 3px solid black">
-            <tr>
-              <th class="bg-blue">Project Details</th>
-            </tr>
-            <tr>
+          <table class="border-middle">
+            <tr id="b">
               <table>
-                <tr>
-                  <td>Grant - Cat 1</td>
-                  <td>Grant - Cat 2</td>
-                  <td>Grant - Cat 3</td>
-                  <td>Grant - Cat 4 (CRC/P)</td>
-                  <td>Contract Research</td>
-                  <td>Consultancy</td>
-                  <td>Tender</td>
+                <tr id="b">
+                  <th id="b">Project Title:</th>
+                  <td id="b">{{ this.projectDetails.projectTitle }}</td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table class="border-middle">
+            <tr id="b">
+              <table>
+                <tr id="b">
+                  <th id="b">Brief Project Description:</th>
+                </tr>
+                <tr id="b">
+                  <td id="b">{{ this.projectDetails.description }}</td>
                 </tr>
               </table>
             </tr>
@@ -58,7 +66,7 @@
         </v-col>
       </v-container>
     </v-row>
-    <v-container id="element-to-convert">
+    <v-container>
       <v-row class="pa-15">
         <h2 class="mx-auto">Research Funding Clearance Form</h2>
       </v-row>
@@ -135,79 +143,25 @@
             <v-col cols="12">
               <v-card-actions class="py-0 my-0">
                 <v-col cols="6">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="date"
-                        label="Proposed commencement date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        disabled
-                        value="2022-09-06"
-                      >
-                      </v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.menu.save(date)"
-                      >
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                  <v-text-field
+                    v-model="this.projectDetails.startDate"
+                    label="Proposed commencement date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    disabled
+                    value="this.projectDetails.startDate"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6">
-                  <v-menu
-                    ref="menu2"
-                    v-model="menu2"
-                    :close-on-content-click="false"
-                    :return-value.sync="date2"
-                    transition="scale-transition"
-                    offset-y
+                  <v-text-field
+                    v-model="this.projectDetails.endDate"
+                    label="Proposed completion date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    disabled
+                    value="this.projectDetails.endDate"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="date2"
-                        label="Proposed completion date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        disabled
-                        value="2023-03-17"
-                      >
-                      </v-text-field>
-                    </template>
-                    <v-date-picker v-model="date2" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu2 = false">
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.menu2.save(date2)"
-                      >
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                  </v-text-field>
                 </v-col>
               </v-card-actions>
             </v-col>
@@ -306,7 +260,7 @@
             </v-col>
             <v-col cols="3" class="py-0">
               <v-checkbox
-                v-model="checkbox"
+                v-model="unpaid"
                 label="Associated with project / unpaid"
                 class="py-0"
               >
@@ -314,7 +268,7 @@
             </v-col>
             <v-col cols="3" class="py-0">
               <v-checkbox
-                v-model="checkbox"
+                v-model="casual"
                 label="Paid from project - casual employee"
                 class="py-0"
               >
@@ -322,7 +276,7 @@
             </v-col>
             <v-col cols="3" class="py-0">
               <v-checkbox
-                v-model="checkbox"
+                v-model="scholarship"
                 label="Scholarship paid from project"
                 class="py-0"
               >
@@ -415,8 +369,8 @@
                 <p>Human participants (medical or social science)</p>
               </v-col>
               <v-col cols="6">
-                <v-checkbox v-model="checkbox" label="Yes"></v-checkbox>
-                <v-checkbox v-model="checkbox" label="No"></v-checkbox>
+                <v-checkbox v-model="humanYes" label="Yes"></v-checkbox>
+                <v-checkbox v-model="humanNo" label="No"></v-checkbox>
               </v-col>
             </v-row>
           </v-row>
@@ -426,14 +380,82 @@
   </v-app>
 </template>
 <script>
-//const axios = require("axios").default;
 import html2pdf from "html2pdf.js";
-// const axios = require("axios").default;
+const axios = require("axios").default;
 
 export default {
   data() {
     return {
-      title: "Test Project",
+      projectDetails: {
+        category: "",
+        projectTitle: "",
+        description: "",
+        herdc: "",
+        startDate: Date,
+        endDate: Date,
+        fundingBody: "",
+        scheme: "",
+        contactName: "",
+        contactEmail: "",
+      },
+      leadInvestigator: {
+        name: "",
+        organisation: "",
+        fte: "",
+      },
+      investigators: {
+        // array of:
+        name: "",
+        organisation: "",
+        fte: "",
+      },
+      externalInvestigators: {
+        // array of:
+        name: "",
+        organisation: "",
+        fte: "",
+      },
+      rhdStudents: {
+        // array of:
+        name: "",
+        unit: "",
+        involvement: "",
+      },
+      researchCodes: {
+        // array of:
+        forCodes: {
+          code: "",
+          percentage: "",
+        },
+        // array of:
+        seoCodes: {
+          code: "",
+          percentage: "",
+        },
+        appliedRearch: "",
+        experimentalDevelopment: "",
+        strategicBasic: "",
+        pureBasic: "",
+      },
+      ethics: {
+        human: false,
+        humanRefNo: "",
+        animal: false,
+        animalRefNo: "",
+        controlledDrugs: false,
+        clinicalTrial: false,
+      },
+      costs: "",
+      externalPayments: "",
+      clearanceInfoTemp: "",
+      clearanceInfo: "",
+      menu: false,
+      menu2: false,
+      unpaid: false,
+      casual: false,
+      scholarship: false,
+      humanYes: false,
+      humanNo: false,
     };
   },
   methods: {
@@ -444,40 +466,74 @@ export default {
         html2canvas: { scale: 5 },
       });
     },
+    load_clearance_form() {
+      axios
+        .get(
+          "http://10.36.241.204:8080/api/clearance/" +
+            this.$store.state.projectIndex
+        )
+        .then((resp) => {
+          console.log(resp.data); //use resp.data[0].name for arrays
+          // this.clearanceInfoTemp = resp.data;
+          // var obj;
+          // obj = {
+          //   projectDetails: {
+          //     projectTitle: resp.data.projectDetails.projectDetails,
+          //     // category: this.clearanceInfoTemp.projectDetails.category,
+          //     // this.clearanceInfo.projectDetails.projectTitle = resp.data.projectDetails.projectTitle,
+          //     // description:
+          //     //   this.clearanceInfoTemp[i].projectDetails.description,
+          //     // herdc: this.clearanceInfoTemp[i].projectDetails.herdc,
+          //     // startDate: this.clearanceInfoTemp[i].projectDetails.startDate,
+          //     // endDate: this.clearanceInfoTemp[i].projectDetails.endDate,
+          //     // fundingBody:
+          //     //   this.clearanceInfoTemp[i].projectDetails.fundingBody,
+          //     // scheme: this.clearanceInfoTemp[i].projectDetails.scheme,
+          //     // contactName:
+          //     //   this.clearanceInfoTemp[i].projectDetails.contactName,
+          //     // contactEmail:
+          //     //   this.clearanceInfoTemp[i].projectDetails.contactEmail,
+          //   },
+          // };
+          // // this.clearanceInfo.projectDetails.projectTitle =
+          // //   resp.data.projectDetails.projectTitle;
+          // this.clearanceInfo = obj;
+          this.projectDetails.projectTitle =
+            resp.data.projectDetails.projectTitle;
+          this.projectDetails.category = resp.data.projectDetails.category;
+          this.projectDetails.description =
+            resp.data.projectDetails.description;
+          this.projectDetails.herdc = resp.data.projectDetails.herdc;
+          this.projectDetails.startDate = resp.data.projectDetails.startDate;
+          this.projectDetails.endDate = resp.data.projectDetails.endDate;
+          this.projectDetails.fundingBody =
+            resp.data.projectDetails.fundingBody;
+          this.projectDetails.scheme = resp.data.projectDetails.scheme;
+          this.projectDetails.contactName =
+            resp.data.projectDetails.contactName;
+          this.projectDetails.contactEmail =
+            resp.data.projectDetails.contactEmail;
+          console.log("Clearance info:" + this.projectDetails);
+        });
+    },
   },
-  // load_clearance_form() {
-  //   axios
-  //     .get(
-  //       "http://10.36.241.204:8080/api/clearance/" +
-  //         this.$store.state.projectIndex
-  //     )
-  //     .then((resp) => {
-  //       console.log(resp.data); //use resp.data[0].name for arrays
-  //       this.costListTemp = resp.data;
-  //       var obj;
-  //       for (var i = 0; i < this.costListTemp.length; i++) {
-  //         obj = {
-  //           id: this.costListTemp[i].id,
-  //           type: this.costListTemp[i].type,
-  //           description: this.costListTemp[i].description,
-  //           in_kind: this.costListTemp[i].inKindPercent,
-  //           actual_cost: this.costListTemp[i].actualCost,
-  //         };
-  //         this.costListFixed.push(obj);
-  //       }
-  //     });
-  // },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
     window.scrollTo(0, 0);
+    this.load_clearance_form();
   },
 };
 </script>
 <style>
-td,
+/* td,
 th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+} */
+#b {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
@@ -489,5 +545,18 @@ table {
   border-collapse: collapse;
   /* border: 2px solid #000000; */
   width: 100%;
+}
+table.border-middle {
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+}
+table.border-bottom {
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+}
+table.border-all {
+  border: 3px solid black;
 }
 </style>
