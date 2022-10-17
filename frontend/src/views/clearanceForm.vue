@@ -5,7 +5,7 @@
         <v-btn @click="exportPDF()" style="float: right">Export</v-btn>
       </v-row>
     </v-row>
-    <v-row>
+    <v-row id="no-margin-x">
       <v-container id="element-to-convert">
         <v-col
           cols="12"
@@ -18,7 +18,7 @@
         >
           <h2>Research Funding Clearance Form</h2>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" id="no-margin-x">
           <table class="border-all">
             <tr>
               <table>
@@ -30,13 +30,62 @@
             <tr>
               <table>
                 <tr id="b">
-                  <td id="b">Grant - Cat 1</td>
-                  <td id="b">Grant - Cat 2</td>
-                  <td id="b">Grant - Cat 3</td>
-                  <td id="b">Grant - Cat 4 (CRC/P)</td>
-                  <td id="b">Contract Research</td>
-                  <td id="b">Consultancy</td>
-                  <td id="b">Tender</td>
+                  <td id="b">
+                    Grant - Cat 1
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.one"
+                    />
+                  </td>
+                  <td id="b">
+                    Grant - Cat 2
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.two"
+                    />
+                  </td>
+                  <td id="b">
+                    Grant - Cat 3
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.three"
+                    />
+                  </td>
+                  <td id="b">
+                    Grant - Cat 4 (CRC/P)
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.four"
+                    />
+                  </td>
+                  <td id="b">
+                    Contract Research
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.contract"
+                    />
+                  </td>
+                  <td id="b">
+                    Consultancy
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.consultancy"
+                    />
+                  </td>
+                  <td id="b">
+                    Tender
+                    <input
+                      type="checkbox"
+                      id="form-box"
+                      v-model="this.categories.tender"
+                    />
+                  </td>
                 </tr>
               </table>
             </tr>
@@ -119,8 +168,7 @@
                 width="100%"
                 height="100px"
                 label="Brief project description"
-                :value="this.projectDetails.description"
-                disabled
+                v-model="projectDetails.description"
               ></v-textarea>
             </v-col>
           </v-card-actions>
@@ -414,6 +462,16 @@ const axios = require("axios").default;
 export default {
   data() {
     return {
+      categories: {
+        one: false,
+        two: false,
+        three: false,
+        four: false,
+        contract: false,
+        consultancy: false,
+        exemption: false,
+        tender: false,
+      },
       projectDetails: {
         category: "",
         projectTitle: "",
@@ -489,9 +547,9 @@ export default {
   methods: {
     exportPDF() {
       html2pdf(document.getElementById("element-to-convert"), {
-        margin: 5,
+        margin: 2,
         filename: "Research-Funding-Clearance-Form.pdf",
-        html2canvas: { scale: 5 },
+        html2canvas: { scale: 7 },
       });
     },
     load_clearance_form() {
@@ -502,30 +560,6 @@ export default {
         )
         .then((resp) => {
           console.log(resp.data); //use resp.data[0].name for arrays
-          // this.clearanceInfoTemp = resp.data;
-          // var obj;
-          // obj = {
-          //   projectDetails: {
-          //     projectTitle: resp.data.projectDetails.projectDetails,
-          //     // category: this.clearanceInfoTemp.projectDetails.category,
-          //     // this.clearanceInfo.projectDetails.projectTitle = resp.data.projectDetails.projectTitle,
-          //     // description:
-          //     //   this.clearanceInfoTemp[i].projectDetails.description,
-          //     // herdc: this.clearanceInfoTemp[i].projectDetails.herdc,
-          //     // startDate: this.clearanceInfoTemp[i].projectDetails.startDate,
-          //     // endDate: this.clearanceInfoTemp[i].projectDetails.endDate,
-          //     // fundingBody:
-          //     //   this.clearanceInfoTemp[i].projectDetails.fundingBody,
-          //     // scheme: this.clearanceInfoTemp[i].projectDetails.scheme,
-          //     // contactName:
-          //     //   this.clearanceInfoTemp[i].projectDetails.contactName,
-          //     // contactEmail:
-          //     //   this.clearanceInfoTemp[i].projectDetails.contactEmail,
-          //   },
-          // };
-          // // this.clearanceInfo.projectDetails.projectTitle =
-          // //   resp.data.projectDetails.projectTitle;
-          // this.clearanceInfo = obj;
           this.projectDetails.projectTitle =
             resp.data.projectDetails.projectTitle;
           this.projectDetails.category = resp.data.projectDetails.category;
@@ -541,7 +575,33 @@ export default {
             resp.data.projectDetails.contactName;
           this.projectDetails.contactEmail =
             resp.data.projectDetails.contactEmail;
-          console.log("Clearance info:" + this.projectDetails);
+          switch (resp.data.projectDetails.category) {
+            case "ONE":
+              this.categories.one = true;
+              break;
+            case "TWO":
+              this.categories.two = true;
+              break;
+            case "THREE":
+              this.categories.three = true;
+              break;
+            case "FOUR":
+              this.categories.four = true;
+              break;
+            case "CONTRACT":
+              this.categories.contract = true;
+              break;
+            case "CONSULTANCY":
+              this.categories.consultancy = true;
+              break;
+            case "EXEMPTION":
+              this.categories.exemption = true;
+              break;
+            case "TENDER":
+              this.categories.tender = true;
+              break;
+          }
+          console.log(this.categories);
         });
     },
   },
@@ -570,6 +630,18 @@ th {
   padding-right: 8px;
   padding-top: 4px;
   padding-bottom: 4px;
+  white-space: pre-line; /* Preserves enters */
+}
+#form-box {
+  padding: 0px;
+  margin: 0px;
+  margin-top: 5px;
+}
+#no-margin-x {
+  padding-left: 0px;
+  padding-right: 0px;
+  /* margin-left: 0px;
+  margin-right: 0px; */
 }
 th.bg-blue {
   background: RGB(191, 253, 252);
