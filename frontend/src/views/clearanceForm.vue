@@ -93,9 +93,13 @@
           <table class="border-middle">
             <tr>
               <table>
-                <tr id="b">
-                  <th id="b">Project Title:</th>
-                  <td id="b">{{ this.projectDetails.projectTitle }}</td>
+                <tr>
+                  <td>
+                    <tr>
+                      <th id="b">Project Title:</th>
+                      <td id="be">{{ this.projectDetails.projectTitle }}</td>
+                    </tr>
+                  </td>
                 </tr>
               </table>
             </tr>
@@ -129,6 +133,98 @@
                   <td id="b">
                     {{ this.projectDetails.herdc }}
                   </td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table class="border-middle">
+            <tr>
+              <table>
+                <tr>
+                  <v-row id="no-spacing-a">
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="b">Proposed commencement date:</th>
+                          <td id="be">{{ this.projectDetails.startDate }}</td>
+                        </tr>
+                      </td>
+                    </v-col>
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="b">Proposed completion date:</th>
+                          <td id="be">{{ this.projectDetails.endDate }}</td>
+                        </tr>
+                      </td>
+                    </v-col>
+                  </v-row>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table class="border-middle">
+            <tr>
+              <table>
+                <tr>
+                  <v-row id="no-spacing-a">
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="b">Funding Body / Client:</th>
+                          <td id="be">{{ this.projectDetails.fundingBody }}</td>
+                        </tr>
+                      </td>
+                    </v-col>
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="b">Scheme:</th>
+                          <td id="be">{{ this.projectDetails.scheme }}</td>
+                        </tr>
+                      </td>
+                    </v-col>
+                  </v-row>
+                </tr>
+              </table>
+            </tr>
+          </table>
+          <table class="border-middle">
+            <tr>
+              <table>
+                <tr id="b">
+                  <th id="b">
+                    For contract research and consultancy only, provide a
+                    contact name and email address
+                  </th>
+                </tr>
+              </table>
+            </tr>
+            <tr>
+              <table>
+                <tr>
+                  <v-row id="no-spacing-a">
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="bnt">Contact name:</th>
+                          <td id="bnte">
+                            {{ this.projectDetails.contactName }}
+                          </td>
+                        </tr>
+                      </td>
+                    </v-col>
+                    <v-col cols="6" id="no-spacing-a">
+                      <td>
+                        <tr>
+                          <th id="bnt">Contact email:</th>
+                          <td id="bnte">
+                            {{ this.projectDetails.contactEmail }}
+                          </td>
+                        </tr>
+                      </td>
+                    </v-col>
+                  </v-row>
                 </tr>
               </table>
             </tr>
@@ -250,10 +346,15 @@
                     label="Funding Body / Client"
                     outlined
                     disabled
+                    :value="projectDetails.fundingBody"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field label="Scheme" outlined></v-text-field>
+                  <v-text-field
+                    label="Scheme"
+                    outlined
+                    v-model="projectDetails.scheme"
+                  ></v-text-field>
                 </v-col>
               </v-card-actions>
             </v-col>
@@ -632,6 +733,44 @@ th {
   padding-bottom: 4px;
   white-space: pre-line; /* Preserves enters */
 }
+#be {
+  border-top: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  font-size: small;
+  /* padding: 8px; */
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  white-space: pre-line; /* Preserves enters */
+}
+#bnt {
+  border-right: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  font-size: small;
+  /* padding: 8px; */
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  white-space: pre-line; /* Preserves enters */
+}
+#bnte {
+  border-left: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  font-size: small;
+  /* padding: 8px; */
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  white-space: pre-line; /* Preserves enters */
+}
 #form-box {
   padding: 0px;
   margin: 0px;
@@ -642,6 +781,10 @@ th {
   padding-right: 0px;
   /* margin-left: 0px;
   margin-right: 0px; */
+}
+#no-spacing-a {
+  padding: 0px;
+  margin: 0px;
 }
 th.bg-blue {
   background: RGB(191, 253, 252);
