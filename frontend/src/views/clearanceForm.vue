@@ -230,6 +230,41 @@
             </tr>
           </table>
         </v-col>
+        <v-col cols="12" id="no-margin-x">
+          <table class="border-all">
+            <tr>
+              <table>
+                <tr id="b">
+                  <td id="b" class="bg-blue">
+                    <b>Lead Investigator - UTAS or external</b>
+                    <i>
+                      (If this is a student-led project, their supervisor must
+                      be listed as the Lead Investigator)
+                    </i>
+                  </td>
+                </tr>
+              </table>
+            </tr>
+            <tr>
+              <table>
+                <tr>
+                  <th id="bnte">Name:</th>
+                  <th id="bnte">
+                    UTAS discipline/unit <i>or</i> External Organisation:
+                  </th>
+                  <th id="bnte" height="100%">FTE %:</th>
+                </tr>
+                <tr>
+                  <td id="bnte">{{ this.leadInvestigator.name }}</td>
+                  <td id="bnte">
+                    {{ this.leadInvestigator.organisation }}
+                  </td>
+                  <td id="bnte">{{ this.leadInvestigator.fte }}</td>
+                </tr>
+              </table>
+            </tr>
+          </table>
+        </v-col>
       </v-container>
     </v-row>
     <v-container>
@@ -359,6 +394,26 @@
               </v-card-actions>
             </v-col>
           </v-row>
+          <v-divider></v-divider>
+          <v-row class="ma-5 pt-0">
+            <v-card-text class="mt-0 py-0">
+              For contract research and consultancies only, provide a contact
+              name and email address:
+            </v-card-text>
+            <v-col cols="6">
+              <v-text-field
+                label="Contact Name"
+                v-model="projectDetails.contactName"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                label="Email Address"
+                type="email"
+                v-model="projectDetails.contactEmail"
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </v-card>
       </v-row>
 
@@ -374,15 +429,22 @@
           <v-card-title>Lead Investigator - UTAS or external</v-card-title>
           <v-card-actions>
             <v-col cols="4">
-              <v-text-field label="Name"></v-text-field>
+              <v-text-field
+                label="Name"
+                v-model="leadInvestigator.name"
+              ></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 label="UTAS discipline/unit or External Organisation"
+                v-model="leadInvestigator.organisation"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
-              <v-text-field label="FTE %"></v-text-field>
+              <v-text-field
+                label="FTE %"
+                v-model="leadInvestigator.fte"
+              ></v-text-field>
             </v-col>
           </v-card-actions>
           <v-divider></v-divider>
@@ -648,7 +710,7 @@ export default {
   methods: {
     exportPDF() {
       html2pdf(document.getElementById("element-to-convert"), {
-        margin: 2,
+        // margin: 1,
         filename: "Research-Funding-Clearance-Form.pdf",
         html2canvas: { scale: 7 },
       });
@@ -702,6 +764,10 @@ export default {
               this.categories.tender = true;
               break;
           }
+          this.leadInvestigator.name = resp.data.leadInvestigator.name;
+          this.leadInvestigator.organisation =
+            resp.data.leadInvestigator.organisation;
+          this.leadInvestigator.fte = resp.data.leadInvestigator.fte;
           console.log(this.categories);
         });
     },
@@ -786,7 +852,13 @@ th {
   padding: 0px;
   margin: 0px;
 }
+#bg-darkblue {
+  border: 1px solid darkblue;
+}
 th.bg-blue {
+  background: RGB(191, 253, 252);
+}
+td.bg-blue {
   background: RGB(191, 253, 252);
 }
 table {
