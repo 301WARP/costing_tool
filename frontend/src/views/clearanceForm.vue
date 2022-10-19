@@ -2,10 +2,12 @@
   <v-app>
     <v-row style="position: absolute; top: 50px; right: 50px">
       <v-row style="text-align: right">
-        <v-btn @click="exportPDF()" style="float: right">Export</v-btn>
+        <v-btn @click="exportPDF()" style="float: right">
+          {{ this.exportButtonTitle }}
+        </v-btn>
       </v-row>
     </v-row>
-    <v-row id="no-margin-x">
+    <v-row id="no-margin-x" v-if="isExporting">
       <v-container id="element-to-convert">
         <v-col
           cols="12"
@@ -705,15 +707,21 @@ export default {
       scholarship: false,
       humanYes: false,
       humanNo: false,
+      isExporting: false,
+      exportButtonTitle: "Export",
     };
   },
   methods: {
     exportPDF() {
+      this.isExporting = true;
+      this.exportButtonTitle = "Download";
       html2pdf(document.getElementById("element-to-convert"), {
         // margin: 1,
         filename: "Research-Funding-Clearance-Form.pdf",
         html2canvas: { scale: 7 },
       });
+      // this.isExporting = false;
+      // needs to rehide, but must wait until file is downloaded first
     },
     load_clearance_form() {
       axios
