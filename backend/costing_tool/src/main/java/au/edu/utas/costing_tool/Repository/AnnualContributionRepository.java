@@ -9,12 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.AnnualContributionID;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContributionID;
 
 
 @Repository

@@ -13,14 +13,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+
 // =============================================================================
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.DTO.UpdateResearcherDTO;
-
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Contribution;
+import au.edu.utas.costing_tool.DTO.Contribution.UpdateResearcherDTO;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contribution.Contribution;
 
 
 @Mapper

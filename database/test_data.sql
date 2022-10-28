@@ -6,18 +6,18 @@
 USE warp;
 
 -- Researchers
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('DR', 'First', 'Last');
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('DR', 'Test', 'User');
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('PROF', 'Test', 'Professor');
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('MR', 'Another', 'Last');
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('MS', 'Another', 'Last');
-INSERT INTO `researcher` (`title`, `first_name`, `last_name`)
-VALUES ('MR', 'First', 'Also');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (1, 'DR', 'First', 'Last');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (2, 'DR', 'Test', 'User');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (3, 'PROF', 'Test', 'Professor');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (4, 'MR', 'Another', 'Last');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (5, 'MS', 'Another', 'Last');
+INSERT INTO `researcher` (`staff_id`, `title`, `first_name`, `last_name`)
+VALUES (6, 'MR', 'First', 'Also');
 
 
 -- Units
@@ -203,10 +203,10 @@ INSERT INTO `contract`
     'NON_CASUAL',									-- contract type
     'ACADEMIC',										-- non-casual staff type
     NULL,											-- casual staff type
-    'A',											-- non-casual classification
+    'LEVEL_A',										-- non-casual classification
     NULL,											-- casual classification
     NULL,											-- RHD classification
-    '1',											-- step
+    'A1',											-- step
     NULL,											-- pay code
     '100000.00',									-- salary
     NULL											-- hourly rate
@@ -231,10 +231,10 @@ INSERT INTO `contract`
     NULL,											-- non-casual staff type
     'PROFESSIONAL',									-- casual staff type
     NULL,											-- non-casual classification
-    'RA1',											-- casual classification
+    'RESEARCH_ACADEMIC',							-- casual classification
     NULL,											-- RHD classification
     NULL,											-- step
-    '1',											-- pay code
+    'CRA1',											-- pay code
     NULL,											-- salary
     '50.00'											-- hourly rate
 );
@@ -261,7 +261,7 @@ INSERT INTO `contract`
     NULL,											-- casual classification
     'APA',											-- RHD classification
     NULL,											-- step
-    '1',											-- pay code
+    NULL,											-- pay code
     '25000.00',										-- salary
     NULL											-- hourly rate
 );
@@ -401,6 +401,7 @@ INSERT INTO `expense`
 (
 	`project_id`,
     `expense_type`,
+    `description`,
     `cost_per_unit`,
     `in_kind_%`,
 
@@ -414,14 +415,13 @@ INSERT INTO `expense`
     `accommodation`,
 
 	-- Facility  Hire
-    `facility`,
-    `time_unit`,
-    `organisation`
+    `facility_cost_id`
 ) VALUES (
     1,													-- project id
-    'FACILITY_HIRE',									-- expense type
-    '20.0',												-- cost per unit
-    '70.00',											-- in kind percent
+    'FACILITY_COSTS',									-- expense type
+    'test facility cost',								-- description
+    NULL,												-- cost per unit
+    70.00,												-- in kind percent
 
 	-- Travel
     NULL,												-- number of travelers
@@ -433,11 +433,45 @@ INSERT INTO `expense`
     NULL,												-- accommodation price
 
 	-- Facility  Hire
-	'LABS_R_US',										-- facility
-    'days',												-- time unit
+	1													-- facility cost id
+);
+INSERT INTO `expense`
+(
+	`project_id`,
+    `expense_type`,
+    `description`,
+    `cost_per_unit`,
+    `in_kind_%`,
 
-	-- Partner Organisation
-    NULL												-- organisation
+	-- Travel
+    `num_travellers`,
+    `departure`,
+    `return`,
+    `fare`,
+    `car_hire`,
+    `meals`,
+    `accommodation`,
+
+	-- Facility  Hire
+    `facility_cost_id`
+) VALUES (
+    1,													-- project id
+    'NONE',												-- expense type
+    'test facility cost',								-- description
+    NULL,												-- cost per unit
+    70.00,												-- in kind percent
+
+	-- Travel
+    NULL,												-- number of travelers
+    NULL,												-- departure date
+    NULL,												-- return date
+    NULL,												-- fare
+    NULL,												-- car hire price
+    NULL,												-- meal price
+    NULL,												-- accommodation price
+
+	-- Facility  Hire
+	NULL												-- facility cost id
 );
 
 

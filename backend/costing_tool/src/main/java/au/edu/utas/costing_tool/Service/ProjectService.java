@@ -12,14 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.DTO.ProjectRecommendationDTO;
-import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.DTO.Project.ProjectRecommendationDTO;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import au.edu.utas.costing_tool.Repository.ProjectRepository;
 import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;

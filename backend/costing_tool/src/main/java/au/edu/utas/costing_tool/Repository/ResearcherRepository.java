@@ -11,13 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import au.edu.utas.costing_tool.Enums.Title;
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.Enums.Researcher.Title;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 
 
 public interface ResearcherRepository extends JpaRepository<Researcher, Long>

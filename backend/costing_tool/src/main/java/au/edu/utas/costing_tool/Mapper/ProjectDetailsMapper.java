@@ -16,16 +16,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.DTO.ProjectDetailsDTO;
-
-import au.edu.utas.costing_tool.Model.FORCodes;
-import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.SEOCodes;
+import au.edu.utas.costing_tool.DTO.Project.ProjectDetailsDTO;
+import au.edu.utas.costing_tool.Model.Project.FORCodes;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Model.Project.SEOCodes;
 
 
 @Mapper

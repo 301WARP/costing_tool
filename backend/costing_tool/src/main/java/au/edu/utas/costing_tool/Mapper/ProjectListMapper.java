@@ -17,14 +17,18 @@ import org.mapstruct.Named;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.DTO.ProjectListDTO;
-import au.edu.utas.costing_tool.Model.Contribution;
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.DTO.Project.ProjectListDTO;
+import au.edu.utas.costing_tool.Model.Contribution.Contribution;
+import au.edu.utas.costing_tool.Model.Project.Project;
 
 
 @Mapper
 public interface ProjectListMapper
 {
+    // =========================================================================
+    // Mappers
+    // =========================================================================
+
     @Mapping(target="id", source="project.id")
     @Mapping(target="name", source="project.name")
     @Mapping(target="startDate", source="project.startDate")
@@ -35,7 +39,11 @@ public interface ProjectListMapper
                 qualifiedByName="contractMap")
     ProjectListDTO
     map(Project project, @Context Long userId);
+    
 
+    // =========================================================================
+    // Methods
+    // =========================================================================
 
     @Named("roleMap")
     static
@@ -55,7 +63,6 @@ public interface ProjectListMapper
             .findFirst()
             .orElse(null);
     }
-
 
     @Named("contractMap")
     static

@@ -1,3 +1,4 @@
+/*
 package au.edu.utas.costing_tool.Controller;
 
 
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.AnnualContributionID;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContributionID;
 import au.edu.utas.costing_tool.Repository.AnnualContributionRepository;
 
 
@@ -71,3 +72,4 @@ public class AnnualContributionController
         return ac.get();
     }
 }
+*/

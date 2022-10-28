@@ -18,24 +18,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
-import au.edu.utas.costing_tool.DTO.ResearcherRecommendationDTO;
-
-import au.edu.utas.costing_tool.Enums.Title;
-
+import au.edu.utas.costing_tool.DTO.Contribution.ContributionDetailsDTO;
+import au.edu.utas.costing_tool.DTO.Researcher.ResearcherRecommendationDTO;
+import au.edu.utas.costing_tool.Enums.Researcher.Title;
 import au.edu.utas.costing_tool.Mapper.ResearcherDetailsMapper;
-
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Model.Contribution;
-import au.edu.utas.costing_tool.Model.ContributionID;
-import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contribution.Contribution;
+import au.edu.utas.costing_tool.Model.Contribution.ContributionID;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import au.edu.utas.costing_tool.Repository.AnnualContributionRepository;
 import au.edu.utas.costing_tool.Repository.ContributionRepository;
 import au.edu.utas.costing_tool.Repository.ResearcherRepository;

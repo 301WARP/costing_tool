@@ -11,9 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
-import au.edu.utas.costing_tool.Enums.Title;
-import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Model.Researcher;
+import au.edu.utas.costing_tool.Enums.Researcher.Title;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 
 @DataJpaTest

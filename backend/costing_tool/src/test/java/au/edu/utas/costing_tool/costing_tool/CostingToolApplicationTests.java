@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 // Project Imports
 // =============================================================================
 
-import au.edu.utas.costing_tool.Controller.AnnualContributionController;
+//import au.edu.utas.costing_tool.Controller.AnnualContributionController;
 import au.edu.utas.costing_tool.Controller.ClearanceController;
 import au.edu.utas.costing_tool.Controller.ContractController;
 import au.edu.utas.costing_tool.Controller.ExpenseController;
@@ -46,8 +46,8 @@ class CostingToolApplicationTests
 	// Controllers
 	// =========================================================================
 
-	@Autowired
-	private AnnualContributionController acController;
+	//@Autowired
+	//private AnnualContributionController acController;
 
 	@Autowired
 	private ClearanceController clearanceController;
@@ -118,7 +118,7 @@ class CostingToolApplicationTests
 	void contextLoads()
 	{
 		// Controllers
-		assertThat(acController).isNotNull();
+		//assertThat(acController).isNotNull();
 		assertThat(clearanceController).isNotNull();
 		assertThat(contractController).isNotNull();
 		assertThat(expenseController).isNotNull();
