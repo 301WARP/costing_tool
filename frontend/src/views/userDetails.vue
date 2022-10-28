@@ -41,6 +41,33 @@
                 </v-col>
               </v-row>
 
+              <v-row v-if="category == 'ONE'">
+                <v-col cols="4">
+                  <v-subheader>Category 1 Type: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="category_1_Subtype"
+                      label="Select Category"
+                      v-model="category1Subtype"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="category == 'CONSULTANCY'">
+                <v-col cols="4">
+                  <v-subheader>Profit Margin: </v-subheader>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    suffix="%"
+                    v-model="profitMargin"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
               <v-row>
                 <v-col cols="4">
                   <v-subheader>AMC/Menzies: </v-subheader>
@@ -51,6 +78,21 @@
                       :items="amc_menzies"
                       label="Select"
                       v-model="amcMenzies"
+                    ></v-select>
+                  </v-col>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="amcMenzies == 'AMC'">
+                <v-col cols="4">
+                  <v-subheader>AMC National Centre: </v-subheader>
+                </v-col>
+                <v-col cols="8" class="pa-0">
+                  <v-col class="d-flex">
+                    <v-select
+                      :items="amc_national_centre"
+                      label="Select"
+                      v-model="amcNationalCentre"
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -198,12 +240,13 @@
                   </v-col>
                 </v-col>
                 <v-col v-if="Crowd_Funding" cols="12" class="mt-0">
-                  <v-text-field
-                    label="Provider"
+                  <v-select
+                    :items="crowd_funding_provider"
+                    label="Select"
                     outlined
                     class="mx-5 mt-0"
                     v-model="crowdFundingProvider"
-                  ></v-text-field>
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-card>
@@ -320,7 +363,7 @@
                         length="6"
                         type="number"
                         id="'researchCodeInput' + i"
-                        v-model="Object.keys(forCodes)[i - 1]"
+                        v-model="forHeader[i - 1]"
                       ></v-otp-input>
                       <v-text-field
                         suffix="%"
@@ -332,6 +375,7 @@
                   <v-col align="right" class="pt-0 mt-0">
                     <v-btn
                       class="mx-0"
+                      v-if="research_codes_count < 3"
                       fab
                       x-small
                       @click="inc_research_codes()"
@@ -370,7 +414,7 @@
                         length="6"
                         type="number"
                         :id="'ecoCodeInput' + i"
-                        v-model="Object.keys(seoCodes)[i - 1]"
+                        v-model="seoHeader[i - 1]"
                       ></v-otp-input>
                       <v-text-field
                         suffix="%"
@@ -383,6 +427,7 @@
                   <v-col align="right" class="pt-0 mt-0">
                     <v-btn
                       class="mx-0 mb-3"
+                      v-if="economic_codes_count < 3"
                       fab
                       x-small
                       @click="inc_eco_codes()"
@@ -403,6 +448,18 @@
               </v-row>
             </v-card>
           </v-col>
+          <v-row class="mx-15 my-10">
+            <v-btn
+              color="primary"
+              elevation="4"
+              outlined
+              x-large
+              @click="update_details()"
+              class="my-5"
+              width="100%"
+              >Submit
+            </v-btn>
+          </v-row>
         </v-row>
       </v-container>
     </v-app>
@@ -414,10 +471,13 @@ const axios = require("axios").default;
 
 export default {
   data: () => ({
-    category1: ["ONE", "TWO"],
-    amc_menzies: ["NONE", "YES", "NO"],
+    category1: ["ONE", "TWO", "THREE", "FOUR", "CONSULTANCY"],
+    amc_menzies: ["NONE", "AMC", "MENZIES"],
     year_end: ["CALENDAR", "FINANCIAL"],
     research_institute: ["IMAS"],
+    crowd_funding_provider: ["NONE"],
+    category_1_Subtype: ["NONE", "ARC", "NHMRC/DECRA/DORA/DIA", "Other"],
+    amc_national_centre: ["NONE", "NCMEH (OP:071001)", "NCPS (OP:071528)"],
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -454,24 +514,51 @@ export default {
     strategicBasic: 0,
     pureBasic: 0,
     test: ["123456", "122222"],
+    projectIndexUpdate: 0,
+    forHeader: [],
+    seoHeader: [],
   }),
   methods: {
     say(e) {
       alert(e);
     },
     inc_research_codes() {
-      this.research_codes_count++;
+      if (this.research_codes_count < 3) {
+        this.research_codes_count++;
+      }
     },
     dec_research_codes() {
-      if (this.research_codes_count > 1) {
+      console.log(this.forHeader.length);
+      console.log(this.research_codes_count);
+      if (
+        this.research_codes_count > 1 &&
+        this.forHeader.length == this.research_codes_count
+      ) {
+        this.research_codes_count--;
+        delete this.forCodes[
+          Object.keys(this.forCodes)[this.research_codes_count]
+        ];
+        this.forHeader.pop();
+      } else {
         this.research_codes_count--;
       }
     },
     inc_eco_codes() {
-      this.economic_codes_count++;
+      if (this.economic_codes_count < 3) {
+        this.economic_codes_count++;
+      }
     },
     dec_eco_codes() {
-      if (this.economic_codes_count > 1) {
+      if (
+        this.economic_codes_count > 1 &&
+        this.seoHeader.length == this.economic_codes_count
+      ) {
+        this.economic_codes_count--;
+        delete this.seoCodes[
+          Object.keys(this.seoCodes)[this.economic_codes_count]
+        ];
+        this.seoHeader.pop();
+      } else {
         this.economic_codes_count--;
       }
     },
@@ -482,8 +569,7 @@ export default {
       var errorData = { status: 200 };
       axios
         .get(
-          "http://10.36.241.204:8080/api/projects/" +
-            this.$store.state.projectIndex
+          "http://10.36.241.204:8080/api/projects/" + this.projectIndexUpdate
         )
         .then((resp) => {
           this.connectError = 0;
@@ -507,25 +593,30 @@ export default {
           }
           this.partnerCashContribution = resp.data.partnerCashContribution;
           if (this.partnerCashContribution > 0) {
-            this.UTAS_Cash = true;
+            this.Partner_Cash = true;
           }
           this.crowdFundingProvider = resp.data.crowdFundingProvider;
-          if (this.crowdFundingProvider > 0) {
-            this.UTAS_Cash = true;
+          if (this.crowdFundingProvider == "?") {
+            this.Crowd_Funding = true;
           }
           this.entity = resp.data.entity;
           this.forCodes = resp.data.forCodes;
-          // if (Object.keys(this.forCodes).length > 1) {
-
-          // }
+          for (
+            var index = 0;
+            index < Object.keys(this.forCodes).length;
+            index++
+          ) {
+            this.forHeader.push(Object.keys(this.forCodes)[index]);
+          }
           this.research_codes_count = Object.keys(this.forCodes).length;
           this.seoCodes = resp.data.seoCodes;
-          console.log(this.seoCodes[100000]);
+          for (index = 0; index < Object.keys(this.seoCodes).length; index++) {
+            this.seoHeader.push(Object.keys(this.seoCodes)[index]);
+          }
           this.economic_codes_count = Object.keys(this.seoCodes).length;
           this.appliedResearch = resp.data.appliedResearch;
           this.experimentalDevelopment = resp.data.experimentalDevelopment;
           this.strategicBasic = resp.data.strategicBasic;
-          0;
           this.pureBasic = resp.data.pureBasic;
         })
         .catch(function (error) {
@@ -539,14 +630,57 @@ export default {
         this.connectErrorCode = errorData.code;
       }
     },
+    update_details() {
+      var fcodes = {};
+      var ecodes = {};
+      for (var index = 0; index < Object.keys(this.forCodes).length; index++) {
+        fcodes[this.forHeader[index]] =
+          this.forCodes[Object.keys(this.forCodes)[index]];
+      }
+      for (index = 0; index < Object.keys(this.seoCodes).length; index++) {
+        ecodes[this.seoHeader[index]] =
+          this.seoCodes[Object.keys(this.seoCodes)[index]];
+      }
+      axios.put(
+        "http://10.36.241.204:8080/api/projects/" + this.projectIndexUpdate,
+        {
+          name: this.name,
+          description: this.decription,
+          leadResearcherName: this.leadResearcherName,
+          leadResearcherOrg: this.leadResearcherOrg,
+          category: this.category,
+          category1Subtype: this.category1Subtype,
+          amcMenzies: this.amcMenzies,
+          amcNationalCentre: this.amcNationalCentre,
+          profitMargin: this.profitMargin,
+          startDate: this.date,
+          endDate: this.date2,
+          yearEnd: this.yearEnd,
+          utasCashContribution: this.utasCashContribution,
+          partnerCashContribution: this.partnerCashContribution,
+          crowdFundingProvider: this.crowdFundingProvider,
+          entity: this.entity,
+          forCodes: fcodes,
+          seoCodes: ecodes,
+          appliedResearch: this.appliedResearch,
+          experimentalDevelopment: this.experimentalDevelopment,
+          strategicBasic: this.strategicBasic,
+          pureBasic: this.pureBasic,
+        }
+      );
+      window.scrollTo(0, 0);
+      this.$router.push("/researcher");
+    },
   },
   mounted() {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
     if (this.$store.state.projectIndex != 0) {
+      this.projectIndexUpdate = this.$store.state.projectIndex;
       this.load_projects_list();
     }
+    window.scrollTo(0, 0);
   },
 };
 </script>

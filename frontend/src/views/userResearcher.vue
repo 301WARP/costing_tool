@@ -30,6 +30,8 @@
                       :items="title"
                       label="Select Title"
                       v-model="title_input"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -41,7 +43,14 @@
                   <v-subheader>Family Name: </v-subheader>
                 </v-col>
                 <v-col cols="8" class="pa-0">
-                  <v-text-field v-model="family_name"></v-text-field>
+                  <!-- <v-text-field v-model="family_name"></v-text-field> -->
+                  <v-autocomplete
+                    v-model="family_name"
+                    :items="researchers_name_list"
+                    @change="load_firstName(family_name)"
+                    :disabled="newProject == false"
+                    :filled="newProject == false"
+                  ></v-autocomplete>
                 </v-col>
               </v-row>
             </v-col>
@@ -51,7 +60,18 @@
                   <v-subheader>Given Names: </v-subheader>
                 </v-col>
                 <v-col cols="8" class="pa-0">
-                  <v-text-field v-model="given_name"></v-text-field>
+                  <!-- <v-text-field
+                    filled
+                    disabled
+                    v-model="given_name"
+                  ></v-text-field> -->
+                  <v-autocomplete
+                    v-model="given_name"
+                    :items="researchers_first_name_list"
+                    @change="load_contract(family_name, given_name)"
+                    :disabled="newProject == false"
+                    :filled="newProject == false"
+                  ></v-autocomplete>
                 </v-col>
               </v-row>
             </v-col>
@@ -76,10 +96,12 @@
                   <v-row>
                     <v-col class="d-flex">
                       <v-select
-                        :items="contract"
+                        :items="userContracts"
                         label="Select Contract"
                         @change="checkContract($event)"
                         v-model="contract_input"
+                        :disabled="newProject == false"
+                        :filled="newProject == false"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -124,6 +146,8 @@
                       :items="staff_type"
                       label="Select Staff Type"
                       v-model="staff_type_full"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -140,6 +164,8 @@
                       :items="classification"
                       label="Select Classification"
                       v-model="classification_full"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -156,6 +182,8 @@
                       :items="step"
                       label="Select Step"
                       v-model="step_full"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -170,7 +198,12 @@
                   <v-subheader>Starting Salary: </v-subheader>
                 </v-col>
                 <v-col cols="8">
-                  <v-text-field v-model="start_salary_full" prefix="$">
+                  <v-text-field
+                    filled
+                    disabled
+                    v-model="start_salary_full"
+                    prefix="$"
+                  >
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -310,11 +343,20 @@
               <v-row>
                 <v-col align="right">
                   <v-btn
+                    color="error"
+                    elevation="4"
+                    outlined
+                    x-large
+                    class="mr-5"
+                    @click="load_researcher()"
+                    >Delete
+                  </v-btn>
+                  <v-btn
                     color="primary"
                     elevation="4"
                     outlined
                     x-large
-                    @click="full_time = false"
+                    @click="closeInfo()"
                     class="mr-5"
                     >Close
                   </v-btn>
@@ -360,6 +402,8 @@
                       :items="staff_type"
                       label="Select Staff Type"
                       v-model="staff_type_casual"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -373,6 +417,8 @@
                       :items="classification"
                       label="Select Classification"
                       v-model="classification_casual"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -386,6 +432,8 @@
                       :items="pay_code"
                       label="Select Pay Code"
                       v-model="pay_code_casual"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -400,7 +448,12 @@
                   <v-subheader>Starting Salary: </v-subheader>
                 </v-col>
                 <v-col cols="8">
-                  <v-text-field v-model="start_salary_casual" prefix="$">
+                  <v-text-field
+                    filled
+                    disabled
+                    v-model="start_salary_casual"
+                    prefix="$"
+                  >
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -546,11 +599,20 @@
               <v-row>
                 <v-col align="right">
                   <v-btn
+                    color="error"
+                    elevation="4"
+                    outlined
+                    x-large
+                    class="mr-5"
+                    @click="say()"
+                    >Delete
+                  </v-btn>
+                  <v-btn
                     color="primary"
                     elevation="4"
                     outlined
                     x-large
-                    @click="casual = false"
+                    @click="closeInfo()"
                     class="mr-5"
                     >Close
                   </v-btn>
@@ -589,6 +651,8 @@
                       :items="classification"
                       label="Select Classification"
                       v-model="classification_rhd"
+                      filled
+                      disabled
                     ></v-select>
                   </v-col>
                 </v-col>
@@ -598,7 +662,12 @@
                   <v-subheader>Annual Salary: </v-subheader>
                 </v-col>
                 <v-col cols="8">
-                  <v-text-field v-model="annual_salary_rhd" prefix="$">
+                  <v-text-field
+                    filled
+                    disabled
+                    v-model="annual_salary_rhd"
+                    prefix="$"
+                  >
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -713,11 +782,20 @@
               <v-row>
                 <v-col align="right">
                   <v-btn
+                    color="error"
+                    elevation="4"
+                    outlined
+                    x-large
+                    class="mr-5"
+                    @click="say()"
+                    >Delete
+                  </v-btn>
+                  <v-btn
                     color="primary"
                     elevation="4"
                     outlined
                     x-large
-                    @click="rhd = false"
+                    @click="closeInfo()"
                     class="mr-5"
                     >Close
                   </v-btn>
@@ -758,21 +836,29 @@
           <td :style="{ padding: '10px' }">
             <tr
               v-for="(ite, index) in item.extra"
-              @click="say('Clicked on table: ' + index)"
-              :key="index"
+              @click="fill_data(ite)"
+              :key="'A' + index"
             >
               {{
                 ite.classification
               }}
             </tr>
           </td>
-          <td></td>
-          <td></td>
+          <td
+            v-for="(ite, index) in item.extra"
+            :key="'B' + index"
+            @click="fill_data(ite)"
+          ></td>
+          <td
+            v-for="(ite, index) in item.extra"
+            :key="index"
+            @click="fill_data(ite)"
+          ></td>
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'C' + index"
+              @click="fill_data(ite)"
             >
               {{
                 ite.income
@@ -782,19 +868,19 @@
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'D' + index"
+              @click="fill_data(ite)"
             >
               {{
-                ite.inKind
+                "$" + ite.inKindDollar + " (" + ite.inKind + "%)"
               }}
             </tr>
           </td>
           <td>
             <tr
               v-for="(ite, index) in item.extra"
-              :key="index"
-              @click="say('Clicked on table: ' + index)"
+              :key="'E' + index"
+              @click="fill_data(ite)"
             >
               {{
                 ite.actual
@@ -804,6 +890,20 @@
         </template>
       </v-data-table>
     </template>
+    <v-row class="px-3">
+      <v-col cols="4">
+        <v-subheader style="align-text: right">Total: </v-subheader>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field filled disabled v-model="totalCashIncome"></v-text-field>
+      </v-col>
+      <v-col cols="2">
+        <v-text-field filled disabled v-model="totalInKind"></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-text-field filled disabled v-model="totalActual"></v-text-field>
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
@@ -823,7 +923,7 @@ export default {
       { text: "Role", value: "role" },
       { text: "Contract", value: "contract" },
       { text: "Cash Income", value: "cash_income" },
-      { text: "In Kind Contribution", value: "inKindPercent" },
+      { text: "In Kind Contribution", value: "inKindPercentFull" },
       { text: "Actual Cost", value: "actualCost" },
     ],
 
@@ -853,12 +953,12 @@ export default {
     table_key: 0,
     researcher_list: [],
     researcherFixed_list: [],
-    title: ["Dr", "Mr", "Mrs", "Ms"],
+    title: ["DR", "MR", "MRS", "MS"],
     contract: ["RHD", "NON_CASUAL", "CASUAL"],
     staff_type: ["ACADEMIC", "PROFESSIONAL"],
     classification: ["A", "RA1", "APA"],
     step: [1, 2, 3, 4, 5],
-    salary_cost_rate: [1.0, 123.0],
+    salary_cost_rate: [116.98, 120.98, 128.44],
     pay_code: [1, 2, 3, 4, 5],
     casual: false,
     rhd: false,
@@ -893,6 +993,19 @@ export default {
     contractID: "",
 
     researchers: [],
+    totalCashIncome: 0,
+    totalInKind: 0,
+    totalActual: 0,
+
+    projectIndexUpdate: -2,
+
+    researchers_name_list: [],
+    researcher_data: [],
+    researchers_first_name_list: [],
+
+    newProject: true,
+
+    userContracts: [],
   }),
 
   computed: {
@@ -944,6 +1057,9 @@ export default {
       //set basic details that apply to every contract
       this.initialize();
 
+      this.newProject = false;
+
+      this.researchers_first_name_list.push(e.firstName);
       this.title_input = e.title;
       this.family_name = e.lastName;
       this.given_name = e.firstName;
@@ -953,7 +1069,12 @@ export default {
       console.log("?" + e.contractID);
 
       axios
-        .get("http://10.36.241.204:8080/api/researchers/1/" + e.contractID)
+        .get(
+          "http://10.36.241.204:8080/api/researchers/" +
+            this.projectIndexUpdate +
+            "/" +
+            e.contractID
+        )
         .then((resp) => {
           console.log(resp.data); //use resp.data[0].name for arrays
           this.researcher_list = resp.data;
@@ -968,7 +1089,7 @@ export default {
             this.wage_adj_full = resp.data.wageAdjustment;
             this.salary_rate_full = resp.data.salaryOnCostRate;
             this.in_kind_full = e.inKindPercent;
-            //this.annualContributions = resp.data.annualContributions;
+            this.annualContributions = resp.data.annualContributions;
             console.log(resp.data.annualContributions);
             for (fte_years in resp.data.annualContributions) {
               obj = {
@@ -998,7 +1119,7 @@ export default {
             this.checkContract("RHD");
             this.classification_rhd = resp.data.classification;
             this.annual_salary_rhd = resp.data.wageExpense;
-            this.in_kind_rhd = e.inKindPercent;
+            this.in_kind_rhd = e.inKind;
             this.annualContributions = resp.data.annualContributions;
             for (fte_years in resp.data.annualContributions) {
               obj = {
@@ -1010,163 +1131,246 @@ export default {
           }
         });
     },
-
     load_researcher_list() {
-      axios.get("http://10.36.241.204:8080/api/researchers/1").then((resp) => {
-        console.log(resp.data); //use resp.data[0].name for arrays
-        this.researcher_list = resp.data;
-        var obj;
-        var done = [];
+      this.load_researcher();
+      axios
+        .get(
+          "http://10.36.241.204:8080/api/researchers/" + this.projectIndexUpdate
+        )
+        .then((resp) => {
+          console.log(resp.data); //use resp.data[0].name for arrays
+          this.researcher_list = resp.data;
+          var obj;
+          var done = [];
 
-        for (var i = 0; i < this.researcher_list.length; i++) {
-          if (!done.includes(this.researcher_list[i].staffID)) {
-            var count = 0;
-            var extra2 = [];
-            var obj2;
-            var first = true;
+          for (var i = 0; i < this.researcher_list.length; i++) {
+            if (!done.includes(this.researcher_list[i].staffID)) {
+              var count = 0;
+              var extra2 = [];
+              var obj2;
+              var first = true;
 
-            for (
-              var staffNum = 0;
-              staffNum < this.researcher_list.length;
-              staffNum++
-            ) {
-              if (
-                this.researcher_list[staffNum].staffID ==
-                this.researcher_list[i].staffID
+              for (
+                var staffNum = 0;
+                staffNum < this.researcher_list.length;
+                staffNum++
               ) {
-                count++;
-                if (!first) {
-                  obj2 = {
-                    classification: this.researcher_list[staffNum].contract,
-                    income: "$111",
-                    inKind: this.researcher_list[staffNum].inKindPercent,
-                    actual: "$" + this.researcher_list[staffNum].actualCost,
-                  };
-                  extra2.push(obj2);
+                if (
+                  this.researcher_list[staffNum].staffID ==
+                  this.researcher_list[i].staffID
+                ) {
+                  count++;
+                  if (!first) {
+                    var inKindDollar2 =
+                      (this.researcher_list[staffNum].inKindPercent / 100) *
+                      this.researcher_list[staffNum].actualCost;
+                    this.totalActual =
+                      this.totalActual +
+                      this.researcher_list[staffNum].actualCost;
+                    this.totalInKind = this.totalInKind + inKindDollar2;
+                    this.totalCashIncome =
+                      this.totalCashIncome +
+                      (this.researcher_list[staffNum].actualCost -
+                        inKindDollar2);
+                    obj2 = {
+                      title: this.researcher_list[staffNum].title,
+                      contractID: this.researcher_list[staffNum].contractID,
+                      staffID: this.researcher_list[staffNum].staffID,
+                      lastName: this.researcher_list[staffNum].lastName,
+                      firstName: this.researcher_list[staffNum].firstName,
+                      role: this.researcher_list[staffNum].role,
+                      contract: this.researcher_list[staffNum].contract,
+                      classification: this.researcher_list[staffNum].contract,
+                      income:
+                        "$" +
+                        (this.researcher_list[staffNum].actualCost -
+                          inKindDollar2),
+                      inKind: this.researcher_list[staffNum].inKindPercent,
+                      inKindDollar: inKindDollar2,
+                      actual: "$" + this.researcher_list[staffNum].actualCost,
+                    };
+                    extra2.push(obj2);
+                  }
+                  first = false;
                 }
-                first = false;
               }
+              var inKindDollar =
+                (this.researcher_list[i].inKindPercent / 100) *
+                this.researcher_list[i].actualCost;
+              this.totalActual =
+                this.totalActual + this.researcher_list[i].actualCost;
+              this.totalInKind = this.totalInKind + inKindDollar;
+              this.totalCashIncome =
+                this.totalCashIncome +
+                (this.researcher_list[i].actualCost - inKindDollar);
+              obj = {
+                title: this.researcher_list[i].title,
+                name:
+                  this.researcher_list[i].firstName +
+                  " " +
+                  this.researcher_list[i].lastName +
+                  " (" +
+                  count +
+                  ")",
+                firstName: this.researcher_list[i].firstName,
+                lastName: this.researcher_list[i].lastName,
+                staffID: this.researcher_list[i].staffID,
+                role: this.researcher_list[i].role,
+                contract: this.researcher_list[i].contract,
+                contractID: this.researcher_list[i].contractID,
+                cash_income:
+                  "$" + (this.researcher_list[i].actualCost - inKindDollar),
+                inKindPercent: this.researcher_list[i].inKindPercent,
+                inKindPercentFull:
+                  "$" +
+                  inKindDollar +
+                  " (" +
+                  this.researcher_list[i].inKindPercent +
+                  "%)",
+                actualCost: "$" + this.researcher_list[i].actualCost,
+                extra: extra2,
+              };
+              this.researcherFixed_list.push(obj);
+              done.push(this.researcher_list[i].staffID);
             }
-
-            obj = {
-              title: this.researcher_list[i].title,
-              name:
-                this.researcher_list[i].firstName +
-                " " +
-                this.researcher_list[i].lastName +
-                " (" +
-                (count - 1) +
-                ")",
-              firstName: this.researcher_list[i].firstName,
-              lastName: this.researcher_list[i].lastName,
-              staffID: this.researcher_list[i].staffID,
-              role: this.researcher_list[i].role,
-              contract: this.researcher_list[i].contract,
-              contractID: this.researcher_list[i].contractID,
-              cash_income: "$" + 0,
-              inKindPercent: this.researcher_list[i].inKindPercent,
-              actualCost: "$" + this.researcher_list[i].actualCost,
-              extra: extra2,
-            };
-            this.researcherFixed_list.push(obj);
-            done.push(this.researcher_list[i].staffID);
           }
-        }
-      });
+        });
     },
-
-    // lastName: this.family_name,
-    // firstName: this.given_name,
-    // contract: this.contract_input,
-    // staffType: this.staff_type_full,
-    // classification: this.classification_full,
-    // step: this.step_full,
-    // startingSalary: this.start_salary_full,
-    // wageAdjustment: this.wage_adj_full,
-    // salaryonCostRate: this.salary_rate_full,
-
-    submit(contract, e) {
-      if (this.contractID == "") {
-        console.log("EMPTY");
+    load_researcher() {
+      axios
+        .patch("http://10.36.241.204:8080/api/researchers", {
+          params: {
+            staffID: null,
+            title: null,
+            firstName: null,
+            lastName: null,
+          },
+        })
+        .then((resp) => {
+          for (var i = 0; i < resp.data.length; i++) {
+            this.researchers_name_list.push(resp.data[i].lastName);
+          }
+          this.researcher_data = resp.data;
+          console.log(this.researchers_name_list);
+        });
+    },
+    load_firstName(lastName) {
+      this.userContracts = [];
+      this.researchers_first_name_list = [];
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
+      for (var i = 0; i < this.researcher_data.length; i++) {
+        if (this.researcher_data[i].lastName == lastName) {
+          this.researchers_first_name_list.push(
+            this.researcher_data[i].firstName
+          );
+        }
       }
+    },
+    load_contract(lastName, firstName) {
+      this.userContracts = [];
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
+      console.log(this.researcher_data);
+      for (var i = 0; i < this.researcher_data.length; i++) {
+        if (
+          this.researcher_data[i].lastName == lastName &&
+          this.researcher_data[i].firstName == firstName
+        ) {
+          this.title_input = this.researcher_data[i].title;
+          axios
+            .get(
+              "http://10.36.241.204:8080/api/contracts/" +
+                this.researcher_data[i].staffID
+            )
+            .then((resp) => {
+              //console.log(resp.data[0].type);
+              for (var i = 0; i < resp.data.length; i++) {
+                this.userContracts.push(resp.data[i].type);
+              }
+            });
+        }
+      }
+    },
+    closeInfo() {
+      this.newProject = true;
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
+      this.title_input = "";
+      this.role_input = "";
+      this.contract_input = "";
+      this.family_name = "";
+      this.researchers_first_name_list = [];
+    },
+    async delete_researcher() {
+      await axios
+        .delete(
+          "http://10.36.241.204:8080/api/researchers/" +
+            this.projectIndexUpdate +
+            "/" +
+            this.contractID
+        )
+        .then((resp) => {
+          console.log(resp);
+        });
+      this.load_researcher_list();
+      this.given_name = "";
+      this.role_input = "";
+      this.contract_input = "";
+      this.title_input = "";
+      this.family_name = "";
+      this.full_time = false;
+      this.casual = false;
+      this.rhd = false;
+    },
+    async submit(contract) {
       if (contract == "NON_CASUAL") {
-        console.log(
-          "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_full +
-            " " +
-            this.classification_full +
-            " " +
-            this.step_full +
-            " " +
-            this.start_salary_full +
-            " " +
-            this.wage_adj_full +
-            " " +
-            this.salary_rate_full +
-            " " +
-            this.in_kind_full
-        );
-        console.log("--" + this.years);
-        axios.put(
-          "http://10.36.241.204:8080/api/researchers/1/" + this.contractID,
+        console.log("NON");
+        var annual_non = {};
+        for (var index in this.years) {
+          console.log(this.years[index].fte);
+          annual_non[this.years[index].year] = this.years[index].fte;
+        }
+        await axios.put(
+          "http://10.36.241.204:8080/api/researchers/" +
+            this.projectIndexUpdate +
+            "/" +
+            this.contractID,
           {
             role: this.role_input,
             inKindPercent: this.in_kind_full,
-            annualContributions: this.years,
+            annualContributions: annual_non,
+            onCostRate: this.salary_rate_full,
+            wageAdjustment: this.wage_adj_full,
           }
         );
+        this.researcherFixed_list = [];
+        this.load_researcher_list();
       } else if (contract == "CASUAL") {
-        console.log(
-          "UPDATING RESEARCHER WITH " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.staff_type_casual +
-            " " +
-            this.classification_casual +
-            " " +
-            this.pay_code_casual +
-            " " +
-            this.start_salary_casual +
-            " " +
-            this.wage_adj_casual +
-            " " +
-            this.salary_rate_casual +
-            " " +
-            this.in_kind_casual
-        );
+        //
       } else if (contract == "RHD") {
-        console.log(
-          "UPDATING RESEARCHER WITH STAFF ID:" +
-            e.staffID +
-            " " +
-            this.family_name +
-            " " +
-            this.given_name +
-            " " +
-            this.role_input +
-            " " +
-            this.contract_input +
-            " " +
-            this.classification_rhd +
-            " " +
-            this.annual_salary_rhd +
-            " " +
-            this.in_kind_rhd
+        console.log("HIT R");
+        var annual_rhd = {};
+        for (var index3 in this.years) {
+          console.log(this.years[index3].fte);
+          annual_rhd[this.years[index3].year] = this.years[index3].fte;
+        }
+        await axios.put(
+          "http://10.36.241.204:8080/api/researchers/" +
+            this.projectIndexUpdate +
+            "/" +
+            this.contractID,
+          {
+            role: this.role_input,
+            inKindPercent: this.in_kind_rhd,
+            annualContributions: annual_rhd,
+          }
         );
+        this.researcherFixed_list = [];
+        this.load_researcher_list();
       }
     },
 
@@ -1221,7 +1425,11 @@ export default {
     if (this.$store.state.projectIndex == -1) {
       this.$router.push("/");
     }
-    this.load_researcher_list();
+    if (this.$store.state.projectIndex != 0) {
+      this.projectIndexUpdate = this.$store.state.projectIndex;
+      this.load_researcher_list();
+    }
+    window.scrollTo(0, 0);
   },
 };
 </script>
