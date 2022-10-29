@@ -9,4 +9,12 @@ public class ContractDTO
 {
     Long id;
     String type;
+
+    String staffType;
+    String classification;
+    Integer payCode;
+    Integer step;
+
+    Double salary;
+    Double hourlyRate;
 }

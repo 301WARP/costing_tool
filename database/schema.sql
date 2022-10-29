@@ -191,10 +191,10 @@ CREATE TABLE `project`
     `partner_cash` DOUBLE(9,2),
     `entity` ENUM('NONE', 'IMAS')												-- values?
 		DEFAULT 'NONE',
-    `crowd_funding_provider` ENUM('?', 'NONE'),									-- values?
+    `crowd_funding_provider` ENUM('?', 'POZIBLE', 'NONE'),						-- values?
 
 	-- Specific to Category 1 projects
-	`category_1_subtype` ENUM('NONE'),
+	`category_1_subtype` ENUM('NONE', 'ARC', 'NHMRC_DECRA_DORA_DIA', 'OTHER'),
 
 	-- Specific to Consultancy projects
 	`profit_margin` Double(5,2),

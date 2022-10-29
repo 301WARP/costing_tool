@@ -4,9 +4,15 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    projectIndex: -1,
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    setProjectIndex(state, index) {
+      state.projectIndex = index;
+    },
+  },
   actions: {},
   modules: {},
 });
