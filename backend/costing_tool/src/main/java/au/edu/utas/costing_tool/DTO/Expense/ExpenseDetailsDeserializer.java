@@ -75,6 +75,9 @@ public class ExpenseDetailsDeserializer extends StdDeserializer<ExpenseDetailsDT
         if (longNode instanceof NullNode)
             return null;
 
+        if (longNode instanceof IntNode)
+            return Long.valueOf((Integer) ((IntNode)longNode).numberValue());
+
         return (Long) ((LongNode)longNode).numberValue();
     }
 

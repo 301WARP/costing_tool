@@ -105,7 +105,12 @@ public class Expense
 
     public Boolean addAnnualExpense(AnnualExpense annualExpense)
     {
-        return this.getAnnualExpenses().add(annualExpense);
+        Boolean didAdd = this.getAnnualExpenses().add(annualExpense);
+        
+        if (didAdd)
+            annualExpense.setExpense(this);
+
+        return didAdd;
     }
 
     public Boolean removeAnnualExpense(AnnualExpense annualExpense)

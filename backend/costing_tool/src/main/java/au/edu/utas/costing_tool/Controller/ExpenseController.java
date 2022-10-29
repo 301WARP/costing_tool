@@ -8,46 +8,34 @@ import java.net.URI;
 // =============================================================================
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import lombok.Data;
-import au.edu.utas.costing_tool.DTO.Expense.AuditFeeDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.ConsumableDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.EquipmentPurchaseDetailsDTO;
 import au.edu.utas.costing_tool.DTO.Expense.ExpenseDetailsDTO;
 import au.edu.utas.costing_tool.DTO.Expense.ExpenseListDTO;
-import au.edu.utas.costing_tool.DTO.Expense.ExternalContractorDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.FacilityCostDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.LaboratoryHireDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.OtherCostsDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.PartnerOrganisationDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.RhdNonStipendCostDetailsDTO;
-import au.edu.utas.costing_tool.DTO.Expense.TravelDetailsDTO;
 import au.edu.utas.costing_tool.Mapper.ExpenseDetailsMapper;
 import au.edu.utas.costing_tool.Mapper.ExpenseListMapper;
-import au.edu.utas.costing_tool.Model.Expense.Consumables;
-import au.edu.utas.costing_tool.Model.Expense.EquipmentPurchases;
+
 
 // =============================================================================
 // Project Imports
 // =============================================================================
 
 import au.edu.utas.costing_tool.Model.Expense.Expense;
-import au.edu.utas.costing_tool.Model.Expense.LaboratoryHire;
 import au.edu.utas.costing_tool.Model.Project.Project;
 import au.edu.utas.costing_tool.Service.ExpenseService;
 import au.edu.utas.costing_tool.Service.ProjectService;
-import au.edu.utas.costing_tool.Util.Log;
 
 
 @Data
@@ -158,10 +146,55 @@ public class ExpenseController
         return ResponseEntity.created(location).body(detailsDTO);
     }
 
-    /*
-    public void updateCost(Expense c)
+    @CrossOrigin(origins="*")
+    @PutMapping(path="/expenses/{expenseID}")
+    ResponseEntity<ExpenseDetailsDTO>
+    updateExpense(  @RequestBody ExpenseDetailsDTO dto,
+                    @PathVariable Long expenseID)
     {
-        // TODO: not yet implemented
+        // Bad request
+        if (expenseID == null || dto == null)
+            return ResponseEntity.badRequest().build();
+
+        Expense oldExpense
+            = this.xService.findExpense(expenseID);
+
+        // No such project/expense
+        if (oldExpense == null || oldExpense.getProject() == null)
+            return ResponseEntity.notFound().build();
+
+        Expense newExpense = this.detailsMapper.map(dto);
+
+        newExpense =
+            this.xService
+                .updateExpense(oldExpense, newExpense);
+        
+        ExpenseDetailsDTO detailsDTO =
+            this.detailsMapper.map(newExpense);
+
+        return ResponseEntity.ok().body(detailsDTO);
     }
-    */
+
+
+    @CrossOrigin(origins="*")
+    @DeleteMapping(path="/expenses/{expenseID}")
+    ResponseEntity<Void>
+    deleteExpense(@PathVariable Long expenseID)
+    {
+        // Bad request
+        if (expenseID == null)
+            return ResponseEntity.badRequest().build();
+
+        Expense expense
+            = this.xService.findExpense(expenseID);
+
+        // No such project/expense
+        if (expense == null)
+            return ResponseEntity.notFound().build();
+
+        this.xService
+            .deleteExpense(expense);
+        
+        return ResponseEntity.ok().build();
+    }
 }

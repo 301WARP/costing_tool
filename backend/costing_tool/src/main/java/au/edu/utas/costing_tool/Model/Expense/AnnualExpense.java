@@ -53,6 +53,6 @@ public class AnnualExpense
     {
         this.expense = expense;
         this.expenseID = expense.getId();
-        expense.addAnnualExpense(this);
+        //expense.addAnnualExpense(this);
     }
 }
