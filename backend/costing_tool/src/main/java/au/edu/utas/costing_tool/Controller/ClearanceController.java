@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import au.edu.utas.costing_tool.DTO.DisplayClearanceDTO;
-import au.edu.utas.costing_tool.DTO.UpdateClearanceDTO;
+import au.edu.utas.costing_tool.DTO.Clearance.DisplayClearanceDTO;
+import au.edu.utas.costing_tool.DTO.Clearance.UpdateClearanceDTO;
 import au.edu.utas.costing_tool.Mapper.ClearanceMapper;
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Model.Project.Project;
 import au.edu.utas.costing_tool.Service.ProjectService;
 import lombok.Data;
 

@@ -22,13 +22,16 @@ DROP TABLE IF EXISTS `director_endorsement`;
 DROP TABLE IF EXISTS `college_endorsement`;
 DROP TABLE IF EXISTS `unit`;
 DROP TABLE IF EXISTS `college`;
+DROP TABLE IF EXISTS `facility_cost`;
+DROP TABLE IF EXISTS `salary_on_cost`;
+DROP TABLE IF EXISTS `audit_fee`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- Researchers
 CREATE TABLE `researcher`
 (
-	`staff_id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	`staff_id` INTEGER(6) UNSIGNED NOT NULL UNIQUE,
 	`title` ENUM('NONE', 'MR', 'MISS', 'MRS', 'MS', 'DR', 'PROF', 'TBA'),
 	`first_name` VARCHAR(50),
 	`last_name` VARCHAR(50),
@@ -66,16 +69,97 @@ CREATE TABLE `contract`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     `researcher_id` INTEGER(6) UNSIGNED NOT NULL,
-    `contract_type` ENUM('NON_CASUAL', 'CASUAL', 'RHD'),
-    `staff_type_non_casual` ENUM(	'ACADEMIC', 'PROFESSIONAL',
-									'RESEARCH_ASSISTANT'),
-    `staff_type_casual` ENUM(	'ACADEMIC', 'PROFESSIONAL',
-								'NON_AWARD_TEACHING', 'CONSERVATORIUM_AMEB'),
-    `classification_non_casual` ENUM('A', 'B', 'C', 'D', 'E'),					-- values?
-    `classification_casual` ENUM('RA1', 'RA2', 'RA3', 'RA4', 'RA5'),			-- values?
-    `classification_rhd` ENUM('APA', 'TopUp'),									-- values?
-    `pay_code` ENUM('1', '2', '3'),												-- values?
-    `step` ENUM('1', '2', '3'),													-- values?
+    `contract_type` ENUM(
+		'NONE',
+
+		'NON_CASUAL', 'CASUAL', 'RHD'
+	),
+    `staff_type_non_casual` ENUM(
+		'NONE',
+
+		'ACADEMIC', 'PROFESSIONAL', 'RESEARCH_ASSISTANT'
+	),
+    `staff_type_casual` ENUM(
+		'NONE',
+
+		'ACADEMIC', 'PROFESSIONAL', 'TEACHING', 'CONSERVATORIUM'
+	),
+    `classification_non_casual` ENUM(
+		'NONE', 
+
+		'LEVEL_A', 'LEVEL_B', 'LEVEL_C', 'LEVEL_D', 'LEVEL_E',
+
+		'HEO_LEVEL_1', 'HEO_LEVEL_2', 'HEO_LEVEL_3', 'HEO_LEVEL_4', 'HEO_LEVEL_5',
+		'HEO_LEVEL_6', 'HEO_LEVEL_7', 'HEO_LEVEL_8', 'HEO_LEVEL_9', 'HEO_LEVEL_10',
+
+		'RA_1', 'RA_2', 'RA_3'
+	),
+    `classification_casual` ENUM(
+		'NONE',
+
+		'LECTURING', 'TUTORING_ACADEMIC', 'MARKING', 'MUSIC_ACCOMPANYING',
+
+		'CLINICAL_NURSE', 'RESEARCH_ACADEMIC', 'OTHER_ACADEMIC',
+
+		'RESEARCH', 'PROFESSIONAL', 'PIECEWORK',
+
+		'ELICOS', 'IELTS', 'TUTORING', 'ATAS_TUTORING',
+
+		'AMEB'
+	),
+    `classification_rhd` ENUM(
+	    'NONE',
+
+		'APA', 'APAI', 'TOP_UP'
+	),
+    `pay_code` ENUM(
+		'NONE',
+
+		'CAL1', 'CAL2', 'CAL3', 'CAL4',
+		'CAT1', 'CAT2', 'CAT3', 'CAT4',
+		'CAM1', 'CAM2', 'CAM3',
+		'CMU1', 'CMU2',
+		'CAN1', 'CAN2', 'CAN3', 'CAN4',
+		'CJRF',
+		'CAO1', 'CAO2',
+
+		'CRA1', 'CRA2', 'CRA3',
+		'CJG1', 'CJG2', 'CJG3', 'CJG4',
+		'CG01', 'CG01L', 'CG02', 'CG03', 'CG04', 'CG06', 'CG07', 'CG08', 'CG09', 'CG10', 'CG54',
+		'CHMA1', 'CHMA2', 'CHMA3', 'CHMA4', 'CHMA5',
+
+		'ELC1', 'CTE01', 'CTE02',
+		'ELCIW', 'ELCTW', 'ELCEW', 'ELCIS', 'ELCTS', 'ELCES',
+		'CTUT1', 'CTUT2',
+		'RTUTU', 'RTUTG', 'RMENT', 'RGRP',
+
+		'CMSS', 'CMOES', 'CMTE1'
+	),
+    `step` ENUM(
+		'NONE',
+
+		'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8',
+		'B1', 'B2', 'B3', 'B4', 'B5', 'B6',
+		'C1', 'C2', 'C3', 'C4', 'C5', 'C6',
+		'D1', 'D2', 'D3', 'D4',
+		'E1', 'E2',
+
+		'HEO_1_1', 'HEO_1_2', 'HEO_1_3',
+		'HEO_2_1', 'HEO_2_2',
+		'HEO_3_1', 'HEO_3_2', 'HEO_3_3', 'HEO_3_4', 'HEO_3_5',
+		'HEO_4_1', 'HEO_4_2', 'HEO_4_3', 'HEO_4_4',
+		'HEO_5_1', 'HEO_5_2', 'HEO_5_3', 'HEO_5_4', 'HEO_5_5',
+		'HEO_6_1', 'HEO_6_2', 'HEO_6_3', 'HEO_6_4', 'HEO_6_5',
+
+		'HEO_7_1', 'HEO_7_2', 'HEO_7_3', 'HEO_7_4', 'HEO_7_5',
+		'HEO_8_1', 'HEO_8_2', 'HEO_8_3', 'HEO_8_4', 'HEO_8_5', 'HEO_8_6',
+		'HEO_9_1', 'HEO_9_2', 'HEO_9_3', 'HEO_9_4', 'HEO_9_5',
+		'HEO_10_1', 'HEO_10_2',
+
+		'RA_1_1',
+		'RA_2_1',
+		'RA_3_1'
+	),
     `salary` DOUBLE(9,2)
 		CHECK (`salary` >= 0),
     `hourly_rate` DOUBLE(9,2)
@@ -182,10 +266,14 @@ CREATE TABLE `project`
 CREATE TABLE `expense`
 (
     `id` INTEGER(6) UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `project_id` INTEGER(6) UNSIGNED NOT NULL,
-    `expense_type` ENUM('TRAVEL', 'FACILITY_HIRE', 'EQUIPMENT', 'CONSUMABLES',
-						'PARTNER_ORGANISATIONS', 'EXTERNAL_CONTRACTING',
-						'RHD_NON-STIPEND_COSTS', 'OTHER', 'NONE'),
+    `project_id` INTEGER(6) UNSIGNED,
+    `expense_type` ENUM(
+		'NONE', 'TRAVEL', 'LABORATORY_HIRE', 'CONSUMABLES',
+		'EQUIPMENT_PURCHASES', 'EXTERNAL_CONTRACTOR', 'OTHER_COSTS',
+		'AUDIT_FEES', 'RHD_NON_STIPEND_COSTS', 'FACILITY_COSTS',
+		'PARTNER_ORGANISATION'
+	),
+    `description` VARCHAR(256),
     `cost_per_unit` DOUBLE(9,2),
     `in_kind_%` DOUBLE(9,2),
 
@@ -198,14 +286,16 @@ CREATE TABLE `expense`
     `meals` DOUBLE(9,2),
     `accommodation` DOUBLE(9,2),
 
-	-- Facility  Hire
-    `facility` ENUM('NONE', 'LABS_R_US'),
-    `time_unit` ENUM('NONE', 'MINUTES', 'HOURS', 'DAYS', 'WEEKS', 'MONTHS'),
+	-- Facility  costs
+	`facility_cost_id` INTEGER(6) UNSIGNED,
+
+	-- Audit fees
+	`audit_fee_id` INTEGER(6) UNSIGNED,
 
 	-- Partner Organisation
-    `organisation` ENUM('UMELB', '?', 'NONE'),
+    `organisation` VARCHAR(256),
+    -- `organisation` ENUM('UMELB', '?', 'NONE'),
     PRIMARY KEY (`id`)
-
 ) Engine=InnoDB;
 
 -- Annual Expenses
@@ -237,7 +327,7 @@ CREATE TABLE `director_endorsement`
 -- Unit
 CREATE TABLE `unit`
 (
-	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`id` INTEGER(6) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(256),
 	`abbreviation` VARCHAR(256),
 	`head_id` INTEGER(6) UNSIGNED NOT NULL,
@@ -258,11 +348,69 @@ CREATE TABLE `college_endorsement`
 -- College
 CREATE TABLE `college`
 (
-	`id` INTEGER(6) UNSIGNED NOT NULL,
+	`id` INTEGER(6) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(256),
 	`executive_dean_id` INTEGER(6) UNSIGNED,
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
+
+-- Facility costs
+CREATE TABLE `facility_cost`
+(
+	`id` INTEGER(6) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`facility` ENUM('NONE', 'ANIMAL', 'AMC', 'CSL', 'IMAS', 'MENZIES', 'TIA'),
+	`name` VARCHAR(256),
+	`cost_per_unit` DOUBLE,
+	`units` ENUM(
+		'NONE',
+		-- time
+		'HOURS', 'HOURS_60', 'DAYS', 'MONTHS', 'YEARS',
+		-- size
+		'KM', 'SQ_MTR', 'LITRES',
+		-- mass
+		'GRAMS',
+		-- size/time
+		'SQ_MTR_WEEK',
+		-- size/item
+		'HA_CROP',
+		-- items/time
+		'ANNUM_PERCENT', 'ANNUM_PERSON', 'ANNUM_PHONE', 'ANNUM_FTE',
+			'ITEMS_WEEKS',
+		-- events
+		'CANCELLATIONS', 'TRANSFERS',
+		-- items
+		'ITEMS', 'UNITS', 'SAMPLES', 'ANIMALS', 'STRAINS', 'TIPS', 'PERSON',
+			'PARTICIPANTS', 'FTES',
+		-- items/event
+		'DIVE', 
+		-- collections
+		'BATCHES', 'BLOCKS', 'BAGS', 'ROW_12', 'ROW_8', 'PLATE', 'BOX_96',
+			'DISCS'
+	),
+	`notes` VARCHAR(256),
+	PRIMARY KEY (`id`)
+) Engine=InnoDB;
+
+-- Salary on cost rate
+CREATE TABLE `salary_on_cost`
+(
+	`type` ENUM('PERMANENT_ADDITIONAL', 'PERMANENT_GOV', 'CASUAL'),
+	`year` INTEGER(4),
+	`percent` DOUBLE,
+	PRIMARY KEY (`type`, `year`)
+) Engine=InnoDB;
+
+-- Salary on cost rate
+CREATE TABLE `audit_fee`
+(
+	`id` INTEGER(6) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`type` ENUM('EXTERNAL'),
+	`cost_per_unit` DOUBLE,
+	`units` ENUM('AUDITS'),
+	`notes` VARCHAR(256),
+	PRIMARY KEY (`id`)
+) Engine=InnoDB;
+
 
 -- Specify foreign keys
 ALTER TABLE `contract` ADD FOREIGN KEY (`researcher_id`) REFERENCES `researcher` (`staff_id`);
@@ -272,6 +420,8 @@ ALTER TABLE `contribution` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (
 -- ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
 ALTER TABLE `project` ADD FOREIGN KEY (`rhd_unit_id`) REFERENCES `unit` (`id`);
 ALTER TABLE `expense` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
+ALTER TABLE `expense` ADD FOREIGN KEY (`facility_cost_id`) REFERENCES `facility_cost` (`id`);
+ALTER TABLE `expense` ADD FOREIGN KEY (`audit_fee_id`) REFERENCES `audit_fee` (`id`);
 ALTER TABLE `annual_expense` ADD FOREIGN KEY (`expense_id`) REFERENCES `expense` (`id`);
 ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 ALTER TABLE `director_endorsement` ADD FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`);
@@ -286,4 +436,5 @@ ALTER TABLE `college` ADD FOREIGN KEY (`executive_dean_id`) REFERENCES `research
 -- Test Data
 -- -----------------------------------------------------------------------------
 
+source ./data.sql;
 source ./test_data.sql;

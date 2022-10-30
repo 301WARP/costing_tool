@@ -35,24 +35,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // =============================================================================
 
 import au.edu.utas.costing_tool.Controller.ClearanceController;
-
-import au.edu.utas.costing_tool.DTO.DisplayClearanceDTO;
-import au.edu.utas.costing_tool.Enums.AMCMenzies;
-import au.edu.utas.costing_tool.Enums.AMCNationalCentre;
-import au.edu.utas.costing_tool.Enums.Category1Subtype;
-import au.edu.utas.costing_tool.Enums.ProjectCategory;
-import au.edu.utas.costing_tool.Enums.ResearchEntity;
-import au.edu.utas.costing_tool.Enums.RhdInvolvement;
-import au.edu.utas.costing_tool.Enums.Title;
-import au.edu.utas.costing_tool.Enums.YearEndType;
+import au.edu.utas.costing_tool.DTO.Clearance.DisplayClearanceDTO;
+import au.edu.utas.costing_tool.Enums.Project.AMCMenzies;
+import au.edu.utas.costing_tool.Enums.Project.AMCNationalCentre;
+import au.edu.utas.costing_tool.Enums.Project.Category1Subtype;
+import au.edu.utas.costing_tool.Enums.Project.ProjectCategory;
+import au.edu.utas.costing_tool.Enums.Project.ResearchEntity;
+import au.edu.utas.costing_tool.Enums.Project.RhdInvolvement;
+import au.edu.utas.costing_tool.Enums.Project.YearEndType;
+import au.edu.utas.costing_tool.Enums.Researcher.Title;
 import au.edu.utas.costing_tool.Mapper.ClearanceMapper;
-import au.edu.utas.costing_tool.Model.EthicsChecklist;
-import au.edu.utas.costing_tool.Model.FORCodes;
-import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.ResearchAreas;
-import au.edu.utas.costing_tool.Model.Researcher;
-import au.edu.utas.costing_tool.Model.SEOCodes;
-import au.edu.utas.costing_tool.Model.Unit;
+import au.edu.utas.costing_tool.Model.Entity.Unit;
+import au.edu.utas.costing_tool.Model.Project.EthicsChecklist;
+import au.edu.utas.costing_tool.Model.Project.FORCodes;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Model.Project.ResearchAreas;
+import au.edu.utas.costing_tool.Model.Project.SEOCodes;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import au.edu.utas.costing_tool.Service.ProjectService;
 
 

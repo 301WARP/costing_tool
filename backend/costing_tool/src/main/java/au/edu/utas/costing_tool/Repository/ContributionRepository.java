@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import au.edu.utas.costing_tool.Model.Contribution;
-import au.edu.utas.costing_tool.Model.ContributionID;
+import au.edu.utas.costing_tool.Model.Contribution.Contribution;
+import au.edu.utas.costing_tool.Model.Contribution.ContributionID;
 
 public interface ContributionRepository
     extends JpaRepository<Contribution, ContributionID>

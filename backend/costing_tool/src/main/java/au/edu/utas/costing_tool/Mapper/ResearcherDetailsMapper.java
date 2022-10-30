@@ -13,21 +13,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.DTO.CasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.ContributionDetailsDTO;
-import au.edu.utas.costing_tool.DTO.NonCasualDetailsDTO;
-import au.edu.utas.costing_tool.DTO.RHDDetailsDTO;
-import au.edu.utas.costing_tool.Model.AnnualContribution;
-import au.edu.utas.costing_tool.Model.Casual;
-import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Model.Contribution;
-import au.edu.utas.costing_tool.Model.NonCasual;
-import au.edu.utas.costing_tool.Model.RHD;
+import au.edu.utas.costing_tool.DTO.Contribution.CasualDetailsDTO;
+import au.edu.utas.costing_tool.DTO.Contribution.ContributionDetailsDTO;
+import au.edu.utas.costing_tool.DTO.Contribution.NonCasualDetailsDTO;
+import au.edu.utas.costing_tool.DTO.Contribution.RHDDetailsDTO;
+import au.edu.utas.costing_tool.Model.Contract.Casual;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Contract.NonCasual;
+import au.edu.utas.costing_tool.Model.Contract.RHD;
+import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
+import au.edu.utas.costing_tool.Model.Contribution.Contribution;
 
 @Mapper
 public interface ResearcherDetailsMapper

@@ -23,18 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
-
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.DTO.ProjectDetailsDTO;
-import au.edu.utas.costing_tool.DTO.ProjectListDTO;
-import au.edu.utas.costing_tool.DTO.ProjectRecommendationDTO;
+import au.edu.utas.costing_tool.DTO.Project.ProjectDetailsDTO;
+import au.edu.utas.costing_tool.DTO.Project.ProjectListDTO;
+import au.edu.utas.costing_tool.DTO.Project.ProjectRecommendationDTO;
 import au.edu.utas.costing_tool.Mapper.ProjectDetailsMapper;
 import au.edu.utas.costing_tool.Mapper.ProjectListMapper;
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Model.Project.Project;
 import au.edu.utas.costing_tool.Service.ProjectService;
 
 

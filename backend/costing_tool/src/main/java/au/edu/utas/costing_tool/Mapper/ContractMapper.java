@@ -1,5 +1,10 @@
 package au.edu.utas.costing_tool.Mapper;
 
+
+// =============================================================================
+// External Imports
+// =============================================================================
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,11 +14,18 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.SubclassMapping;
 
-import au.edu.utas.costing_tool.DTO.ContractDTO;
-import au.edu.utas.costing_tool.Model.Casual;
-import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Model.NonCasual;
-import au.edu.utas.costing_tool.Model.RHD;
+
+// =============================================================================
+// Project Imports
+// =============================================================================
+
+import au.edu.utas.costing_tool.DTO.Contract.ContractDTO;
+
+import au.edu.utas.costing_tool.Model.Contract.Casual;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Contract.NonCasual;
+import au.edu.utas.costing_tool.Model.Contract.RHD;
+
 
 @Mapper
 public interface ContractMapper

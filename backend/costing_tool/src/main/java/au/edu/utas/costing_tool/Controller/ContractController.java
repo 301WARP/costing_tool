@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import au.edu.utas.costing_tool.DTO.ContractDTO;
+import au.edu.utas.costing_tool.DTO.Contract.ContractDTO;
 import au.edu.utas.costing_tool.Mapper.ContractMapper;
-import au.edu.utas.costing_tool.Model.Contract;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
 import au.edu.utas.costing_tool.Service.ContractService;
 import au.edu.utas.costing_tool.Service.ResearcherService;
 import lombok.Data;

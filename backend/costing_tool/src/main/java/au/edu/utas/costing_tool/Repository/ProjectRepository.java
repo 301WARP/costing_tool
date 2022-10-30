@@ -10,12 +10,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-
-// =============================================================================
-// Project Imports
-// =============================================================================
-
-import au.edu.utas.costing_tool.Model.Project;
+import au.edu.utas.costing_tool.Model.Project.Project;
 
 
 public interface ProjectRepository extends JpaRepository<Project, Long>

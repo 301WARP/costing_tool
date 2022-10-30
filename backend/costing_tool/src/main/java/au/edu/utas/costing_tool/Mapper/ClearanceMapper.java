@@ -17,16 +17,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Qualifier;
 
-import au.edu.utas.costing_tool.DTO.DisplayClearanceDTO;
-import au.edu.utas.costing_tool.DTO.UpdateClearanceDTO;
-import au.edu.utas.costing_tool.Enums.ContractType;
-import au.edu.utas.costing_tool.Model.Contract;
-import au.edu.utas.costing_tool.Model.EthicsChecklist;
-import au.edu.utas.costing_tool.Model.ExternalResearcher;
-import au.edu.utas.costing_tool.Model.FORCodes;
-import au.edu.utas.costing_tool.Model.Project;
-import au.edu.utas.costing_tool.Model.Researcher;
-import au.edu.utas.costing_tool.Model.SEOCodes;
+import au.edu.utas.costing_tool.DTO.Clearance.DisplayClearanceDTO;
+import au.edu.utas.costing_tool.DTO.Clearance.UpdateClearanceDTO;
+import au.edu.utas.costing_tool.Enums.Contract.ContractType;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Project.EthicsChecklist;
+import au.edu.utas.costing_tool.Model.Project.FORCodes;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Model.Project.SEOCodes;
+import au.edu.utas.costing_tool.Model.Researcher.ExternalResearcher;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 
 
 @Mapper
