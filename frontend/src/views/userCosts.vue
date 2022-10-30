@@ -371,7 +371,7 @@ export default {
     load_project_cost() {
       axios
         .get(
-          "http://10.36.241.204:8080/api/expenseList/" +
+          "http://10.36.241.204:8080/api/expenses/" +
             this.$store.state.projectIndex
         )
         .then((resp) => {
@@ -379,13 +379,28 @@ export default {
           this.costListTemp = resp.data;
           var obj;
           for (var i = 0; i < this.costListTemp.length; i++) {
-            obj = {
-              id: this.costListTemp[i].id,
-              type: this.costListTemp[i].type,
-              description: this.costListTemp[i].description,
-              in_kind: this.costListTemp[i].inKindPercent,
-              actual_cost: this.costListTemp[i].actualCost,
-            };
+            var cost = this.costListTemp[i];
+            if (this.costListTemp[i].type == "FACILITY_HIRE") {
+              obj = {
+                id: cost.id,
+                type: "Facility Hire",
+                description: cost.description,
+                costPerUnit: cost.cost,
+                in_kind: cost.inKindPercent,
+                annualExpenses: [],
+                facility: cost.facility,
+                timeUnit: cost.timeUnit,
+                // actual_cost: cost.actualCost,
+              };
+              for (var j = 0; j < cost.annualExpenses.length; j++) {
+                var eachYear = {
+                  expenseID: cost.annualExpenses[j].expenseID,
+                  year: cost.annualExpenses[j].year,
+                  units: cost.annualExpenses[j].units,
+                };
+                obj.annualExpenses.push(eachYear);
+              }
+            }
             this.costListFixed.push(obj);
           }
           console.log(this.costListFixed);
