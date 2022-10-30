@@ -7,7 +7,8 @@
         </v-btn>
       </v-row>
     </v-row>
-    <v-row id="no-margin-x" v-if="isExporting">
+    <v-row id="no-margin-x">
+      <!-- v-if="isExporting" -->
       <v-container id="element-to-convert">
         <v-col
           cols="12"
@@ -649,17 +650,8 @@ export default {
         contactName: "",
         contactEmail: "",
       },
-      leadInvestigator: {
-        name: "",
-        organisation: "",
-        fte: "",
-      },
-      investigators: {
-        // array of:
-        name: "",
-        organisation: "",
-        fte: "",
-      },
+      leadInvestigator: [],
+      investigators: [],
       externalInvestigators: {
         // array of:
         name: "",
@@ -776,7 +768,15 @@ export default {
           this.leadInvestigator.organisation =
             resp.data.leadInvestigator.organisation;
           this.leadInvestigator.fte = resp.data.leadInvestigator.fte;
-          console.log(this.categories);
+          for (var i = 0; i < resp.data.investigators.length; i++) {
+            var temp = {
+              fte: resp.data.investigators[i].fte,
+              name: resp.data.investigators[i].name,
+              organisation: resp.data.investigators[i].organisation,
+            };
+            this.investigators.push(temp);
+          }
+          console.log(this.investigators);
         });
     },
   },
