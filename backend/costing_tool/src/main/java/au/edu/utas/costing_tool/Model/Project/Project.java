@@ -46,6 +46,7 @@ import au.edu.utas.costing_tool.Enums.Project.ProjectCategory;
 import au.edu.utas.costing_tool.Enums.Project.ResearchEntity;
 import au.edu.utas.costing_tool.Enums.Project.RhdInvolvement;
 import au.edu.utas.costing_tool.Enums.Project.YearEndType;
+import au.edu.utas.costing_tool.Model.Contract.Contract;
 import au.edu.utas.costing_tool.Model.Contribution.Contribution;
 import au.edu.utas.costing_tool.Model.Entity.Unit;
 import au.edu.utas.costing_tool.Model.Expense.Expense;
@@ -363,5 +364,63 @@ public class Project
     public boolean removeExpense(Expense expense)
     {
         return this.getExpenses().remove(expense);
+    }
+
+    public
+    <T extends Contract>
+    Double
+    labourActualCost(Class<T> clazz)
+    {
+        return this.getContributions().stream()
+            .filter(c -> c.getContract().getClass() == clazz)
+            .mapToDouble(c -> c.Price())
+            .sum();
+    }
+
+    public
+    <T extends Contract>
+    Double
+    labourInKindPercent(Class<T> clazz)
+    {
+        Double actualCost = this.labourActualCost(clazz);
+
+        if (actualCost == 0.0)
+            return 0.0;
+
+        Double inKindDollar =  this.getContributions().stream()
+            .filter(c -> c.getContract().getClass() == clazz)
+            .mapToDouble(c -> c.InKindDollar())
+            .sum();
+        
+        return 100 * inKindDollar / actualCost;
+    }
+
+    public
+    <T extends Expense>
+    Double
+    expensesActualCost(Class<T> clazz)
+    {
+        return this.getExpenses().stream()
+            .filter(x -> x.getClass() == clazz)
+            .mapToDouble(x -> x.Cost())
+            .sum();
+    }
+
+    public
+    <T extends Expense>
+    Double
+    expenseInKindPercent(Class<T> clazz)
+    {
+        Double actualCost = this.expensesActualCost(clazz);
+
+        if (actualCost == 0.0)
+            return 0.0;
+
+        Double inKindDollar =  this.getExpenses().stream()
+            .filter(x -> x.getClass() == clazz)
+            .mapToDouble(x -> x.inKindDollar())
+            .sum();
+
+        return 100 * inKindDollar / actualCost;
     }
 }
