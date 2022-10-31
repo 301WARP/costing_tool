@@ -191,7 +191,7 @@ CREATE TABLE `project`
     `partner_cash` DOUBLE(9,2),
     `entity` ENUM('NONE', 'IMAS')												-- values?
 		DEFAULT 'NONE',
-    `crowd_funding_provider` ENUM('?', 'POZIBLE', 'NONE'),						-- values?
+    `crowd_funding_provider` ENUM('POZIBLE', 'NONE'),						-- values?
 
 	-- Specific to Category 1 projects
 	`category_1_subtype` ENUM('NONE', 'ARC', 'NHMRC_DECRA_DORA_DIA', 'OTHER'),
@@ -294,7 +294,7 @@ CREATE TABLE `expense`
 
 	-- Partner Organisation
     `organisation` VARCHAR(256),
-    -- `organisation` ENUM('UMELB', '?', 'NONE'),
+    -- `organisation` ENUM('UMELB', 'NONE'),
     PRIMARY KEY (`id`)
 ) Engine=InnoDB;
 
