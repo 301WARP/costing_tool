@@ -30,6 +30,7 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -45,6 +46,7 @@ import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -85,32 +87,7 @@ public abstract class Contract
                 fetch=FetchType.LAZY,
                 mappedBy="contract")
     @JsonManagedReference
-    protected List<Contribution> contributions;
-
-
-    // ========================================================================= 
-    // Constructors
-    // ========================================================================= 
-
-    public Contract()
-    {
-        this.setContributions(new ArrayList<Contribution>());
-    }
-
-    public Contract(ContractType type)
-    {
-        this();
-        this.setContractType(type);
-    }
-
-    public Contract(Researcher researcher, ContractType type)
-    {
-        this(type);
-        this.setResearcher(researcher);
-
-        // Add contract to researcher
-        this.getResearcher().addContract(this);
-    }
+    protected List<Contribution> contributions = new ArrayList<Contribution>();
 
 
     // ========================================================================= 

@@ -233,7 +233,7 @@ INSERT INTO `contract`
 	NULL,											-- non-casual classification
 	NULL,											-- step
 	'PROFESSIONAL',									-- casual staff type
-	'RESEARCH_ACADEMIC',							-- casual classification
+	'RESEARCH',										-- casual classification
 	'CRA1',											-- pay code
 	NULL,											-- RHD classification
 	NULL											-- wage expense

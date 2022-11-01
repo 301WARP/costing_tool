@@ -10,6 +10,10 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,51 +47,35 @@ public class Casual extends Staff
     // Properties
     // =========================================================================
 
-    @Column(name="staff_type_casual")
+    @Column(name="`staff_type_casual`",
+            insertable=false,
+            updatable=false)
     @Enumerated(EnumType.STRING)
     protected CasualStaffType staffType;
 
-    @Column(name="classification_casual")
+    @Column(name="`classification_casual`",
+            insertable=false,
+            updatable=false)
     @Enumerated(value=EnumType.STRING)
     private CasualClassification classification;
 
-    @Column(name="pay_code")
+    @Column(name="`pay_code`",
+            insertable=false,
+            updatable=false)
     @Enumerated(value=EnumType.STRING)
     private PayCode payCode;
 
-    @Column(name="hourly_rate")
-    private Double hourlyRate;
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumns({
+        @JoinColumn(name="`staff_type_casual`",
+                    referencedColumnName="`staff_type`"),
+        @JoinColumn(name="`classification_casual`",
+                    referencedColumnName="`classification`"),
+        @JoinColumn(name="`pay_code`",
+                    referencedColumnName="`pay_code`")
+    })
+    private CasualPaymentDetails paymentDetails;
 
-    // TODO(Andrew): Contribution?
-    //private Dictionary<LocalDate, Double> Hours;
-
-
-    // =========================================================================
-    // Constructors
-    // =========================================================================
-
-    /*
-    public Casual() {super();}
-
-    public Casual(Researcher researcher)
-    {
-        super(researcher, ContractType.CASUAL);
-    }
-
-    public Casual(  Researcher researcher,
-                    Double wageAdjustment,
-                    Double salaryOnCostRate,
-                    CasualClassification classification,
-                    PayCode step,
-                    Double hourlyRate)
-    {
-        super(researcher, ContractType.CASUAL, wageAdjustment, salaryOnCostRate);
-
-        this.setClassification(classification);
-        this.setPayCode(payCode);
-        this.setHourlyRate(hourlyRate);
-    }
-    */
 
 
     // =========================================================================

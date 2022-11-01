@@ -62,7 +62,7 @@ public interface ResearcherDetailsMapper
     @Mapping(target="classification", source="contract.classification")
     @Mapping(   target="step", source="contract.step",
                 qualifiedByName="enumToInteger")
-    @Mapping(target="startingSalary", source="contract.startingSalary")
+    @Mapping(target="startingSalary", source="contract.paymentDetails.salary")
     @Mapping(target="wageAdjustment", source="contribution.wageAdjustment")
     @Mapping(target="salaryOnCostRate", source="contribution.onCostRate")
     @Mapping(   target="annualContributions",
@@ -78,7 +78,7 @@ public interface ResearcherDetailsMapper
     @Mapping(target="classification", source="contract.classification")
     @Mapping(   target="payCode", source="contract.payCode",
                 qualifiedByName="enumToInteger")
-    @Mapping(target="hourlyRate", source="contract.hourlyRate")
+    @Mapping(target="hourlyRate", source="contract.paymentDetails.hourlyRate")
     @Mapping(target="wageAdjustment", source="contribution.wageAdjustment")
     @Mapping(target="salaryOnCostRate", source="contribution.onCostRate")
     @Mapping(   target="annualContributions",
@@ -91,7 +91,7 @@ public interface ResearcherDetailsMapper
 
     @Mapping(target="role", source="contribution.role")
     @Mapping(target="classification", source="contract.classification")
-    @Mapping(target="wageExpense", source="contract.annualSalary")
+    @Mapping(target="wageExpense", source="contract.wageExpense")
     @Mapping(   target="annualContributions",
                 source="contribution.annualContributions",
                 qualifiedByName="annualContributionsMap")

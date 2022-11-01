@@ -12,14 +12,11 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @Builder
-//@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 public class AuditFeeDetailsDTO extends ExpenseDetailsDTO
 {
     Long id;

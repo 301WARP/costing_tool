@@ -284,7 +284,7 @@ public class Contribution
             return null;
 
         if (contract instanceof NonCasual) {
-            Double salary = ((NonCasual)contract).getStartingSalary();
+            Double salary = ((NonCasual)contract).getPaymentDetails().getSalary();
 
             if (salary == null)
                 return null;
@@ -292,7 +292,7 @@ public class Contribution
             return salary * onCost * fte / 100.0;
         }
         else if (contract instanceof RHD)  {
-            Double salary = ((RHD)contract).getAnnualSalary();
+            Double salary = ((RHD)contract).getWageExpense();
 
             if (salary == null)
                 return null;
@@ -300,7 +300,7 @@ public class Contribution
             return salary * fte / 100.0;
         }
         else if (contract instanceof Casual) {
-            Double hourlyRate = ((Casual)contract).getHourlyRate();
+            Double hourlyRate = ((Casual)contract).getPaymentDetails().getHourlyRate();
 
             if (hourlyRate == null)
                 return null;

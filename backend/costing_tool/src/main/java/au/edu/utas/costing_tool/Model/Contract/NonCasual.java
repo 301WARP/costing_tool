@@ -10,6 +10,10 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,21 +47,35 @@ public class NonCasual extends Staff
     // Properties
     // =========================================================================
 
-    @Column(name="staff_type_non_casual")
+    @Column(name="`staff_type_non_casual`",
+            insertable=false,
+            updatable=false)
     @Enumerated(EnumType.STRING)
     protected NonCasualStaffType staffType;
 
-    @Column(name="classification_non_casual")
+    @Column(name="`classification_non_casual`",
+            insertable=false,
+            updatable=false)
     @Enumerated(EnumType.STRING)
     private NonCasualClassification classification;
 
-    @Column(name="step")
+    @Column(name="`step`",
+            insertable=false,
+            updatable=false)
     @Enumerated(EnumType.STRING)
     private Step step;
 
-    @Column(name="salary")
-    private Double startingSalary;
-    
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumns({
+        @JoinColumn(name="`staff_type_non_casual`",
+                    referencedColumnName="`staff_type`"),
+        @JoinColumn(name="`classification_non_casual`",
+                    referencedColumnName="`classification`"),
+        @JoinColumn(name="`step`",
+                    referencedColumnName="`step`")
+    })
+    private NonCasualPaymentDetails paymentDetails;
+
 
     // =========================================================================
     // Methods

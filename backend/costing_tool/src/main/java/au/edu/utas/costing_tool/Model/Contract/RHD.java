@@ -38,8 +38,8 @@ public class RHD extends Contract
     @Enumerated(value=EnumType.STRING)
     public RHDIncomeStream classification;
 
-    @Column(name="salary")
-    public Double annualSalary;
+    @Column(name="wage_expense")
+    public Double wageExpense;
 
 
     // =========================================================================
