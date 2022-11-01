@@ -191,27 +191,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'1',											-- contract id
 	'1',											-- researcher id
 	'NON_CASUAL',									-- contract type
 	'ACADEMIC',										-- non-casual staff type
-	NULL,											-- casual staff type
 	'LEVEL_A',										-- non-casual classification
+	'A1',											-- step
+	NULL,											-- casual staff type
 	NULL,											-- casual classification
 	NULL,											-- RHD classification
-	'A1',											-- step
 	NULL,											-- pay code
-	'100000.00',									-- salary
-	NULL											-- hourly rate
+	NULL											-- wage expense
 );
 
 INSERT INTO `contract`
@@ -220,27 +218,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'2',											-- contract id
 	'1',											-- researcher id
 	'CASUAL',										-- contract type
 	NULL,											-- non-casual staff type
-	'PROFESSIONAL',									-- casual staff type
 	NULL,											-- non-casual classification
-	'RESEARCH_ACADEMIC',							-- casual classification
-	NULL,											-- RHD classification
 	NULL,											-- step
+	'PROFESSIONAL',									-- casual staff type
+	'RESEARCH_ACADEMIC',							-- casual classification
 	'CRA1',											-- pay code
-	NULL,											-- salary
-	'50.00'											-- hourly rate
+	NULL,											-- RHD classification
+	NULL											-- wage expense
 );
 
 INSERT INTO `contract`
@@ -249,27 +245,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'3',											-- contract id
 	'1',											-- researcher id
 	'RHD',											-- contract type
 	NULL,											-- non-casual staff type
-	NULL,											-- casual staff type
 	NULL,											-- non-casual classification
-	NULL,											-- casual classification
-	'APA',											-- RHD classification
 	NULL,											-- step
+	NULL,											-- casual staff type
+	NULL,											-- casual classification
 	NULL,											-- pay code
-	'25000.00',										-- salary
-	NULL											-- hourly rate
+	'APA',											-- RHD classification
+	10000.00										-- wage expense
 );
 
 INSERT INTO `contract`
@@ -278,27 +272,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'4',											-- contract id
 	'3',											-- researcher id
 	'NON_CASUAL',									-- contract type
 	'ACADEMIC',										-- non-casual staff type
+	'LEVEL_E',										-- non-casual classification
+	'E1',											-- step
 	NULL,											-- casual staff type
-	'LEVEL_E',											-- non-casual classification
 	NULL,											-- casual classification
-	NULL,											-- RHD classification
-	NULL,											-- step
 	NULL,											-- pay code
-	'150000.00',									-- salary
-	NULL											-- hourly rate
+	NULL,											-- RHD classification
+	NULL											-- wage expense
 );
 
 INSERT INTO `contract`
@@ -307,27 +299,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'5',											-- contract id
 	'5',											-- researcher id
 	'RHD',											-- contract type
 	NULL,											-- non-casual staff type
-	NULL,											-- casual staff type
 	NULL,											-- non-casual classification
-	NULL,											-- casual classification
-	'APA',											-- RHD classification
 	NULL,											-- step
+	NULL,											-- casual staff type
+	NULL,											-- casual classification
 	NULL,											-- pay code
-	'40000.00',										-- salary
-	NULL											-- hourly rate
+	'APA',											-- RHD classification
+	20000.00										-- wage expense
 );
 
 INSERT INTO `contract`
@@ -336,27 +326,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'6',											-- contract id
 	'6',											-- researcher id
 	'CASUAL',										-- contract type
 	NULL,											-- non-casual staff type
-	'PROFESSIONAL',									-- casual staff type
 	NULL,											-- non-casual classification
-	'LECTURING',									-- casual classification
-	NULL,											-- RHD classification
 	NULL,											-- step
-	NULL,											-- pay code
-	NULL,											-- salary
-	'70.0'											-- hourly rate
+	'PROFESSIONAL',									-- casual staff type
+	'PROFESSIONAL',									-- casual classification
+	'CG10',											-- pay code
+	NULL,											-- RHD classification
+	NULL											-- wage expense
 );
 
 INSERT INTO `contract`
@@ -365,27 +353,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'7',											-- contract id
 	'2',											-- researcher id
 	'NON_CASUAL',									-- contract type
 	'ACADEMIC',										-- non-casual staff type
-	NULL,											-- casual staff type
 	'LEVEL_B',										-- non-casual classification
+	'B2',											-- step
+	NULL,											-- casual staff type
 	NULL,											-- casual classification
-	NULL,											-- RHD classification
-	NULL,											-- step
 	NULL,											-- pay code
-	'90000.0',										-- salary
-	NULL											-- hourly rate
+	NULL,											-- RHD classification
+	NULL											-- wage expense
 );
 
 INSERT INTO `contract`
@@ -394,27 +380,25 @@ INSERT INTO `contract`
 	`researcher_id`,
 	`contract_type`,
 	`staff_type_non_casual`,
-	`staff_type_casual`,
 	`classification_non_casual`,
-	`classification_casual`,
-	`classification_rhd`,
 	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
 	`pay_code`,
-	`salary`,
-	`hourly_rate`
+	`classification_rhd`,
+	`wage_expense`
 ) VALUES (
 	'8',											-- contract id
 	'4',											-- researcher id
 	'NON_CASUAL',									-- contract type
 	'ACADEMIC',										-- non-casual staff type
-	NULL,											-- casual staff type
 	'LEVEL_B',										-- non-casual classification
+	'B1',											-- step
+	NULL,											-- casual staff type
 	NULL,											-- casual classification
-	NULL,											-- RHD classification
-	NULL,											-- step
 	NULL,											-- pay code
-	'90000.0',										-- salary
-	NULL											-- hourly rate
+	NULL,											-- RHD classification
+	NULL											-- wage expense
 );
 
 
