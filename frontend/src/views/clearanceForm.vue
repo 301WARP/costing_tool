@@ -267,6 +267,39 @@
               </table>
             </tr>
           </table>
+          <table class="border-bottom">
+            <tr>
+              <table>
+                <tr id="b">
+                  <td id="b" class="bg-blue">
+                    <b>
+                      All Other Investigators - FTE % only required for UTAS-based investigators
+                    </b>
+                  </td>
+                </tr>
+              </table>
+            </tr>
+            <tr>
+              <table>
+                <tr>
+                  <th id="bnte">Name:</th>
+                  <th id="bnte">
+                    UTAS discipline/unit <i>or</i> External Organisation:
+                  </th>
+                  <th id="bnte" height="100%">FTE %:</th>
+                </tr>
+                <template v-for="i in investigators">
+                  <tr>
+                    <td id="bnte">{{ i.name }}</td>
+                    <td id="bnte">
+                      {{ i.organisation }}
+                    </td>
+                    <td id="bnte">{{ i.fte }}</td>
+                  </tr>
+                </template>
+              </table>
+            </tr>
+          </table>
         </v-col>
       </v-container>
     </v-row>
@@ -325,6 +358,8 @@
             >Does the project meet the
             <a
               href="https://www.utas.edu.au/research-admin/research-funding/finding-and-applying-for-funding/definition-of-research"
+              target="_blank"
+              rel="noopener noreferrer"
               >five core criteria</a
             >? Please explain how:</v-card-text
           >
@@ -435,18 +470,21 @@
               <v-text-field
                 label="Name"
                 v-model="leadInvestigator.name"
+                disabled
               ></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 label="UTAS discipline/unit or External Organisation"
                 v-model="leadInvestigator.organisation"
+                disabled
               ></v-text-field>
             </v-col>
             <v-col cols="2">
               <v-text-field
                 label="FTE %"
                 v-model="leadInvestigator.fte"
+                disabled
               ></v-text-field>
             </v-col>
           </v-card-actions>
@@ -455,19 +493,31 @@
           <v-card-title class="pb-2"
             >All Other Investigators (incl. students)</v-card-title
           >
-          <v-card-actions v-for="(item, i, index) in 3" :key="index">
+          <v-card-actions v-for="inv in investigators">
             <v-col cols="4" class="py-0">
-              <v-text-field label="Name" class="py-0"></v-text-field>
+              <v-text-field
+                label="Name"
+                class="py-0"
+                v-model="inv.name"
+                disabled
+              ></v-text-field>
             </v-col>
             <v-col cols="6" class="py-0">
               <v-text-field
                 label="UTAS discipline/unit or External Organisation"
                 class="py-0"
+                v-model="inv.organisation"
+                disabled
               >
               </v-text-field>
             </v-col>
             <v-col cols="2" class="py-0">
-              <v-text-field label="FTE %" class="py-0"></v-text-field>
+              <v-text-field
+                label="FTE %"
+                class="py-0"
+                v-model="inv.fte"
+                disabled
+              ></v-text-field>
             </v-col>
           </v-card-actions>
           <v-divider></v-divider>
@@ -480,13 +530,17 @@
             </v-col>
             <v-col class="mt-5 mr-5" style="text-align: right">
               <i style="color: grey"
-                >A <a href="">Deed of Assignment</a> may be required</i
+                >A <a
+                  href="https://www.utas.edu.au/research/partnering/technology-transfer-and-commercialisation/intellectual-property"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Deed of Assignment</a> may be required</i
               >
             </v-col>
           </v-row>
           <v-card-actions>
             <v-col cols="6">
-              <v-text-field label="Name" class="py-0"></v-text-field>
+              <v-text-field label="Name" class="py-0" disabled></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
