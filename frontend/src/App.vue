@@ -21,6 +21,7 @@
           <v-tab to="/details"> Details </v-tab>
           <v-tab to="/researcher"> Researchers </v-tab>
           <v-tab to="/costs"> Costs </v-tab>
+          <v-tab to="/summary"> Summary </v-tab>
           <v-tab to="/clearance"> Clearance Form </v-tab>
         </template>
       </v-tabs>

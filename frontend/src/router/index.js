@@ -5,6 +5,7 @@ import Details from "../views/userDetails.vue";
 import Researcher from "../views/userResearcher.vue";
 import Clearance from "../views/clearanceForm.vue";
 import Costs from "../views/userCosts.vue";
+import Summary from "../views/userSummary.vue";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
     path: "/costs",
     name: "Costs",
     component: Costs,
+  },
+  {
+    path: "/summary",
+    name: "Summary",
+    component: Summary,
   },
 ];
 
