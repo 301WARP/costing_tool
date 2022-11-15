@@ -69,6 +69,7 @@ ALTER TABLE `contract` ADD FOREIGN KEY (
 
 ALTER TABLE `contribution` ADD FOREIGN KEY (`contract_id`) REFERENCES `contract` (`id`);
 ALTER TABLE `contribution` ADD FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
+ALTER TABLE `contribution` ADD FOREIGN KEY (`on_cost_rate`) REFERENCES `salary_on_cost` (`type`);
 
 -- ALTER TABLE `project` ADD FOREIGN KEY (`lead_researcher_id`) REFERENCES `researcher` (`staff_id`);
 ALTER TABLE `project` ADD FOREIGN KEY (`rhd_unit_id`) REFERENCES `unit` (`id`);

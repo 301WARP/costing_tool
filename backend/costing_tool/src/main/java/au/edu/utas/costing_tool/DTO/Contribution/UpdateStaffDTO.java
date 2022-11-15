@@ -10,30 +10,23 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 //@NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public abstract class UpdateResearcherDTO
+public class UpdateStaffDTO extends UpdateResearcherDTO
 {
-    /*
     String role;
-
-    String contract;
-    String staffType;
-    String classification;
-    String step;
-    String payCode;
-
-    String wageExpense;
+    String contractID;
 
     Double inKindPercent;
     Double wageAdjustment;
     Double onCostRate;
     Map<Integer, Double> annualContributions;
-    */
 }

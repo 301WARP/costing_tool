@@ -29,7 +29,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-// TODO(Andrew): Consider creating new table for DirectorEndorsement
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

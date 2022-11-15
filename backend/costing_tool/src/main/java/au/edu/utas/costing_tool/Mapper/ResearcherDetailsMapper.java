@@ -61,7 +61,7 @@ public interface ResearcherDetailsMapper
     @Mapping(target="staffType", source="contract.staffType")
     @Mapping(target="classification", source="contract.classification")
     @Mapping(   target="step", source="contract.step",
-                qualifiedByName="enumToInteger")
+                qualifiedByName="enumToString")
     @Mapping(target="startingSalary", source="contract.paymentDetails.salary")
     @Mapping(target="wageAdjustment", source="contribution.wageAdjustment")
     @Mapping(target="salaryOnCostRate", source="contribution.onCostRate")
@@ -103,6 +103,12 @@ public interface ResearcherDetailsMapper
     static Integer enumToInteger(Enum<?> e)
     {
         return e.ordinal();
+    }
+
+    @Named("enumToString")
+    static String enumToString(Enum<?> e)
+    {
+        return e.toString();
     }
 
 

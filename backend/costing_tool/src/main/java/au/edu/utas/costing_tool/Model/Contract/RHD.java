@@ -18,6 +18,11 @@ import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
+
+// =============================================================================
+// Project imports
+// =============================================================================
+
 import au.edu.utas.costing_tool.Enums.Contract.RHDIncomeStream;
 
 

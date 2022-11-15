@@ -5,6 +5,8 @@ package au.edu.utas.costing_tool.Model.Project;
 // External imports
 // =============================================================================
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
@@ -18,15 +20,19 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import au.edu.utas.costing_tool.Model.Entity.College;
-import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+
+// =============================================================================
+// Project imports
+// =============================================================================
+
+import au.edu.utas.costing_tool.Model.Entity.College;
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 
 
 @Data

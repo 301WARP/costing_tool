@@ -5,6 +5,9 @@ package au.edu.utas.costing_tool.Model.Contribution;
 // External Imports
 // ============================================================================= 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,17 +23,19 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+
+// ============================================================================= 
+// External Imports
+// ============================================================================= 
 
 import au.edu.utas.costing_tool.Model.Contract.Casual;
 import au.edu.utas.costing_tool.Model.Contract.Contract;
 import au.edu.utas.costing_tool.Model.Contract.NonCasual;
 import au.edu.utas.costing_tool.Model.Contract.RHD;
 import au.edu.utas.costing_tool.Model.Project.Project;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 
 
 @Data
@@ -105,10 +110,11 @@ public class Contribution
                 mappedBy="contribution",
                 orphanRemoval=true)
     @JsonManagedReference
-    // TODO(Andrew): final?
-    private List<AnnualContribution> annualContributions;
+    private final List<AnnualContribution> annualContributions =
+        new ArrayList<AnnualContribution>();
 
     
+    /*
     // ========================================================================= 
     // Constructors
     // ========================================================================= 
@@ -132,6 +138,7 @@ public class Contribution
         this.setRole(role);
         this.setInKindPercent(inKindPercent);
     }
+    */
 
 
     // ========================================================================= 

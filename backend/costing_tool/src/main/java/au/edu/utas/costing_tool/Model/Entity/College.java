@@ -1,6 +1,10 @@
 package au.edu.utas.costing_tool.Model.Entity;
 
 
+// =============================================================================
+// External Imports
+// =============================================================================
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +13,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
+// =============================================================================
+// Project Imports
+// =============================================================================
+
+import au.edu.utas.costing_tool.Model.Researcher.Researcher;
 
 
 @Data

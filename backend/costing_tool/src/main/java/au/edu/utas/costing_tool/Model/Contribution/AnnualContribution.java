@@ -5,6 +5,9 @@ package au.edu.utas.costing_tool.Model.Contribution;
 // External Imports
 // ============================================================================= 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,17 +17,24 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import au.edu.utas.costing_tool.Model.Contract.Contract;
-import au.edu.utas.costing_tool.Model.Project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+
+// ============================================================================= 
+// Project Imports
+// ============================================================================= 
+
+import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Project.Project;
+import au.edu.utas.costing_tool.Repository.SalaryOnCostRateRepository;
 
 
 @Data
@@ -39,6 +49,12 @@ public class AnnualContribution
     // ========================================================================= 
     // Properties
     // ========================================================================= 
+
+    /*
+    @Transient
+    @Autowired
+    private SalaryOnCostRateRepository onCostRepos;
+    */
 
     @Id
     @Column(name="contract_id")
@@ -59,9 +75,11 @@ public class AnnualContribution
             || this.getYear() == null)
             return null;
 
-        return new AnnualContributionID(this.getContractID(),
-                                        this.getProjectID(),
-                                        this.getYear());
+        return AnnualContributionID.builder()
+            .contractID(this.getContractID())
+            .projectID(this.getProjectID())
+            .year(this.getYear())
+            .build();
     }
 
 
@@ -95,6 +113,7 @@ public class AnnualContribution
     public void setHours(Double hours) {this.units = hours;}
 
 
+    /*
     // ========================================================================= 
     // Constructors
     // ========================================================================= 
@@ -148,4 +167,5 @@ public class AnnualContribution
         this.setYear(year);
         this.setUnits(units);
     }
+    */
 }

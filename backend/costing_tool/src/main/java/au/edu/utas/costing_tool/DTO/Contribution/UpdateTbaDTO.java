@@ -10,17 +10,30 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Data
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
+//@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UpdateNonCasualDTO
+@SuperBuilder
+public class UpdateTbaDTO extends UpdateResearcherDTO
 {
-    // Contribution
     String role;
+
+    String contract;
+    String staffType;
+    String classification;
+    String step;
+    String payCode;
+
+    Double wageExpense;
+
     Double inKindPercent;
+    Double wageAdjustment;
+    Double onCostRate;
     Map<Integer, Double> annualContributions;
 }

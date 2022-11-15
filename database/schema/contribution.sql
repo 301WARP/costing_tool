@@ -9,7 +9,7 @@ CREATE TABLE `contribution`
     `in_kind_%` DOUBLE(5,2)
 		CHECK (`in_kind_%` BETWEEN 0 AND 100),
     `wage_adjustment` DOUBLE,
-    `on_cost_rate` DOUBLE,
+    `on_cost_rate` ENUM('PERMANENT_ADDITIONAL', 'PERMANENT_GOV', 'CASUAL'),
 	PRIMARY KEY (`contract_id`, `project_id`)
 ) Engine=InnoDB;
 

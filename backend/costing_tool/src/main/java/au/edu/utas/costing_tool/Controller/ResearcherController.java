@@ -146,7 +146,7 @@ public class ResearcherController
             return ResponseEntity.notFound().build();
 
         // TODO(Andrew): try?
-        Contribution newContribution = this.updateMapper.updateResearcherDTOToContribution(dto);
+        Contribution newContribution = this.updateMapper.map(dto, projectID);
 
         Contribution contribution
             = this  .contributionService
@@ -158,6 +158,7 @@ public class ResearcherController
         return ResponseEntity.ok().body(detailsDTO);
     }
 
+    /*
     @CrossOrigin(origins="*")
     @PostMapping(path="/researchers/{projectID}/{contractID}")
     ResponseEntity<ContributionDetailsDTO>
@@ -177,18 +178,14 @@ public class ResearcherController
         // Contribution already exists
         if (contribution != null)
         {
-            /*
-            Map<String, Long> pathVariables = new HashMap<String, Long>();
-            pathVariables.put("projectID", projectID);
-            pathVariables.put("contractID", contractID);
-            */
+            //Map<String, Long> pathVariables = new HashMap<String, Long>();
+            //pathVariables.put("projectID", projectID);
+            //pathVariables.put("contractID", contractID);
 
             URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                /*
-                .path("/api/researchers/{projectID}/{contractID}")
-                .buildAndExpand(pathVariables)
-                */
+                //.path("/api/researchers/{projectID}/{contractID}")
+                //.buildAndExpand(pathVariables)
                 .build()
                 .toUri();
 
@@ -231,6 +228,7 @@ public class ResearcherController
 
         return ResponseEntity.created(location).body(detailsDTO);
     }
+    */
 
     @CrossOrigin(origins="*")
     @DeleteMapping(path="/researchers/{projectID}/{contractID}")

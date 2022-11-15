@@ -18,18 +18,34 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+// =============================================================================
+// Project Imports
+// =============================================================================
+
 import au.edu.utas.costing_tool.DTO.Contribution.ContributionDetailsDTO;
 import au.edu.utas.costing_tool.DTO.Researcher.ResearcherRecommendationDTO;
+
 import au.edu.utas.costing_tool.Enums.Researcher.Title;
+
 import au.edu.utas.costing_tool.Mapper.ResearcherDetailsMapper;
+import au.edu.utas.costing_tool.Model.Contract.Casual;
+import au.edu.utas.costing_tool.Model.Contract.CasualPaymentDetailsID;
 import au.edu.utas.costing_tool.Model.Contract.Contract;
+import au.edu.utas.costing_tool.Model.Contract.NonCasual;
+import au.edu.utas.costing_tool.Model.Contract.NonCasualPaymentDetailsID;
+import au.edu.utas.costing_tool.Model.Contract.RHD;
 import au.edu.utas.costing_tool.Model.Contribution.AnnualContribution;
 import au.edu.utas.costing_tool.Model.Contribution.Contribution;
 import au.edu.utas.costing_tool.Model.Contribution.ContributionID;
 import au.edu.utas.costing_tool.Model.Project.Project;
 import au.edu.utas.costing_tool.Model.Researcher.Researcher;
+
 import au.edu.utas.costing_tool.Repository.AnnualContributionRepository;
+import au.edu.utas.costing_tool.Repository.CasualPaymentDetailsRepository;
+import au.edu.utas.costing_tool.Repository.ContractRepository;
 import au.edu.utas.costing_tool.Repository.ContributionRepository;
+import au.edu.utas.costing_tool.Repository.NonCasualPaymentDetailsRepository;
 import au.edu.utas.costing_tool.Repository.ResearcherRepository;
 
 
@@ -51,7 +67,17 @@ public class ContributionService
     private final ResearcherRepository rRepos;
 
     @Autowired
+    private final ContractRepository contractRepos;
+
+    @Autowired
+    private final NonCasualPaymentDetailsRepository ncpRepos;
+
+    @Autowired
+    private final CasualPaymentDetailsRepository cpRepos;
+
+    @Autowired
     private final ResearcherDetailsMapper detailsMapper;
+
 
     private static final Pageable page = PageRequest.of(0, 10);
 
@@ -86,6 +112,38 @@ public class ContributionService
         if (old == null || nw == null)
             return null;
 
+        nw.setProject(old.getProject());
+
+        nw  .getAnnualContributions()
+            .forEach(ac -> ac.setContribution(nw));
+        
+        Contract nwContract =
+            this.contractRepos
+                .findById(nw.getContractID())
+                .orElse(null);
+        
+        if (nwContract == null)
+            return nw;
+        
+        Researcher researcher = nwContract.getResearcher();
+
+        if (researcher == null)
+            return nw;
+
+        Long rid = researcher.getStaffID();
+
+        if (rid == null)
+            return nw;
+
+        // Researcher ID 0 is reserved for TBA
+        if (rid == 0) {
+            nw.setContract(this.udpateTbaContract(nwContract));
+        } else {
+            nw.setContract(nwContract);
+        }
+
+        return cRepos.save(nw);
+        /*
         old.setInKindPercent(nw.getInKindPercent());
         old.setRole(nw.getRole());
         old.setWageAdjustment(nw.getWageAdjustment());
@@ -97,6 +155,53 @@ public class ContributionService
         this.update(old, nw);
 
         return old;
+        */
+    }
+
+    @Transactional
+    public Contract udpateTbaContract(Contract contract)
+    {
+        if (contract instanceof NonCasual) {
+            NonCasual c = (NonCasual) contract;
+
+            NonCasualPaymentDetailsID pid =
+                NonCasualPaymentDetailsID.builder()
+                    .staffType(c.getStaffType())
+                    .classification(c.getClassification())
+                    .step(c.getStep())
+                    .build();
+            
+            c.setPaymentDetails(
+                this.ncpRepos
+                    .findById(pid)
+                    .orElse(null)
+            );
+
+            return c;
+        }
+        else if (contract instanceof Casual) {
+            Casual c = (Casual) contract;
+
+            CasualPaymentDetailsID pid =
+                CasualPaymentDetailsID.builder()
+                    .staffType(c.getStaffType())
+                    .classification(c.getClassification())
+                    .payCode(c.getPayCode())
+                    .build();
+            
+            c.setPaymentDetails(
+                this.cpRepos
+                    .findById(pid)
+                    .orElse(null)
+            );
+
+            return c;
+        }
+        else if (contract instanceof RHD) {
+            return contract;
+        } else {
+            return null;
+        }
     }
 
     @Transactional

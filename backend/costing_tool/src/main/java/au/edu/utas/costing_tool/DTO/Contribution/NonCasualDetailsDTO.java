@@ -26,7 +26,7 @@ public class NonCasualDetailsDTO extends ContributionDetailsDTO
     String staffType;
     String classification;
     // TODO(Andrew): Could be a string?
-    Integer step;
+    String step;
 
     Double startingSalary;
     Double wageAdjustment; 

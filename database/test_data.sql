@@ -401,6 +401,33 @@ INSERT INTO `contract`
 	NULL											-- wage expense
 );
 
+INSERT INTO `contract`
+(
+	`id`,
+	`researcher_id`,
+	`contract_type`,
+	`staff_type_non_casual`,
+	`classification_non_casual`,
+	`step`,
+	`staff_type_casual`,
+	`classification_casual`,
+	`pay_code`,
+	`classification_rhd`,
+	`wage_expense`
+) VALUES (
+	'9',											-- contract id
+	'0',											-- researcher id
+	'NON_CASUAL',									-- contract type
+	'ACADEMIC',										-- non-casual staff type
+	'LEVEL_B',										-- non-casual classification
+	'B1',											-- step
+	NULL,											-- casual staff type
+	NULL,											-- casual classification
+	NULL,											-- pay code
+	NULL,											-- RHD classification
+	NULL											-- wage expense
+);
+
 
 -- contribution of project to contract
 INSERT INTO `contribution`
@@ -463,6 +490,23 @@ INSERT INTO `contribution`
 	'1',											-- project id
 	'Advisor',										-- project role
 	'10.00',										-- in kind percent
+	'1000.00',										-- wage adjustment
+	'1'												-- on cost rate
+);
+
+INSERT INTO `contribution`
+(
+	`contract_id`,
+	`project_id`,
+	`role`,
+	`in_kind_%`,
+	`wage_adjustment`,
+	`on_cost_rate`
+) VALUES (
+	'9',											-- contract id
+	'1',											-- project id
+	'Test TBA',										-- project role
+	'20.00',										-- in kind percent
 	'1000.00',										-- wage adjustment
 	'1'												-- on cost rate
 );

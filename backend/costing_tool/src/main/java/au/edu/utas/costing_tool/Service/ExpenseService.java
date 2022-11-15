@@ -75,6 +75,9 @@ public class ExpenseService
     @Transactional
     public Expense updateExpense(Expense old, Expense nw)
     {
+        if (old == null || nw == null)
+            return null;
+
         nw.setProject(old.getProject());
 
         nw
